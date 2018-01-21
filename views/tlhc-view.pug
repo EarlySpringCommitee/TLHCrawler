@@ -12,9 +12,9 @@ html
                     h1.ts.center.aligned.header!= title
             include _nav.pug
             br
-            .ts.text.container
+            .ts.narrow.container
                 h1.ts.header=item.title
-                !=item.content
+                .ts.basic.segment!=item.content
             br 
             .ts.narrow.container
                 .ts.selection.items

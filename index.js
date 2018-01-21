@@ -13,7 +13,7 @@ app.get('/', function(req, res) {
     links = {
         '校園公告': 'tlhc/pages/40-1001-15-1.php',
     }
-    res.render('index', { title: '使春延期', message: 'owowo', baha: links })
+    res.render('index', { title: '這是首頁', links: links })
 })
 
 // ㄉㄌㄐㄕ

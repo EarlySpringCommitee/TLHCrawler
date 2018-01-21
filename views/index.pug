@@ -8,13 +8,12 @@ html
     body
         header.ts.heading.vertically.padded.fluid.slate
             .ts.center.aligned.container
-                h1.ts.center.aligned.header!= message
+                h1.ts.center.aligned.header!= title
         include _nav.pug
         br
         .ts.narrow.container
             .ts.segmented.selection.items
-                - var animes = baha;
-                each val, index in animes
+                each val, index in links
                     a.item(href=val)= index
                 else
                     .item nothing here
