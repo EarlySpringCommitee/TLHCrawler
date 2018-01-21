@@ -79,16 +79,28 @@ app.get('/tlhc/:id', function(req, res) {
         /* b: 傳回的資料內容 */
         if (e || !b) { return; }
         var $ = cheerio.load(b);
-        var tlhcData = []; //*[@id="Dyn_2_2"]/div/div[2]/div/div/div/table/tbody/tr[1]/td[1]
+        var tlhcData = [];
         var title = $("#Dyn_2_2 .h4.item-title").text();
-        var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").text();
-        var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)").text();
+        var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
+        var view = $(".PtStatistic span").text();
+        var files = $('.baseTB a');
+        var fileData = [];
+        for (var i = 0; i < files.length; i++) {
+            if ($(files[i]).text() != "下載附件") {
+                var preJoin = {
+                    'name': $(files[i]).text(),
+                    'file': 'http://web.tlhc.ylc.edu.tw' + $(files[i]).attr('href'),
+                }
+                fileData.push(preJoin);
+            }
+        }
+
         var tlhcData = [{
             'title': title,
             'content': content,
-            'date': date,
+            'view': view,
         }]
-        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData })
+        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData })
     });
 });
 

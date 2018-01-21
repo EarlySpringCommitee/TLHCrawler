@@ -11,10 +11,15 @@ html
                 .ts.center.aligned.container
                     h1.ts.center.aligned.header=item.title
             br
+            .ts.text.container
+                !=item.content
+            br 
             .ts.narrow.container
-                =item.content
-        else
-            header.ts.heading.vertically.padded.fluid.slate
-                .ts.center.aligned.container
-                    h1.ts.center.aligned.header nothing here
+                .ts.selection.items
+                    each file in files
+                        a.item(href=file.file)
+                            i.large.file.outline.icon
+                            .content
+                                .header 附件
+                                .extra=file.name
 
