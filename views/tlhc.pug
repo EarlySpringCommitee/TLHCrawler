@@ -22,9 +22,9 @@ html
                 each item in lists
                     a.item(href=item.link)
                         .content
-                            .meta
-                                .ts.basic.info.label=item.date
-                                .ts.basic.info.label=item.tag
+                            .meta.large.device.only
+                                span=item.date
+                                span=item.tag
                             .header=item.title
             #navigator
                 .ts.buttons
