@@ -11,7 +11,7 @@ app.set('view engine', 'pug')
 
 app.get('/', function(req, res) {
     links = {
-        'ㄉㄌㄐㄕ': 'tlhc/pages/40-1001-15-1.php',
+        '校園公告': 'tlhc/pages/40-1001-15-1.php',
     }
     res.render('index', { title: '使春延期', message: 'owowo', baha: links })
 })
@@ -61,6 +61,7 @@ app.get('/tlhc/pages/:id', function(req, res) {
         res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData })
     });
 });
+
 app.get('/tlhc/post/:id', function(req, res) {
     //res.send('USER ' + req.params.id);
     request({
