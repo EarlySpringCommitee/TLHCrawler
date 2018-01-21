@@ -12,33 +12,9 @@ app.set('view engine', 'pug')
 app.get('/', function(req, res) {
     links = {
         'ㄉㄌㄐㄕ': 'tlhc/pages/40-1001-15-1.php',
-        'ㄅㄏ': 'baha'
     }
     res.render('index', { title: '使春延期', message: 'owowo', baha: links })
 })
-
-// ㄅㄏ爬蟲
-app.get('/baha', function(req, res) {
-    request({
-        url: "https://ani.gamer.com.tw/",
-        method: "GET"
-    }, function(e, r, b) {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        if (e || !b) { return; }
-        var $ = cheerio.load(b);
-        var resp = {};
-        var titles = $(".newanime-title");
-        var link = $(".newanime__content");
-        var ep = $(".newanime .newanime-vol");
-        for (var i = 0; i < 10; i++) {
-            resp[$(titles[i]).text() + " " + $(ep[i]).text()] = $(link[i]).attr('href');
-            console.log($(link[i]).attr('href'))
-        }
-        console.log(resp)
-        res.render('index', { title: 'ㄅㄏ爬蟲', message: 'ㄅㄏ爬蟲', baha: resp })
-    });
-});
 
 // ㄉㄌㄐㄕ
 app.get('/tlhc/pages/:id', function(req, res) {
@@ -57,6 +33,15 @@ app.get('/tlhc/pages/:id', function(req, res) {
         var link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
         var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
         var pages = $(".navigator-inner a.pagenum");
+
+        var pgid = req.params.id.split("-")[2]
+        var pgTitle = 'ㄉㄌㄐㄕ'
+        if (pgid == 15) { var pgTitle = pgTitle + " - 校園公告" }
+        if (pgid == 29) { var pgTitle = pgTitle + " - 轉知資訊 / 政令宣導" }
+        if (pgid == 30) { var pgTitle = pgTitle + " - 獎助學金公告" }
+        if (pgid == 28) { var pgTitle = pgTitle + " - 教務處公告" }
+        if (pgid == 38) { var pgTitle = pgTitle + " - 榮譽榜" }
+
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
                 'text': $(pages[i]).text(),
@@ -64,7 +49,6 @@ app.get('/tlhc/pages/:id', function(req, res) {
             }
             pageData.push(preJoin);
         }
-        console.log(pageData)
         for (var i = 0; i < tag.length; i++) {
             var preJoin = {
                 'tag': $(tag[i]).text(),
@@ -74,7 +58,7 @@ app.get('/tlhc/pages/:id', function(req, res) {
             }
             tlhcData.push(preJoin);
         }
-        res.render('tlhc', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, pages: pageData })
+        res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData })
     });
 });
 app.get('/tlhc/post/:id', function(req, res) {

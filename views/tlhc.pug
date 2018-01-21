@@ -14,8 +14,9 @@ html
         header.ts.heading.vertically.padded.fluid.slate
             .ts.center.aligned.container
                 h1.ts.center.aligned.header!= title
+        include _nav.pug
         br
-        .ts.narrow.container
+        .ts.container
             .ts.segmented.selection.single.line.items
                 - var lists = tlhc;
                 each item in lists
