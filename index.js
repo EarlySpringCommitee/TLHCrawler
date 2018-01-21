@@ -12,7 +12,8 @@ app.set('view engine', 'pug')
 app.get('/', function(req, res) {
     baha = {
         '測試測試': 'https://www.facebook.com/',
-        'ㄉㄌㄐㄕ': 'http://localhost:3000/tlhc'
+        'ㄉㄌㄐㄕ': 'http://localhost:3000/tlhc',
+        'ㄅㄏ': 'http://localhost:3000/baha'
     }
     res.render('index', { title: '使春延期', message: 'owowo', baha: baha })
 })
@@ -59,12 +60,35 @@ app.get('/tlhc', function(req, res) {
             var preJoin = {
                 'tag': $(tag[i]).text(),
                 'title': $(title[i]).text(),
-                'link': $(link[i]).attr('href'),
+                'link': '/tlhc/' + $(link[i]).attr('href').split("/")[4],
                 'date': $(date[i]).text()
             }
+            console.log($(link[i]).attr('href').split("/"))
             tlhcData.push(preJoin);
         }
         res.render('tlhc', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData })
+    });
+});
+app.get('/tlhc/:id', function(req, res) {
+    //res.send('USER ' + req.params.id);
+    request({
+        url: "http://web.tlhc.ylc.edu.tw/files/" + req.params.id,
+        method: "GET"
+    }, function(e, r, b) {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        if (e || !b) { return; }
+        var $ = cheerio.load(b);
+        var tlhcData = []; //*[@id="Dyn_2_2"]/div/div[2]/div/div/div/table/tbody/tr[1]/td[1]
+        var title = $("#Dyn_2_2 .h4.item-title").text();
+        var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").text();
+        var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)").text();
+        var tlhcData = [{
+            'title': title,
+            'content': content,
+            'date': date,
+        }]
+        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData })
     });
 });
 
