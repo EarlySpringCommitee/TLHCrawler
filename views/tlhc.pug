@@ -17,13 +17,17 @@ html
         include _nav.pug
         br
         .ts.container
-            .ts.segmented.selection.single.line.items
+            .ts.segmented.selection.items
                 - var lists = tlhc;
                 each item in lists
                     a.item(href=item.link)
                         .content
-                            .ts.basic.info.label=item.date
-                            .ts.basic.info.label=item.tag
+                            .meta.mobile.or.tablet.only
+                                .ts.basic.info.label=item.date
+                                .ts.basic.info.label=item.tag
+                            .inline.meta.large.device.only
+                                span=item.date
+                                span=item.tag
                             .header=item.title
             #navigator
                 .ts.buttons
