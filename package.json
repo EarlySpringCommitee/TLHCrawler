@@ -1,0 +1,26 @@
+{
+  "name": "node-web-crawler",
+  "version": "1.0.0",
+  "description": "網頁爬蟲",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gnehs/Node-web-crawler.git"
+  },
+  "author": "gnehs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gnehs/Node-web-crawler/issues"
+  },
+  "homepage": "https://github.com/gnehs/Node-web-crawler#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.2",
+    "jsonfile": "^4.0.0",
+    "pug": "^2.0.0-rc.4",
+    "request": "^2.83.0"
+  }
+}

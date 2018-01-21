@@ -1,0 +1,26 @@
+doctype html
+html
+    head
+        title!= title
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css',rel='stylesheet')
+    body
+        header.ts.heading.vertically.padded.fluid.slate
+            .ts.center.aligned.container
+                h1.ts.center.aligned.header!= title
+        br
+        .ts.narrow.container
+            .ts.segmented.selection.single.line.items
+                - var lists = tlhc;
+                each item in lists
+                    a.item(href=item.link)
+                        .content
+                            .inline.meta
+                                span=item.date
+                                span=item.tag
+                            .header=item.title
+                else
+                    .item nothing here
+
+
