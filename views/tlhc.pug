@@ -17,12 +17,12 @@ html
         include _nav.pug
         br
         .ts.container
-            .ts.segmented.selection.single.line.items
+            .ts.segmented.selection.items
                 - var lists = tlhc;
                 each item in lists
                     a.item(href=item.link)
                         .content
-                            .inline.meta
+                            .meta
                                 span=item.date
                                 span=item.tag
                             .header=item.title

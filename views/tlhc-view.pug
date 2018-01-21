@@ -9,10 +9,11 @@ html
         each item in tlhc
             header.ts.heading.vertically.padded.fluid.slate
                 .ts.center.aligned.container
-                    h1.ts.center.aligned.header=item.title
+                    h1.ts.center.aligned.header!= title
             include _nav.pug
             br
             .ts.text.container
+                h1.ts.header=item.title
                 !=item.content
             br 
             .ts.narrow.container
