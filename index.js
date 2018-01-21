@@ -10,12 +10,11 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 
 app.get('/', function(req, res) {
-    baha = {
-        '測試測試': 'https://www.facebook.com/',
-        'ㄉㄌㄐㄕ': 'http://localhost:3000/tlhc',
-        'ㄅㄏ': 'http://localhost:3000/baha'
+    links = {
+        'ㄉㄌㄐㄕ': 'tlhc/pages/40-1001-15-1.php',
+        'ㄅㄏ': 'baha'
     }
-    res.render('index', { title: '使春延期', message: 'owowo', baha: baha })
+    res.render('index', { title: '使春延期', message: 'owowo', baha: links })
 })
 
 // ㄅㄏ爬蟲
@@ -42,34 +41,43 @@ app.get('/baha', function(req, res) {
 });
 
 // ㄉㄌㄐㄕ
-app.get('/tlhc', function(req, res) {
+app.get('/tlhc/pages/:id', function(req, res) {
     request({
-        url: "http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php",
+        url: "http://web.tlhc.ylc.edu.tw/files/" + req.params.id,
         method: "GET"
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         if (e || !b) { return; }
         var $ = cheerio.load(b);
-        const tlhcData = []; //*[@id="Dyn_2_2"]/div/div[2]/div/div/div/table/tbody/tr[1]/td[1]
+        var tlhcData = [];
+        var pageData = [];
         var tag = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
         var title = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2)");
         var link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
         var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
+        var pages = $(".navigator-inner a.pagenum");
+        for (var i = 0; i < pages.length; i++) {
+            var preJoin = {
+                'text': $(pages[i]).text(),
+                'link': $(pages[i]).attr('href').split("/")[4],
+            }
+            pageData.push(preJoin);
+        }
+        console.log(pageData)
         for (var i = 0; i < tag.length; i++) {
             var preJoin = {
                 'tag': $(tag[i]).text(),
                 'title': $(title[i]).text(),
-                'link': '/tlhc/' + $(link[i]).attr('href').split("/")[4],
+                'link': '/tlhc/post/' + $(link[i]).attr('href').split("/")[4],
                 'date': $(date[i]).text()
             }
-            console.log($(link[i]).attr('href').split("/"))
             tlhcData.push(preJoin);
         }
-        res.render('tlhc', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData })
+        res.render('tlhc', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, pages: pageData })
     });
 });
-app.get('/tlhc/:id', function(req, res) {
+app.get('/tlhc/post/:id', function(req, res) {
     //res.send('USER ' + req.params.id);
     request({
         url: "http://web.tlhc.ylc.edu.tw/files/" + req.params.id,
