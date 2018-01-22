@@ -11,10 +11,12 @@ html
                 h1.ts.center.aligned.header!= title
         include _nav.pug
         br
-        .ts.narrow.container
+        .ts.container
             .ts.segmented.selection.items
                 each val, index in links
-                    a.item(href=val)= index
+                    a.item(href=val)
+                        .content
+                            .header=index
                 else
                     .item nothing here
 

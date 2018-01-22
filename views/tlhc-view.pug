@@ -12,11 +12,11 @@ html
                     h1.ts.center.aligned.header!= title
             include _nav.pug
             br
-            .ts.narrow.container
+            .ts.container
                 h1.ts.header=item.title
+
                 .ts.basic.segment!=item.content
-            br 
-            .ts.narrow.container
+
                 .ts.selection.items
                     each file in files
                         a.item(href=file.file)
@@ -24,4 +24,8 @@ html
                             .content
                                 .header 附件
                                 .extra=file.name
+
+                button.ts.fluid.labeled.icon.button(onclick='history.back()')
+                    i.arrow.left.icon
+                    | 回上頁
 

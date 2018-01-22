@@ -96,6 +96,46 @@ app.get('/tlhc/post/:id', function(req, res) {
         res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData })
     });
 });
+app.get('/tlhc/search/:id', function(req, res) {
+    //res.send('USER ' + req.params.id);
+    console.log(req.params.id)
+    request.post({
+        url: "http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?" + req.params.id,
+        form: {
+            SchKey: req.params.id,
+            search: 'search'
+        }
+    }, function(e, r, b) {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        if (e || !b) { return; }
+        var $ = cheerio.load(b);
+        var tlhcData = [];
+        var pageData = [];
+        var table = $(".baseTB.list_TIDY");
+        var header = $(".baseTB.list_TIDY tr>td.mc .h5 a");
+        var content = $(".baseTB.list_TIDY tr>td.mc .message");
+        var pages = $(".navigator-inner a.pagenum");
+        for (var i = 0; i < header.length; i++) {
+            var preJoin = {
+                'header': $(header[i]).text(),
+                'content': $(content[i]).text(),
+                'link': '/tlhc/post/' + $(header[i]).attr('href').split("/")[4]
+            }
+            tlhcData.push(preJoin);
+        }
+        for (var i = 0; i < pages.length; i++) {
+            var preJoin = {
+                'text': $(pages[i]).text(),
+                'link': $(pages[i]).attr('href').split("?")[1],
+            }
+            pageData.push(preJoin);
+        }
+        console.log($(pages).attr('href').split("?"));
+        console.log(pageData);
+        res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋', tlhc: tlhcData, pages: pageData })
+    });
+});
 
 app.listen(3000, function() {
     console.log("working on http://localhost:3000")
