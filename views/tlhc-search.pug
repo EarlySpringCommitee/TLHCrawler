@@ -17,10 +17,10 @@ html
         include _nav.pug
         br
         .ts.container
-            .ts.cards
+            .ts.one.cards
                 - var lists = tlhc;
                 each item in lists
-                    a.ts.card
+                    a.ts.card(href=item.link)
                         .content
                             .header=item.header
                             .description=item.content
