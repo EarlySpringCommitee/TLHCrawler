@@ -4,10 +4,14 @@ var jsonfile = require('jsonfile'); //讀 json 的咚咚
 var request = require("request"); // HTTP 客戶端輔助工具
 var cheerio = require("cheerio"); // Server 端的 jQuery 實作
 var express = require('express'); // Node.js Web 架構
+var bodyParser = require('body-parser'); // 讀入 post 請求
 
 var app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
 app.get('/', function(req, res) {
     links = {
@@ -137,6 +141,33 @@ app.get('/tlhc/search/:id', function(req, res) {
         }
         res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋', tlhc: tlhcData, pages: pageData })
     });
+});
+app.get('/tlhc/score/', function(req, res) {
+    res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入' });
+});
+
+app.post('/tlhc/score/', function(req, res) {
+    //res.send('USER ' + req.params.id);
+    console.log(req.body);
+    res.send(req.body);
+    /*var userID = req.body['userID'],
+        userPASS = req.body['userPASS'];*/
+    /*request.post({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/login.asp",
+        form: {
+            txtID: userID,
+            txtPWD: userPASS,
+            'login_r7_c5.x': 0,
+            'login_r7_c5.y': 0,
+            Chk: 'Y'
+        }
+    }, function(e, r, b) {
+        // 錯誤代碼 
+        // 傳回的資料內容 
+        if (e || !b) { return; }
+        var $ = cheerio.load(b);
+        console(r)
+    });*/
 });
 
 app.listen(3000, function() {

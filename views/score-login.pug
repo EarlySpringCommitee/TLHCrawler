@@ -1,0 +1,22 @@
+include _header.pug
+body
+	header.ts.heading.vertically.padded.fluid.slate
+		.ts.center.aligned.container
+			h1.ts.center.aligned.header!= title
+	include _nav.pug
+	br
+	.ts.narrow.container
+		br
+		br
+		h1.ts.center.aligned.header
+			| 歡迎回來
+			.sub.header 很高興能夠再次見到你
+		.ts.centered.secondary.segment
+			form.ts.form(method='post',role='form')
+				.field
+					label 帳號
+					input(type='text', placeholder='', id='userID', name='userID',required)
+				.field
+					label 密碼
+					input(type='password', placeholder='', id='userPASS', name='userPASS',required)
+				button.ts.positive.fluid.button(type='submit') 登入
