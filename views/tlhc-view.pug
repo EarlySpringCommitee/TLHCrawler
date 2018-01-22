@@ -1,31 +1,25 @@
-doctype html
-html
-    head
-        title!= title
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        link(href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css',rel='stylesheet')
-    body
-        each item in tlhc
-            header.ts.heading.vertically.padded.fluid.slate
-                .ts.center.aligned.container
-                    h1.ts.center.aligned.header!= title
-            include _nav.pug
-            br
-            .ts.container
-                h1.ts.header=item.title
+include _header.pug
+body
+    each item in tlhc
+        header.ts.heading.vertically.padded.fluid.slate
+            .ts.center.aligned.container
+                h1.ts.center.aligned.header!= title
+        include _nav.pug
+        br
+        .ts.container
+            h1.ts.header=item.title
 
-                .ts.basic.segment!=item.content
+            .ts.basic.segment!=item.content
 
-                .ts.selection.items
-                    each file in files
-                        a.item(href=file.file)
-                            i.large.file.outline.icon
-                            .content
-                                .header 附件
-                                .extra=file.name
+            .ts.selection.items
+                each file in files
+                    a.item(href=file.file)
+                        i.large.file.outline.icon
+                        .content
+                            .header 附件
+                            .extra=file.name
 
-                button.ts.fluid.labeled.icon.button(onclick='history.back()')
-                    i.arrow.left.icon
-                    | 回上頁
+            button.ts.fluid.labeled.icon.button(onclick='history.back()')
+                i.arrow.left.icon
+                | 回上頁
 

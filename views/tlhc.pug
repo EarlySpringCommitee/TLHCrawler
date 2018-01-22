@@ -1,37 +1,26 @@
-doctype html
-html
-    head
-        title!= title
-        meta(charset='utf-8')
-        meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        link(href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css',rel='stylesheet')
-        style.
-            #navigator{
-                margin:0 auto;
-                text-align: center;
-            }
-    body
-        header.ts.heading.vertically.padded.fluid.slate
-            .ts.center.aligned.container
-                h1.ts.center.aligned.header!= title
-        include _nav.pug
+include _header.pug
+body
+    header.ts.heading.vertically.padded.fluid.slate
+        .ts.center.aligned.container
+            h1.ts.center.aligned.header!= title
+    include _nav.pug
+    br
+    .ts.container
+        .ts.segmented.selection.items
+            - var lists = tlhc;
+            each item in lists
+                a.item(href=item.link)
+                    .content
+                        .meta.large.device.only
+                            span=item.date
+                            span=item.tag
+                        .header=item.title
+        #navigator
+            .ts.buttons
+                each page in pages
+                    a.ts.info.button(href=page.link)=page.text
         br
-        .ts.container
-            .ts.segmented.selection.items
-                - var lists = tlhc;
-                each item in lists
-                    a.item(href=item.link)
-                        .content
-                            .meta.large.device.only
-                                span=item.date
-                                span=item.tag
-                            .header=item.title
-            #navigator
-                .ts.buttons
-                    each page in pages
-                        a.ts.info.button(href=page.link)=page.text
-            br
-            br
-            br
+        br
+        br
 
 

@@ -10,11 +10,3 @@
             .ts.underlined.basic.right.icon.input
                 input(type='text', placeholder='搜尋',id='search')
                 i.search.link.icon(onclick="search()")
-script.
-    function search(){
-        var search=document.getElementById('search').value
-        if(!search){
-            alert("未輸入任何內容")
-            return;}
-        location.href='/tlhc/search/'+search
-    }
