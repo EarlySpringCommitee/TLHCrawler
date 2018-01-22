@@ -18,17 +18,19 @@ html
         br
         .ts.container
             .ts.one.cards
-                - var lists = tlhc;
-                each item in lists
+                each item in tlhc
                     a.ts.card(href=item.link)
                         .content
                             .header=item.header
                             .description=item.content
+                else
+                    .ts.header 未找到符合條件的資料
             br
             #navigator
                 .ts.buttons
-                    each page in pages
-                        a.ts.info.button(href=page.link)=page.text
+                    if pages
+                        each page in pages
+                            a.ts.info.button(href=page.link)=page.text
             br
             br
             br

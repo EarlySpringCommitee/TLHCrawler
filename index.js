@@ -116,6 +116,10 @@ app.get('/tlhc/search/:id', function(req, res) {
         var header = $(".baseTB.list_TIDY tr>td.mc .h5 a");
         var content = $(".baseTB.list_TIDY tr>td.mc .message");
         var pages = $(".navigator-inner a.pagenum");
+        if (content == undefined) {
+            res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
+            return
+        }
         for (var i = 0; i < header.length; i++) {
             var preJoin = {
                 'header': $(header[i]).text(),
@@ -131,8 +135,6 @@ app.get('/tlhc/search/:id', function(req, res) {
             }
             pageData.push(preJoin);
         }
-        console.log($(pages).attr('href').split("?"));
-        console.log(pageData);
         res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋', tlhc: tlhcData, pages: pageData })
     });
 });
