@@ -147,6 +147,9 @@ app.get('/tlhc/score/', function(req, res) {
 });
 
 app.post('/tlhc/score/', function(req, res) {
+    //一開始用帳密跟學校換餅乾
+    //然後餅乾存在 session 裡面
+
     //res.send('USER ' + req.params.id);
     console.log(req.body);
     res.send(req.body);
