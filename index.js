@@ -13,12 +13,13 @@ app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
     extended: true
-}));
+})); //拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',
     resave: false,
     saveUninitialized: false
-}));
+})); //發餅乾
+app.use('/js', express.static('js'))
 
 app.get('/', function(req, res) {
     links = {
@@ -156,7 +157,6 @@ app.get('/tlhc/score/', function(req, res) {
         res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入' });
     }
 });
-
 app.post('/tlhc/score/', function(req, res) {
     var userID = req.body['userID']
     var userPASS = req.body['userPASS']
@@ -195,8 +195,29 @@ function getScore(cookie, res) {
         /* b: 傳回的資料內容 */
         var b = iconv.decode(b, 'Big5');
         if (e || !b) { return; }
+        if (b == '無權使用 請登入') {
+            res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入', message: '請確認學號及身分證字號正確無誤！' });
+            return
+        }
         var $ = cheerio.load(b);
-        res.send("庫 " + b);
+        var user = {
+                id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
+                name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
+                class: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
+                num: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+            }
+            //var score = $("body>center>table:nth-child(3) td>table tr font")
+            /*var exam = $("body>center>table:nth-child(3) td>table tr>td.ColumnTDX>.ColumnFONT")
+            var examData = []
+            for (var i = 0; i < exam.length; i++) {
+                var preJoin = {
+                    'text': $(exam[i]).text(),
+                }
+                examData.push(preJoin);
+            } //考試*/
+
+        var score = $("body>center>table:nth-child(3) td>table>tbody")
+        res.render('score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html() });
     });
 }
 

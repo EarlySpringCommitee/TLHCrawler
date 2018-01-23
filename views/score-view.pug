@@ -1,6 +1,25 @@
 include _header.pug
+script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+script(src='/js/score.js')
 body
 	header.ts.heading.vertically.padded.fluid.slate
 		.ts.center.aligned.container
 			h1.ts.center.aligned.header!= title
 	include _nav.pug
+	.ts.container
+		br
+		.ts.stackable.three.cards
+			mixin card(header,description,icon)
+				.ts.card
+					.content
+						.header= header
+						.description= description
+					.symbol
+						i.icon(class=icon)
+			+card('學號',user.id,'list layout')
+			+card('姓名',user.name,'user')
+			+card('班級',user.class,'student')
+		br
+		.gs.scroll
+			table#score.ts.definition.compact.striped.fixed.single.line.table
+				!= score
