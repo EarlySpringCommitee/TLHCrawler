@@ -1,16 +1,23 @@
 ﻿// 載入
-var fs = require('fs'); //檔案系統
-var jsonfile = require('jsonfile'); //讀 json 的咚咚
-var request = require("request"); // HTTP 客戶端輔助工具
-var cheerio = require("cheerio"); // Server 端的 jQuery 實作
-var express = require('express'); // Node.js Web 架構
-var bodyParser = require('body-parser'); // 讀入 post 請求
+const fs = require('fs'); //檔案系統
+const jsonfile = require('jsonfile'); //讀 json 的咚咚
+const request = require("request"); // HTTP 客戶端輔助工具
+const cheerio = require("cheerio"); // Server 端的 jQuery 實作
+const express = require('express'); // Node.js Web 架構
+const bodyParser = require('body-parser'); // 讀入 post 請求
+const session = require('express-session');
+const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
+const app = express()
 
-var app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
     extended: true
+}));
+app.use(session({
+    secret: 'ㄐㄐ讚',
+    resave: false,
+    saveUninitialized: false
 }));
 
 app.get('/', function(req, res) {
@@ -143,17 +150,17 @@ app.get('/tlhc/search/:id', function(req, res) {
     });
 });
 app.get('/tlhc/score/', function(req, res) {
-    res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入' });
+    if (req.session.tlhc) {
+        getScore(req.session.tlhc, res)
+    } else {
+        res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入' });
+    }
 });
 
 app.post('/tlhc/score/', function(req, res) {
-    //一開始用帳密跟學校換餅乾
-    //然後餅乾存在 session 裡面
-
     var userID = req.body['userID']
     var userPASS = req.body['userPASS']
-
-    /*request.post({
+    request.post({
         url: "http://register.tlhc.ylc.edu.tw/hcode/login.asp",
         form: {
             txtID: userID,
@@ -166,11 +173,31 @@ app.post('/tlhc/score/', function(req, res) {
         // 錯誤代碼 
         // 傳回的資料內容 
         if (e || !b) { return; }
-        var $ = cheerio.load(b);
-        console(r)
-    });*/
+        req.session.tlhc = r.headers['set-cookie'];
+        getScore(r.headers['set-cookie'], res)
+            //一開始用帳密跟學校換餅乾
+            //然後餅乾存在 session 裡面
+    });
 });
 
-app.listen(3000, function() {
-    console.log("working on http://localhost:3000")
-})
+function getScore(cookie, res) {
+    request({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
+        method: "GET",
+        encoding: null,
+        headers: {
+            //some header
+            'Cookie': cookie,
+            //some header
+        }
+    }, function(e, r, b) {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        var b = iconv.decode(b, 'Big5');
+        if (e || !b) { return; }
+        var $ = cheerio.load(b);
+        res.send("庫 " + b);
+    });
+}
+
+app.listen(3000, () => console.log("working on http://localhost:3000"))
