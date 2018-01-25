@@ -7,6 +7,8 @@ body
 	include _nav.pug
 	.ts.container
 		br
+		h3.ts.header 基本資料
+			.sub.header 確定成績是不是你的（？
 		.ts.stackable.three.cards
 			mixin card(header,description,icon)
 				.ts.card
@@ -19,10 +21,18 @@ body
 			+card('姓名',user.name,'user')
 			+card('班級',user.class,'student')
 		br
+		h3.ts.header 各項成績
+			.sub.header 若無法看見完整內容可利用 
+				kbd Shift+滾輪
+				|  或是滑鼠來移動
 		.gs.scroll
 			table#score.ts.definition.compact.striped.fixed.single.line.table
 				!= score
 		br
+		h3.ts.header 總成績
+			.sub.header 若無法看見完整內容可利用 
+				kbd Shift+滾輪
+				|  或是滑鼠來移動
 		.gs.scroll
 			table#total.ts.definition.compact.striped.fixed.single.line.table
 				!= total

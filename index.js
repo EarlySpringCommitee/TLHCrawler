@@ -25,9 +25,9 @@ app.use('/css', express.static('css'))
 
 app.get('/', function(req, res) {
     links = [{
-        'header': '圖書館公告',
-        'description': '消失在學校網頁上ㄉ圖書館公告',
-        'link': '/tlhc/pages/40-1001-21-1.php'
+        'header': '校園公告',
+        'description': '好像很重要，又好想沒那麼重要',
+        'link': '/tlhc/pages/40-1001-15-1.php'
     }, {
         'header': '榮譽榜',
         'description': '實際上沒人去看的東西，只會害你升旗站更久',
@@ -37,9 +37,9 @@ app.get('/', function(req, res) {
         'description': '一些比賽跟你完全不會想點進去看的東西',
         'link': '/tlhc/pages/40-1001-29-1.php'
     }, {
-        'header': '校園公告',
-        'description': '好像很重要，又好想沒那麼重要',
-        'link': '/tlhc/pages/40-1001-15-1.php'
+        'header': '圖書館公告',
+        'description': '消失在學校網頁上ㄉ圖書館公告',
+        'link': '/tlhc/pages/40-1001-21-1.php'
     }, {
         'header': '獎助學金公告',
         'description': '能拿錢的情報',
@@ -49,7 +49,7 @@ app.get('/', function(req, res) {
         'description': '招生考試之類的',
         'link': '/tlhc/pages/40-1001-28-1.php'
     }]
-    res.render('index', { title: '公告', links: links })
+    res.render('index', { title: 'ㄉㄌㄐㄕ - 公告', links: links })
 })
 
 // ㄉㄌㄐㄕ
