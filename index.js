@@ -38,15 +38,15 @@ app.get('/', function(req, res) {
         'link': '/tlhc/pages/40-1001-29-1.php'
     }, {
         'header': '校園公告',
-        'description': '我沒梗ㄌ，快 PR 推埂上來',
+        'description': '好像很重要，又好想沒那麼重要',
         'link': '/tlhc/pages/40-1001-15-1.php'
     }, {
         'header': '獎助學金公告',
-        'description': '我沒梗ㄌ，快 PR 推埂上來',
+        'description': '能拿錢的情報',
         'link': '/tlhc/pages/40-1001-30-1.php'
     }, {
         'header': '教務處公告',
-        'description': '我沒梗ㄌ，快 PR 推埂上來',
+        'description': '招生考試之類的',
         'link': '/tlhc/pages/40-1001-28-1.php'
     }]
     res.render('index', { title: '公告', links: links })
@@ -243,7 +243,11 @@ app.get('/tlhc/score/logout', function(req, res) {
 });
 
 app.use(function(req, res, next) {
-    res.status(404).render('error', { title: '糟糕', message: '看來我們找不到您要的東西' })
+    res.status(404).render('error', { title: '糟糕 - 404', message: '看來我們找不到您要的東西' })
 });
+app.use(function(err, req, res, next) {
+    console.error(err.stack);
+    res.status(500).render('error', { title: '糟糕 - 500', message: '看來工程師不小心打翻了味增湯' })
+}); // error
 
 app.listen(3000, () => console.log("working on http://localhost:3000"))

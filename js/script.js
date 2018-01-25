@@ -16,4 +16,18 @@ $(document).ready(function() {
 
         easing: 'linear' // The CSS3 easing function of the ripple
     });
+    $('#search').keypress(function(e) {
+        if (e.which == 13) {
+            search()
+        }
+    });
 });
+
+function search() {
+    var search = document.getElementById('search').value
+    if (!search) {
+        alert("未輸入任何內容")
+        return;
+    }
+    location.href = '/tlhc/search/' + search
+}
