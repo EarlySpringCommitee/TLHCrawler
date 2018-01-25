@@ -6,13 +6,16 @@ body
     include _nav.pug
     br
     .ts.container
-        .ts.segmented.selection.items
-            each val, index in links
-                a.item(href=val)
+        .ts.doubling.four.cards
+            each item in links
+                a.ts.card(href=item.link)
                     .content
-                        .header=index
+                        .header=item.header
+                        .description=item.description
             else
-                .item nothing here
+                .ts.card
+                    .content
+                        .description noithing
     include _footer.pug
 
 

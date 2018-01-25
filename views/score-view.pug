@@ -1,5 +1,4 @@
 include _header.pug
-script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
 script(src='/js/score.js')
 body
 	header.ts.heading.vertically.padded.fluid.slate
@@ -23,4 +22,8 @@ body
 		.gs.scroll
 			table#score.ts.definition.compact.striped.fixed.single.line.table
 				!= score
+		br
+		.gs.scroll
+			table#total.ts.definition.compact.striped.fixed.single.line.table
+				!= total
 	include _footer.pug

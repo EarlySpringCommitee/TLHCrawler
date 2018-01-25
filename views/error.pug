@@ -1,0 +1,15 @@
+include _header.pug
+body
+    header.ts.heading.vertically.padded.fluid.slate
+        .ts.center.aligned.container
+            h1.ts.center.aligned.header!= title
+    include _nav.pug
+    br
+    .ts.container
+        .ts.vertically.padded.slate
+            .ts.massive.header!= title
+                .sub.header!= message
+
+    include _footer.pug
+
+

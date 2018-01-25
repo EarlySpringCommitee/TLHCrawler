@@ -9,7 +9,10 @@ body
         .ts.container
             h1.ts.header=item.title
 
-            .ts.basic.segment!=item.content
+            if(item.content)
+                #content.ts.basic.segment!=item.content
+            else
+                #content.ts.basic.segment 無內文
 
             .ts.selection.items
                 each file in files

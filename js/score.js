@@ -1,4 +1,5 @@
 $(document).ready(function() {
-    $(".ts.definition.table tr:first-child").remove();
+    $("#score tr:first-child").remove();
+    $("#total tr:last-child").remove();
     $('td>font').attr('data-owo', $(this).html())
 });

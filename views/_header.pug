@@ -4,34 +4,12 @@ html
         title!= title
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
-        link(href='https://cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css',rel='stylesheet')
-        style.
-            #navigator {
-                margin: 0 auto;
-                text-align: center;
-            }
-            #login {
-                max-width: 400px;
-            }
-            #score{
-                min-width: 992px;
-            }
-            #score tr:nth-child(1)>td{
-                background: #f7f7f7;
-                font-weight: 500;
-                color: #404040;
-                font-size: 1em;
-            }
-            #score tr:last-child{
-                display: none;
-            }
-            #score td>font{
-                font-family: "SFMono-Regular",Consolas,"Liberation Mono",Menlo,Courier,monospace !important;
-            }
-            .gs.scroll{
-                overflow: scroll;
-                min-width: 100%;
-            }
+        link(href='//cdnjs.cloudflare.com/ajax/libs/tocas-ui/2.3.3/tocas.css',rel='stylesheet')
+        link(href='/css/style.css',rel='stylesheet')
+        link(href='/css/ripple.min.css',rel='stylesheet')
+        script(src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src='/js/ripple.min.js')
+        script(src='/js/script.js')
         script.
             function search(){
                 var search=document.getElementById('search').value

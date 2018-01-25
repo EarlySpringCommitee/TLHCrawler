@@ -1,13 +1,11 @@
-.ts.basic.link.fluid.top.attached.menu.horizontally.scrollable
+.ts.basic.fluid.borderless.menu.horizontally.scrollable
     .ts.container
-        a.item(href='/') 首頁
-        a.item(href='/tlhc/pages/40-1001-15-1.php') 校園公告
-        a.item(href='/tlhc/pages/40-1001-29-1.php') 轉知資訊-政令宣導
-        a.item(href='/tlhc/pages/40-1001-30-1.php') 獎助學金公告
-        a.item(href='/tlhc/pages/40-1001-28-1.php') 教務處公告
-        a.item(href='/tlhc/pages/40-1001-38-1.php') 榮譽榜
+        a.item(href='/') 公告
         a.item(href='/tlhc/score/') 成績
         .right.fitted.item
-            .ts.underlined.basic.right.icon.input
-                input(type='text', placeholder='搜尋',id='search')
-                i.search.link.icon(onclick="search()")
+            if(score)
+                a.item(href='/tlhc/score/logout') 登出
+            else
+                .ts.underlined.basic.right.icon.input
+                    input(type='text', placeholder='搜尋',id='search')
+                    i.search.link.icon(onclick="search()")

@@ -20,12 +20,36 @@ app.use(session({
     saveUninitialized: false
 })); //發餅乾
 app.use('/js', express.static('js'))
+app.use('/css', express.static('css'))
+    //設定 /js 及 /css 目錄
 
 app.get('/', function(req, res) {
-    links = {
-        '校園公告': 'tlhc/pages/40-1001-15-1.php',
-    }
-    res.render('index', { title: '這是首頁', links: links })
+    links = [{
+        'header': '圖書館公告',
+        'description': '消失在學校網頁上ㄉ圖書館公告',
+        'link': '/tlhc/pages/40-1001-21-1.php'
+    }, {
+        'header': '榮譽榜',
+        'description': '實際上沒人去看的東西，只會害你升旗站更久',
+        'link': '/tlhc/pages/40-1001-38-1.php'
+    }, {
+        'header': '轉知資訊-政令宣導',
+        'description': '一些比賽跟你完全不會想點進去看的東西',
+        'link': '/tlhc/pages/40-1001-29-1.php'
+    }, {
+        'header': '校園公告',
+        'description': '我沒梗ㄌ，快 PR 推埂上來',
+        'link': '/tlhc/pages/40-1001-15-1.php'
+    }, {
+        'header': '獎助學金公告',
+        'description': '我沒梗ㄌ，快 PR 推埂上來',
+        'link': '/tlhc/pages/40-1001-30-1.php'
+    }, {
+        'header': '教務處公告',
+        'description': '我沒梗ㄌ，快 PR 推埂上來',
+        'link': '/tlhc/pages/40-1001-28-1.php'
+    }]
+    res.render('index', { title: '公告', links: links })
 })
 
 // ㄉㄌㄐㄕ
@@ -53,6 +77,7 @@ app.get('/tlhc/pages/:id', function(req, res) {
         if (pgid == 30) { var pgTitle = pgTitle + " - 獎助學金公告" }
         if (pgid == 28) { var pgTitle = pgTitle + " - 教務處公告" }
         if (pgid == 38) { var pgTitle = pgTitle + " - 榮譽榜" }
+        if (pgid == 21) { var pgTitle = pgTitle + " - 圖書館公告" }
 
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
@@ -201,24 +226,24 @@ function getScore(cookie, res) {
         }
         var $ = cheerio.load(b);
         var user = {
-                id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
-                name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
-                class: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
-                num: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
-            }
-            //var score = $("body>center>table:nth-child(3) td>table tr font")
-            /*var exam = $("body>center>table:nth-child(3) td>table tr>td.ColumnTDX>.ColumnFONT")
-            var examData = []
-            for (var i = 0; i < exam.length; i++) {
-                var preJoin = {
-                    'text': $(exam[i]).text(),
-                }
-                examData.push(preJoin);
-            } //考試*/
+            id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
+            name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
+            class: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
+            num: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+        }
 
         var score = $("body>center>table:nth-child(3) td>table>tbody")
-        res.render('score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html() });
+        var total = $("body>center>table:nth-child(4) td>table>tbody")
+        res.render('score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html(), total: total.html() });
     });
 }
+app.get('/tlhc/score/logout', function(req, res) {
+    req.session.destroy()
+    res.redirect("/tlhc/score/");
+});
+
+app.use(function(req, res, next) {
+    res.status(404).render('error', { title: '糟糕', message: '看來我們找不到您要的東西' })
+});
 
 app.listen(3000, () => console.log("working on http://localhost:3000"))

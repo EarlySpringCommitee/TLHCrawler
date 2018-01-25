@@ -1,0 +1,74 @@
+#navigator {
+    margin: 0 auto;
+    text-align: center;
+}
+
+#login {
+    max-width: 400px;
+}
+
+
+/*
+    成績
+*/
+
+#score {
+    min-width: 992px;
+}
+
+#score tr:nth-child(1)>td,
+#total tr:nth-child(1)>td {
+    background: #f7f7f7;
+    font-weight: 500;
+    color: #404040;
+    font-size: 1em;
+}
+
+#score tr:last-child {
+    display: none;
+}
+
+#score td>font,
+#total td>font {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+}
+
+.gs.scroll {
+    overflow: scroll;
+    min-width: 100%;
+}
+
+
+/* hide trash */
+
+#score td:nth-child(4),
+#total td:nth-child(4),
+#score td:nth-child(7),
+#total td:nth-child(7) {
+    display: none;
+}
+
+
+/*
+    文章內文
+*/
+
+#content,
+#content * {
+    font-family: "SF Pro TC", "SF Pro Text", "SF Pro Icons", "PingFang TC", "Helvetica Neue", "Helvetica", "Arial", "Microsoft JhengHei", wf_SegoeUI, "Segoe UI", Segoe, "Segoe WP", Tahoma, Verdana, Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, 微軟正黑體, "LiHei Pro", "WenQuanYi Micro Hei", "Droid Sans Fallback", "AR PL UMing TW", Roboto, "Helvetica Neue", "Hiragino Maru Gothic ProN", メイリオ, "ヒラギノ丸ゴ ProN W4", Meiryo, "Droid Sans", sans-serif !important;
+    font-size: 16px !important;
+    background-color: rgba(0, 0, 0, 0) !important;
+    color: rgb(80, 80, 80) !important;
+}
+
+#content a {
+    color: rgb(93, 73, 171) !important;
+}
+
+#content a:hover {
+    color: rgb(76, 60, 141) !important;
+}
+
+#content a:active {
+    color: rgb(51, 41, 94) !important;
+}
