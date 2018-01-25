@@ -6,28 +6,19 @@ body
 	include _nav.pug
 	br
 	.ts.narrow.container
-		br
-		br
 		if(message)
-			if(logout)
-				h1.ts.center.aligned.header 登出成功！
-					.sub.header=message
-			else
-				h1.ts.center.aligned.negative.header 提醒
-					.sub.header=message
+			h1.ts.center.aligned.negative.header 提醒
+				.sub.header=message
 		else
 			h1.ts.center.aligned.header 嗨！
 				.sub.header 輸入您的學號及身分證字號並開始使用
 		#login.ts.centered.secondary.segment
-			if(logout)
-				a.ts.positive.fluid.button(href='/tlhc/score/') 確定
-			else
-				form.ts.form(method='post',role='form',action='/tlhc/score/')
-					.field
-						label 學號
-						input(type='text', placeholder='', id='userID', name='userID',required)
-					.field
-						label 身分證字號
-						input(type='password', placeholder='', id='userPASS', name='userPASS',style='text-transform:uppercase',required)
-					button.ts.positive.fluid.button(type='submit') 登入
+			form.ts.form(method='post',role='form',action='/tlhc/score/')
+				.field
+					label 學號
+					input(type='text', placeholder='', id='userID', name='userID',required)
+				.field
+					label 身分證字號
+					input(type='password', placeholder='', id='userPASS', name='userPASS',style='text-transform:uppercase',required)
+				button.ts.positive.fluid.button(type='submit') 登入
 	include _footer.pug

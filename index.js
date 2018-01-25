@@ -243,11 +243,11 @@ app.get('/tlhc/score/logout', function(req, res) {
 });
 
 app.use(function(req, res, next) {
-    res.status(404).render('error', { title: '糟糕 - 404', message: '看來我們找不到您要的東西' })
+    res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
 });
 app.use(function(err, req, res, next) {
     console.error(err.stack);
-    res.status(500).render('error', { title: '糟糕 - 500', message: '看來工程師不小心打翻了味增湯' })
+    res.status(500).render('error', { title: '錯誤 - 500', message: '看來工程師不小心打翻了香菇雞湯' })
 }); // error
 
 app.listen(3000, () => console.log("working on http://localhost:3000"))
