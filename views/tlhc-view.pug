@@ -7,6 +7,9 @@ body
         include _nav.pug
         br
         .ts.container
+            if(originalURL)
+                a.ts.mini.very.compact.basic.right.floated.button(href=originalURL) 前往本頁原址
+                br
             h1.ts.header=item.title
 
             if(item.content)

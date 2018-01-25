@@ -6,6 +6,9 @@ body
     include _nav.pug
     br
     .ts.container
+        if(originalURL)
+            a.ts.mini.very.compact.basic.right.floated.button(href=originalURL) 前往本頁原址
+            br
         .ts.segmented.selection.items
             - var lists = tlhc;
             each item in lists

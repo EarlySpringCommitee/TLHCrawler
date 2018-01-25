@@ -54,8 +54,9 @@ app.get('/', function(req, res) {
 
 // ㄉㄌㄐㄕ
 app.get('/tlhc/pages/:id', function(req, res) {
+    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
     request({
-        url: "http://web.tlhc.ylc.edu.tw/files/" + req.params.id,
+        url: originalURL,
         method: "GET"
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
@@ -107,14 +108,15 @@ app.get('/tlhc/pages/:id', function(req, res) {
             }
             tlhcData.push(preJoin);
         }
-        res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData })
+        res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData, originalURL: originalURL })
     });
 });
 
 app.get('/tlhc/post/:id', function(req, res) {
     //res.send('USER ' + req.params.id);
+    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
     request({
-        url: "http://web.tlhc.ylc.edu.tw/files/" + req.params.id,
+        url: originalURL,
         method: "GET"
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
@@ -145,7 +147,7 @@ app.get('/tlhc/post/:id', function(req, res) {
             'content': content,
             'view': view,
         }]
-        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData })
+        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData, originalURL: originalURL })
     });
 });
 app.get('/tlhc/search/:id', function(req, res) {
