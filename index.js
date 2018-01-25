@@ -48,10 +48,6 @@ app.get('/', function(req, res) {
         'header': '教務處公告',
         'description': '招生考試之類的',
         'link': '/tlhc/pages/40-1001-28-1.php'
-    }, {
-        'header': '資處科公告',
-        'description': '🤔🤔🤔',
-        'link': '/tlhc/pages/40-1004-66-1.php'
     }]
     res.render('index', { title: 'ㄉㄌㄐㄕ - 公告', links: links })
 })
@@ -89,7 +85,9 @@ app.get('/tlhc/pages/:id', function(req, res) {
         if (pgid == 66) { var pgTitle = pgTitle + " - 資處科公告" }
         if (pgid == 246) {
             // 這頁不知道為啥一直出錯 Orz
+            // http://web.tlhc.ylc.edu.tw/files/11-1004-246-2.php
             res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+            return
         }
 
         for (var i = 0; i < pages.length; i++) {
@@ -151,8 +149,6 @@ app.get('/tlhc/post/:id', function(req, res) {
     });
 });
 app.get('/tlhc/search/:id', function(req, res) {
-    //res.send('USER ' + req.params.id);
-    console.log(req.params.id)
     request.post({
         url: "http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?" + req.params.id,
         form: {
