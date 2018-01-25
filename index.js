@@ -48,6 +48,10 @@ app.get('/', function(req, res) {
         'header': '教務處公告',
         'description': '招生考試之類的',
         'link': '/tlhc/pages/40-1001-28-1.php'
+    }, {
+        'header': '資處科公告',
+        'description': '🤔🤔🤔',
+        'link': '/tlhc/pages/40-1004-66-1.php'
     }]
     res.render('index', { title: 'ㄉㄌㄐㄕ - 公告', links: links })
 })
@@ -60,7 +64,10 @@ app.get('/tlhc/pages/:id', function(req, res) {
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
-        if (e || !b) { return; }
+        if (e || !b) {
+            res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+            return;
+        }
         var $ = cheerio.load(b);
         var tlhcData = [];
         var pageData = [];
@@ -72,12 +79,18 @@ app.get('/tlhc/pages/:id', function(req, res) {
 
         var pgid = req.params.id.split("-")[2]
         var pgTitle = 'ㄉㄌㄐㄕ'
+
         if (pgid == 15) { var pgTitle = pgTitle + " - 校園公告" }
         if (pgid == 29) { var pgTitle = pgTitle + " - 轉知資訊 / 政令宣導" }
         if (pgid == 30) { var pgTitle = pgTitle + " - 獎助學金公告" }
         if (pgid == 28) { var pgTitle = pgTitle + " - 教務處公告" }
         if (pgid == 38) { var pgTitle = pgTitle + " - 榮譽榜" }
         if (pgid == 21) { var pgTitle = pgTitle + " - 圖書館公告" }
+        if (pgid == 66) { var pgTitle = pgTitle + " - 資處科公告" }
+        if (pgid == 246) {
+            // 這頁不知道為啥一直出錯 Orz
+            res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        }
 
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
@@ -86,11 +99,12 @@ app.get('/tlhc/pages/:id', function(req, res) {
             }
             pageData.push(preJoin);
         }
+
         for (var i = 0; i < tag.length; i++) {
             var preJoin = {
                 'tag': $(tag[i]).text(),
                 'title': $(title[i]).text(),
-                'link': '/tlhc/post/' + $(link[i]).attr('href').split("/")[4],
+                'link': '/tlhc/post/' + $(link[i]).attr('href').split("/files/")[1],
                 'date': $(date[i]).text()
             }
             tlhcData.push(preJoin);
@@ -107,7 +121,10 @@ app.get('/tlhc/post/:id', function(req, res) {
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
-        if (e || !b) { return; }
+        if (e || !b) {
+            res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+            return;
+        }
         var $ = cheerio.load(b);
         var tlhcData = [];
         var title = $("#Dyn_2_2 .h4.item-title").text();
