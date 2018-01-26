@@ -21,6 +21,9 @@ $(document).ready(function() {
             search()
         }
     });
+    $('#content td').attr("style", "")
+    $('#content table').attr("style", "")
+    $('#content table').attr("class", "ts celled table")
 });
 
 function search() {

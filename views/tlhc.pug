@@ -10,7 +10,9 @@ body
                 a.ts.card(href=item.link)
                     .content
                         .header=item.title
-                        .description=item.date+' '+item.tag
+                    .extra.content
+                        .ts.basic.label=item.date
+                        .ts.basic.label=item.tag
             else
                 .ts.header 未找到符合條件的資料
         br
