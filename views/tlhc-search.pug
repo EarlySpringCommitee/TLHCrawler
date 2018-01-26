@@ -5,9 +5,8 @@ body
         .ts.center.aligned.container
             h1.ts.center.aligned.header!= title
     include _nav.pug
-    br
     .ts.container
-        .ts.one.cards
+        .ts.stackable.two.cards
             each item in tlhc
                     a.ts.card(href=item.link)
                         .content
