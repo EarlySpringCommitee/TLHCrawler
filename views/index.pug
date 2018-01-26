@@ -1,20 +1,14 @@
 include _header.pug
-body
-    header.ts.heading.vertically.padded.fluid.slate
-        .ts.center.aligned.container
-            h1.ts.center.aligned.header!= title
-    include _nav.pug
-    .ts.container
-        .ts.doubling.four.cards
-            each item in links
-                a.ts.card(href=item.link)
-                    .content
-                        .header=item.header
-                        .description=item.description
-            else
-                .ts.card
-                    .content
-                        .description noithing
-    include _footer.pug
-
-
+include _nav.pug
+.ts.container
+    .ts.doubling.four.cards
+        each item in links
+            a.ts.card(href=item.link)
+                .content
+                    .header=item.header
+                    .description=item.description
+        else
+            .ts.card
+                .content
+                    .description noithing
+include _footer.pug

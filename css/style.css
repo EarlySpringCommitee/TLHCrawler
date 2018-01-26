@@ -9,19 +9,36 @@
 
 
 /*
+    Header
+*/
+
+header {
+    padding: 5em 2em !important;
+    padding-bottom: calc(4em + 48px) !important;
+}
+
+
+/*
     NAV
 */
 
 #nav {
-    box-shadow: 0px 4px 6px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.14);
     margin-bottom: 35px;
+    margin-top: -48px;
+    background-color: rgba(0, 0, 0, 0.22);
 }
 
 #nav a.item {
     border-radius: 4px;
 }
 
+#nav a.item:hover {
+    background: rgba(0, 0, 0, 0.07);
+}
+
 #nav .ts.container {
+    padding-top: 4px;
     padding-bottom: 4px;
 }
 

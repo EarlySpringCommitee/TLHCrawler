@@ -1,4 +1,4 @@
-#nav.ts.basic.fluid.borderless.menu.horizontally.scrollable
+#nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
     .ts.container
         a.item(href='/') 公告
         a.item(href='/tlhc/score/') 成績
@@ -6,6 +6,6 @@
             if(score)
                 a.item(href='/tlhc/score/logout') 登出
             else
-                .ts.underlined.basic.right.icon.input
+                .ts.inverted.borderless.basic.right.icon.input
                     input(type='text', placeholder='搜尋',id='search')
                     i.search.link.icon(onclick="search()")
