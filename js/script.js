@@ -54,7 +54,7 @@ function search() {
     var search = document.getElementById('search').value
     if (!search) {
         alert("未輸入任何內容")
-        return;
+        return
     }
     location.href = '/tlhc/search/' + search
 }
