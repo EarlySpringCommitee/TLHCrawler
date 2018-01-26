@@ -26,7 +26,7 @@ app.use('/css', express.static('css'))
 app.get('/', function(req, res) {
     links = [{
         'header': '校園公告',
-        'description': '好像很重要，又好想沒那麼重要',
+        'description': '好像很重要，又沒那麼重要',
         'link': '/tlhc/pages/40-1001-15-1.php'
     }, {
         'header': '榮譽榜',
