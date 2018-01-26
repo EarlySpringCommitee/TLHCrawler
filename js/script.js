@@ -42,10 +42,8 @@ $(document).ready(function() {
     $('#content table').attr("style", "")
     $('#content table').attr("class", "ts celled table")
     $('#content td').attr("style", "")
-
     $('#content img').attr('src', function() {
         var osrc = $(this).attr('src')
-        console.log(osrc)
         return 'http://web.tlhc.ylc.edu.tw' + osrc
     })
     $('#content img').attr("style", "")

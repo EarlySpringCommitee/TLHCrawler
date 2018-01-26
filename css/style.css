@@ -39,8 +39,9 @@
     成績
 */
 
-#score {
-    min-width: 992px;
+#score,
+#total {
+    min-width: 700px;
 }
 
 #score tr:nth-child(1)>td,
@@ -55,9 +56,10 @@
     display: none;
 }
 
-#score td>font,
-#total td>font {
-    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+#score td.score,
+#total td.score,
+#total tr:nth-child(1n+2) td:nth-child(1n+2) {
+    font-family: 'Roboto Mono', monospace !important;
 }
 
 .gs.scroll {

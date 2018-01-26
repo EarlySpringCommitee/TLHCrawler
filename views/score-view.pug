@@ -25,7 +25,7 @@ body
 				kbd Shift+滾輪
 				|  或是手指來移動
 		.gs.scroll
-			table#score.ts.definition.compact.striped.fixed.single.line.table
+			table#score.ts.definition.compact.striped.fixed.single.line.celled.table(style='display:none')
 				!= score
 		br
 		h3.ts.header 總成績
@@ -33,6 +33,6 @@ body
 				kbd Shift+滾輪
 				|  或是手指來移動
 		.gs.scroll
-			table#total.ts.definition.compact.striped.fixed.single.line.table
+			table#total.ts.definition.compact.striped.fixed.single.line.celled.table(style='display:none')
 				!= total
 	include _footer.pug
