@@ -192,7 +192,7 @@ app.get('/tlhc/search/:id', function(req, res) {
     });
 });
 app.get('/tlhc/login/', function(req, res) {
-    res.render('login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/' });
+    res.render('s-login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/', system: true });
 });
 app.post('/tlhc/login/', function(req, res) {
     getCookie(req, res)
@@ -207,6 +207,13 @@ app.get('/tlhc/score/', function(req, res) {
 app.get('/tlhc/day/', function(req, res) {
     if (req.session.tlhc) {
         getDay(req.session.tlhc, res)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
+app.get('/tlhc/rewards/', function(req, res) {
+    if (req.session.tlhc) {
+        getRewards(req.session.tlhc, res)
     } else {
         res.redirect("/tlhc/login/")
     }
@@ -227,7 +234,7 @@ function getCookie(req, res) {
     }, function(e, r, b) {
         // 錯誤代碼 
         // 傳回的資料內容 
-        if (e || !b) { return; }
+        if (e || !b) { return }
         req.session.tlhc = r.headers['set-cookie'];
         request({
             url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
@@ -241,13 +248,13 @@ function getCookie(req, res) {
         }, function(e, r, b) {
             /* e: 錯誤代碼 */
             /* b: 傳回的資料內容 */
-            var b = iconv.decode(b, 'Big5');
-            if (e || !b) { return; }
+            var b = iconv.decode(b, 'Big5')
+            if (e || !b) { return }
             if (b == '無權使用 請登入') {
-                res.render('login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/', message: '請檢查輸入的學號及身分證字號是否正確' });
+                res.render('s-login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/', message: '請檢查輸入的學號及身分證字號是否正確', system: true })
                 return
             } else {
-                res.render('login-sucess', { title: 'ㄉㄌㄐㄕ - 登入成功' });
+                res.render('s-login-success', { title: 'ㄉㄌㄐㄕ - 登入成功', system: true })
             }
         });
         //一開始用帳密跟學校換餅乾
@@ -269,13 +276,13 @@ function getScore(cookie, res) {
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5');
-        if (e || !b) { return; }
+        var b = iconv.decode(b, 'Big5')
+        if (e || !b) { return }
         if (b == '無權使用 請登入') {
             res.redirect("/tlhc/login/")
             return
         }
-        var $ = cheerio.load(b);
+        var $ = cheerio.load(b)
         var user = {
             id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
             name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
@@ -285,7 +292,7 @@ function getScore(cookie, res) {
 
         var score = $("body>center>table:nth-child(3) td>table>tbody")
         var total = $("body>center>table:nth-child(4) td>table>tbody")
-        res.render('score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html(), total: total.html() });
+        res.render('s-score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html(), total: total.html(), system: true })
     });
 }
 
@@ -302,13 +309,13 @@ function getDay(cookie, res) {
     }, function(e, r, b) {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5');
-        if (e || !b) { return; }
+        var b = iconv.decode(b, 'Big5')
+        if (e || !b) { return }
         if (b == '無權使用 請登入') {
             res.redirect("/tlhc/login/")
             return
         }
-        var $ = cheerio.load(b);
+        var $ = cheerio.load(b)
         var user = {
             id: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
             name: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
@@ -316,7 +323,38 @@ function getDay(cookie, res) {
             num: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
         }
         var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-        res.render('day-view', { title: 'ㄉㄌㄐㄕ - 出勤', user: user, day: day.html() });
+        res.render('s-default-view', { title: 'ㄉㄌㄐㄕ - 出勤', user: user, day: day.html(), system: true })
+    });
+}
+
+function getRewards(cookie, res) {
+    request({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_CHK.asp",
+        method: "GET",
+        encoding: null,
+        headers: {
+            //some header
+            'Cookie': cookie,
+            //some header
+        }
+    }, function(e, r, b) {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        var b = iconv.decode(b, 'Big5')
+        if (e || !b) { return }
+        if (b == '無權使用 請登入') {
+            res.redirect("/tlhc/login/")
+            return
+        }
+        var $ = cheerio.load(b)
+        var user = {
+            id: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
+            name: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
+            class: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
+            num: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+        }
+        var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
+        res.render('s-default-view', { title: 'ㄉㄌㄐㄕ - 獎懲', user: user, day: day.html(), rewards: true, system: true })
     });
 }
 

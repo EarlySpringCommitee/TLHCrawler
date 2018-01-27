@@ -16,7 +16,12 @@ include _nav.pug
 		+card('姓名',user.name,'user')
 		+card('班級',user.class,'student')
 	br
-	h3.ts.header 出勤資料
+	if(rewards)
+		-var dataTitle='獎懲資料'
+	else
+		-var dataTitle='出勤資料'
+	
+	h3.ts.header=dataTitle
 		.sub.header 若無法看見完整內容可利用 
 			kbd Shift+滾輪
 			|  或是手指來移動

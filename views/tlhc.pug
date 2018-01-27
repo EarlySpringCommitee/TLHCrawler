@@ -12,8 +12,8 @@ include _nav.pug
         else
             .ts.header 未找到符合條件的資料
     br
-    #navigator
-        .ts.buttons
+    #navigator.gs.scroll.non-style
+        .ts.basic.buttons
             each page in pages
-                a.ts.info.button(href=page.link)=page.text
+                a.ts.button(href=page.link)=page.text
 include _footer.pug
