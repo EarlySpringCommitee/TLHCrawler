@@ -16,7 +16,7 @@ $(document).ready(function() {
 
         easing: 'linear' // The CSS3 easing function of the ripple
     });
-    /*$.ripple(".menu a.item", {
+    $.ripple(".menu a.item", {
         debug: false, // Turn Ripple.js logging on/off
         on: 'mousedown', // The event to trigger a ripple effect
 
@@ -24,7 +24,7 @@ $(document).ready(function() {
         color: "auto", // Set the background color. If set to "auto", it will use the text color
         multi: true, // Allow multiple ripples per element
 
-        duration: 0.3, // The duration of the ripple
+        duration: 0.27, // The duration of the ripple
 
         // Filter function for modifying the speed of the ripple
         rate: function(pxPerSecond) {
@@ -32,7 +32,7 @@ $(document).ready(function() {
         },
 
         easing: 'linear' // The CSS3 easing function of the ripple
-    });*/
+    });
     $('#search').keypress(function(e) {
         if (e.which == 13) {
             search()

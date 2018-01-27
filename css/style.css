@@ -8,9 +8,9 @@
 }
 
 
-/*
+/*==========
     Header
-*/
+==========*/
 
 header {
     padding: 5em 2em !important;
@@ -18,9 +18,9 @@ header {
 }
 
 
-/*
+/*==========
     NAV
-*/
+==========*/
 
 #nav {
     box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.14);
@@ -48,19 +48,23 @@ header {
     color: white;
 }
 
+#nav .has-ripple {
+    overflow: unset;
+}
 
-/*
+
+/*==========
     卡片
-*/
+==========*/
 
 .ts.cards a.ts.card:hover {
     transform: scale(1.02) !important;
 }
 
 
-/*
+/*==========
     成績
-*/
+==========*/
 
 #score tr:nth-child(1)>td,
 #day tr:nth-child(1)>td,
@@ -114,9 +118,9 @@ header {
 }
 
 
-/*
+/*==========
     文章內文
-*/
+==========*/
 
 #content,
 #content * {
