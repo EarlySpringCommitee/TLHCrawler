@@ -16,7 +16,7 @@ $(document).ready(function() {
 
         easing: 'linear' // The CSS3 easing function of the ripple
     });
-    $.ripple(".menu a.item", {
+    /*$.ripple(".menu a.item", {
         debug: false, // Turn Ripple.js logging on/off
         on: 'mousedown', // The event to trigger a ripple effect
 
@@ -32,7 +32,7 @@ $(document).ready(function() {
         },
 
         easing: 'linear' // The CSS3 easing function of the ripple
-    });
+    });*/
     $('#search').keypress(function(e) {
         if (e.which == 13) {
             search()
