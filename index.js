@@ -150,6 +150,7 @@ app.get('/tlhc/post/:id', function(req, res) {
         res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData, originalURL: originalURL })
     });
 });
+
 app.get('/tlhc/search/:id', function(req, res) {
     request.post({
         url: "http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?" + req.params.id,
@@ -190,14 +191,28 @@ app.get('/tlhc/search/:id', function(req, res) {
         res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋', tlhc: tlhcData, pages: pageData })
     });
 });
+app.get('/tlhc/login/', function(req, res) {
+    res.render('login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/' });
+});
+app.post('/tlhc/login/', function(req, res) {
+    getCookie(req, res)
+});
 app.get('/tlhc/score/', function(req, res) {
     if (req.session.tlhc) {
         getScore(req.session.tlhc, res)
     } else {
-        res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入' });
+        res.redirect("/tlhc/login/")
     }
 });
-app.post('/tlhc/score/', function(req, res) {
+app.get('/tlhc/day/', function(req, res) {
+    if (req.session.tlhc) {
+        getDay(req.session.tlhc, res)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
+
+function getCookie(req, res) {
     var userID = req.body['userID']
     var userPASS = req.body['userPASS']
     request.post({
@@ -214,11 +229,32 @@ app.post('/tlhc/score/', function(req, res) {
         // 傳回的資料內容 
         if (e || !b) { return; }
         req.session.tlhc = r.headers['set-cookie'];
-        getScore(r.headers['set-cookie'], res)
-            //一開始用帳密跟學校換餅乾
-            //然後餅乾存在 session 裡面
+        request({
+            url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
+            method: "GET",
+            encoding: null,
+            headers: {
+                //some header
+                'Cookie': r.headers['set-cookie'],
+                //some header
+            }
+        }, function(e, r, b) {
+            /* e: 錯誤代碼 */
+            /* b: 傳回的資料內容 */
+            var b = iconv.decode(b, 'Big5');
+            if (e || !b) { return; }
+            if (b == '無權使用 請登入') {
+                res.render('login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/', message: '請檢查輸入的學號及身分證字號是否正確' });
+                return
+            } else {
+                res.render('login-sucess', { title: 'ㄉㄌㄐㄕ - 登入成功' });
+            }
+        });
+        //一開始用帳密跟學校換餅乾
+        //然後餅乾存在 session 裡面
     });
-});
+
+}
 
 function getScore(cookie, res) {
     request({
@@ -236,7 +272,7 @@ function getScore(cookie, res) {
         var b = iconv.decode(b, 'Big5');
         if (e || !b) { return; }
         if (b == '無權使用 請登入') {
-            res.render('score-login', { title: 'ㄉㄌㄐㄕ - 登入', message: '請確認學號及身分證字號正確無誤！' });
+            res.redirect("/tlhc/login/")
             return
         }
         var $ = cheerio.load(b);
@@ -252,10 +288,42 @@ function getScore(cookie, res) {
         res.render('score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html(), total: total.html() });
     });
 }
+
+function getDay(cookie, res) {
+    request({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_DAY.asp",
+        method: "GET",
+        encoding: null,
+        headers: {
+            //some header
+            'Cookie': cookie,
+            //some header
+        }
+    }, function(e, r, b) {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        var b = iconv.decode(b, 'Big5');
+        if (e || !b) { return; }
+        if (b == '無權使用 請登入') {
+            res.redirect("/tlhc/login/")
+            return
+        }
+        var $ = cheerio.load(b);
+        var user = {
+            id: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
+            name: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
+            class: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
+            num: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+        }
+        var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
+        res.render('day-view', { title: 'ㄉㄌㄐㄕ - 出勤', user: user, day: day.html() });
+    });
+}
+
 app.get('/tlhc/score/logout', function(req, res) {
     req.session.destroy()
-    res.redirect("/tlhc/score/");
-});
+    res.redirect("/tlhc/score/")
+}); // 登出
 
 app.use(function(req, res, next) {
     res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })

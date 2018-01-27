@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
-    $("#score ,#total").attr('style', '')
-    $("#score tr:first-child ,#total tr:last-child").remove()
+    $("#score ,#total,#day").attr('style', '')
+    $("#score tr:first-child ,#total tr:last-child,#day tr:last-child").remove()
 
     $('#score td ,#total td').html(function() {
         var text = $(this).text()

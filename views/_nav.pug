@@ -2,8 +2,9 @@
     .ts.container
         a.item(href='/') 公告
         a.item(href='/tlhc/score/') 成績
+        a.item(href='/tlhc/day') 出勤
         .right.fitted.item
-            if(score)
+            if(score||day)
                 a.item(href='/tlhc/score/logout') 登出
             else
                 .ts.inverted.borderless.basic.right.icon.input
