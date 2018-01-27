@@ -33,6 +33,7 @@ header {
 
 #nav a.item {
     border-radius: 4px;
+    min-width: 4.29652em;
 }
 
 #nav a.item:hover {
@@ -42,14 +43,12 @@ header {
 #nav .ts.container {
     padding-top: 4px;
     padding-bottom: 4px;
+    padding-left: .88rem !important;
+    padding-right: .88rem !important;
 }
 
 #nav .input .icon {
     color: white;
-}
-
-#nav .has-ripple {
-    overflow: unset;
 }
 
 
