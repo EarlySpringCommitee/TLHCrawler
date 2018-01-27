@@ -108,14 +108,17 @@ header {
     box-shadow: 0 0 rgba(0, 0, 0, 0) !important;
 }
 
-#content a {
+#content a,
+#content a * {
     color: rgb(93, 73, 171) !important;
 }
 
-#content a:hover {
+#content a:hover,
+#content a:hover * {
     color: rgb(76, 60, 141) !important;
 }
 
-#content a:active {
+#content a:active,
+#content a:active * {
     color: rgb(51, 41, 94) !important;
 }
