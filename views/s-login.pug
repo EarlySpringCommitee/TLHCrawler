@@ -1,5 +1,6 @@
 include _header.pug
 include _nav.pug
+script(src='/js/login.js')
 .ts.container
 	if(message)
 		h1.ts.center.aligned.negative.poyon.header 提醒
@@ -8,12 +9,16 @@ include _nav.pug
 		h1.ts.center.aligned.header 嗨！
 			.sub.header 輸入您的學號及身分證字號並開始使用
 	#login.ts.centered.secondary.segment
-		form.ts.form(method='post',role='form',action=post)
+		form.ts.form(method='post',role='form',action=post,onsubmit='return check()')
 			.field
 				label 學號
 				input(type='text', placeholder='', id='userID', name='userID',required)
 			.field
 				label 身分證字號
 				input(type='password', placeholder='', id='userPASS', name='userPASS',style='text-transform:uppercase',required)
+			.field
+				.ts.checkbox
+					input(type='checkbox', id='isRmbPwd', name='isRmbPwd')
+					label(for='isRmbPwd') 記住我
 			button.ts.positive.fluid.button(type='submit') 登入
 include _footer.pug
