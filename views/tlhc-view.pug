@@ -11,8 +11,9 @@ each item in tlhc
 
         .ts.selection.items
             each file in files
-                a.item(href=file.file)
-                    i.large.file.outline.icon
+                a.item(href=file.file,download=file.name)
+                    i.large.icon
+                        i.file-icon(data-type=file.type)
                     .content
                         .header 附件
                         .extra=file.name

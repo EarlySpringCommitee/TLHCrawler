@@ -135,9 +135,14 @@ app.get('/tlhc/post/:id', function(req, res) {
         var fileData = [];
         for (var i = 0; i < files.length; i++) {
             if ($(files[i]).text() != "下載附件") {
+                var file = $(files[i]).attr('href')
+                if ($(files[i]).attr('href') == 'javascript:void(0)') {
+                    var file = $(files[i]).attr('onclick').split("'")[3]
+                }
                 var preJoin = {
                     'name': $(files[i]).text(),
-                    'file': 'http://web.tlhc.ylc.edu.tw' + $(files[i]).attr('href'),
+                    'file': 'http://web.tlhc.ylc.edu.tw' + file,
+                    'type': file.split(".")[1],
                 }
                 fileData.push(preJoin);
             }
