@@ -21,7 +21,8 @@ app.use(session({
 })); //發餅乾
 app.use('/js', express.static('js'))
 app.use('/css', express.static('css'))
-    //設定 /js 及 /css 目錄
+app.use('/icon', express.static('icon'))
+    //設定 /js /icon /css 目錄
 
 app.get('/', function(req, res) {
     links = [{

@@ -7,10 +7,14 @@
     max-width: 400px;
 }
 
+kbd {
+    font-family: 'Roboto Mono', monospace !important;
+}
 
-/*==========
+
+/*===========
     Header
-==========*/
+===========*/
 
 header {
     padding: 5em 2em !important;
@@ -117,9 +121,9 @@ header {
 }
 
 
-/*==========
+/*=============
     文章內文
-==========*/
+=============*/
 
 #content,
 #content * {
