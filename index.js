@@ -153,7 +153,7 @@ app.get('/tlhc/post/:id', function(req, res) {
             'content': content,
             'view': view,
         }]
-        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData, originalURL: originalURL })
+        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData, originalURL: originalURL, view: view })
     });
 });
 
@@ -377,4 +377,4 @@ app.use(function(err, req, res, next) {
     res.status(500).render('error', { title: '錯誤 - 500', message: '看來工程師不小心打翻了香菇雞湯' })
 }); // error
 
-app.listen(3000, () => console.log("working on http://localhost:3000"))
+app.listen(3000, () => console.log(Date() + " working on http://localhost:3000"))
