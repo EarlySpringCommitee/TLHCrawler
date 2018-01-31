@@ -41,3 +41,19 @@ function search() {
     }
     location.href = '/tlhc/search/' + search
 }
+
+function headerImg() {
+    if (window.sessionStorage["headerImg"]) {
+        var headerImg = window.sessionStorage["headerImg"]
+    } else {
+        var perviewImg = Trianglify({
+            width: 2560,
+            height: 2560,
+            stroke_width: 200,
+            cell_size: 100,
+        });
+        var headerImg = perviewImg.png()
+        window.sessionStorage["headerImg"] = headerImg
+    }
+    document.write('<img src="' + headerImg + '">');
+}
