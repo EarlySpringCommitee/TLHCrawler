@@ -1,24 +1,23 @@
 include _header.pug
-each item in tlhc
-    include _nav.pug
-    .ts.container
-        h3.ts.header=item.title
+include _nav.pug
+.ts.container
+    h3.ts.header=tlhc.title
 
-        if(item.content)
-            #content.ts.basic.segment!=item.content
-        else
-            #content.ts.basic.segment 無內文
+    if(tlhc.content)
+        #content.ts.basic.segment!=tlhc.content
+    else
+        #content.ts.basic.segment 無內文
 
-        .ts.selection.items
-            each file in files
-                a.item(href=file.file,download=file.name)
-                    i.large.icon
-                        i.file-icon(data-type=file.type)
-                    .content
-                        .header 附件
-                        .extra=file.name
+    .ts.selection.items
+        each file in files
+            a.item(href=file.file,download=file.name)
+                i.large.icon
+                    i.file-icon(data-type=file.type)
+                .content
+                    .header 附件
+                    .extra=file.name
 
-        button.ts.fluid.labeled.icon.button(onclick='history.back()')
-            i.arrow.left.icon
-            | 回上頁
+    button.ts.fluid.labeled.icon.button(onclick='history.back()')
+        i.arrow.left.icon
+        | 回上頁
 include _footer.pug

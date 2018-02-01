@@ -19,6 +19,11 @@ html
             script console.log('originalURL 
                 =originalURL
                 |')
+        include _tags.pug
+        if(tlhc)
+            +social_tags(tlhc.title,tlhc.content,'/og/og.png?'+Math.floor(Math.random() * 1024))
+        else
+            +social_tags(title,'斗六家商的可愛爬蟲，可以替你查詢成績，也可以查看學校最新公告','/og/og.png')
     body
         header.ts.heading.vertically.padded.fluid.slate
             .image

@@ -24,6 +24,17 @@ app.use('/css', express.static('css'))
 app.use('/icon', express.static('icon'))
     //設定 /js /icon /css 目錄
 
+app.get('/og/og.png', function(req, res) {
+    var img = [
+        '1',
+        '2',
+        '3',
+    ];
+    //算出要輸出的圖片
+    var imgnum = Math.floor(Math.random() * img.length);
+    res.sendFile(__dirname + '/ogimage/' + img[imgnum] + '.png');
+    //og
+})
 app.get('/', function(req, res) {
     links = [{
         'header': '校園公告',
@@ -148,12 +159,18 @@ app.get('/tlhc/post/:id', function(req, res) {
             }
         }
 
-        var tlhcData = [{
+        var tlhcData = {
             'title': title,
             'content': content,
             'view': view,
-        }]
-        res.render('tlhc-view', { title: 'ㄉㄌㄐㄕ', tlhc: tlhcData, files: fileData, originalURL: originalURL, view: view })
+        }
+        res.render('tlhc-view', {
+            title: 'ㄉㄌㄐㄕ',
+            tlhc: tlhcData,
+            files: fileData,
+            originalURL: originalURL,
+            view: view
+        })
     });
 });
 
@@ -194,11 +211,19 @@ app.get('/tlhc/search/:id', function(req, res) {
             }
             pageData.push(preJoin);
         }
-        res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋', tlhc: tlhcData, pages: pageData })
+        res.render('tlhc-search', {
+            title: 'ㄉㄌㄐㄕ - 搜尋',
+            tlhc: tlhcData,
+            pages: pageData
+        })
     });
 });
 app.get('/tlhc/login/', function(req, res) {
-    res.render('s-login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/', system: true });
+    res.render('s-login', {
+        title: 'ㄉㄌㄐㄕ - 登入',
+        post: '/tlhc/login/',
+        system: true
+    });
 });
 app.post('/tlhc/login/', function(req, res) {
     getCookie(req, res)
@@ -257,10 +282,18 @@ function getCookie(req, res) {
             var b = iconv.decode(b, 'Big5')
             if (e || !b) { return }
             if (b == '無權使用 請登入') {
-                res.render('s-login', { title: 'ㄉㄌㄐㄕ - 登入', post: '/tlhc/login/', message: '請檢查輸入的學號及身分證字號是否正確', system: true })
+                res.render('s-login', {
+                    title: 'ㄉㄌㄐㄕ - 登入',
+                    post: '/tlhc/login/',
+                    message: '請檢查輸入的學號及身分證字號是否正確',
+                    system: true
+                })
                 return
             } else {
-                res.render('s-login-success', { title: 'ㄉㄌㄐㄕ - 登入成功', system: true })
+                res.render('s-login-success', {
+                    title: 'ㄉㄌㄐㄕ - 登入成功',
+                    system: true
+                })
             }
         });
         //一開始用帳密跟學校換餅乾

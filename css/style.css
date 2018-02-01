@@ -21,6 +21,10 @@ header {
     padding-bottom: calc(4em + 48px) !important;
 }
 
+header .header {
+    text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
 
 /*==========
 NAV
