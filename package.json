@@ -24,7 +24,8 @@
     "iconv-lite": "^0.4.19",
     "jsonfile": "^4.0.0",
     "pug": "^2.0.0-rc.4",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "trianglify": "^1.2.0"
   },
   "devDependencies": {
     "ws": "3.3.2"

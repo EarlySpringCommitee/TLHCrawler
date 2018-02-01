@@ -7,6 +7,7 @@ const express = require('express'); // Node.js Web 架構
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
+const Trianglify = require('trianglify'); // trianglify
 const app = express()
 
 app.set('views', __dirname + '/views');
@@ -26,16 +27,26 @@ app.use('/css', express.static('css'))
 app.use('/icon', express.static('icon'))
     //設定 /js /icon /css 目錄
 
+app.listen(3000, () => {
+    console.log("棒棒勝 Dedu gnehs.net")
+    console.log("https://github.com/TWScore/TLHCrawler")
+    console.log("-*-*-*-*-*-*-")
+    console.log(Date() + " working on http://localhost:3000")
+})
 app.get('/og/og.png', (req, res) => {
+    var pattern = Trianglify({ width: 1200, height: 500 })
     var img = [
         '1',
         '2',
         '3',
+        '4',
     ];
     //算出要輸出的圖片
     var imgnum = Math.floor(Math.random() * img.length);
-    res.sendFile(__dirname + '/ogimage/' + img[imgnum] + '.png');
-    //og
+    var img = __dirname + '/ogimage/' + img[imgnum] + '.png'
+
+    res.sendFile(img)
+        //og
 })
 app.get('/', (req, res) => {
     links = [{
@@ -427,11 +438,3 @@ app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).render('error', { title: '錯誤 - 500', message: '看來工程師不小心打翻了香菇雞湯' })
 }); // error
-
-
-app.listen(3000, () => {
-    console.log("棒棒勝 Dedu gnehs.net")
-    console.log("https://github.com/TWScore/TLHCrawler")
-    console.log("-*-*-*-*-*-*-")
-    console.log(Date() + " working on http://localhost:3000")
-})
