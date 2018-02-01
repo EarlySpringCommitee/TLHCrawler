@@ -12,19 +12,21 @@ const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
-    extended: true
-})); //拿餅乾
+    extended: true,
+}));
+//拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',
     resave: false,
-    saveUninitialized: false
-})); //發餅乾
+    saveUninitialized: false,
+}));
+//發餅乾
 app.use('/js', express.static('js'))
 app.use('/css', express.static('css'))
 app.use('/icon', express.static('icon'))
     //設定 /js /icon /css 目錄
 
-app.get('/og/og.png', function(req, res) {
+app.get('/og/og.png', (req, res) => {
     var img = [
         '1',
         '2',
@@ -35,7 +37,7 @@ app.get('/og/og.png', function(req, res) {
     res.sendFile(__dirname + '/ogimage/' + img[imgnum] + '.png');
     //og
 })
-app.get('/', function(req, res) {
+app.get('/', (req, res) => {
     links = [{
         'header': '校園公告',
         'description': '好像很重要，又沒那麼重要',
@@ -65,12 +67,15 @@ app.get('/', function(req, res) {
 })
 
 // ㄉㄌㄐㄕ
-app.get('/tlhc/pages/:id', function(req, res) {
+app.get('/tlhc/pages/:id', (req, res) => {
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
     request({
         url: originalURL,
-        method: "GET"
-    }, function(e, r, b) {
+        method: "GET",
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+        }
+    }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         if (e || !b) {
@@ -124,13 +129,16 @@ app.get('/tlhc/pages/:id', function(req, res) {
     });
 });
 
-app.get('/tlhc/post/:id', function(req, res) {
+app.get('/tlhc/post/:id', (req, res) => {
     //res.send('USER ' + req.params.id);
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
     request({
         url: originalURL,
-        method: "GET"
-    }, function(e, r, b) {
+        method: "GET",
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+        }
+    }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         if (e || !b) {
@@ -174,14 +182,17 @@ app.get('/tlhc/post/:id', function(req, res) {
     });
 });
 
-app.get('/tlhc/search/:id', function(req, res) {
+app.get('/tlhc/search/:id', (req, res) => {
     request.post({
         url: "http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?" + req.params.id,
         form: {
             SchKey: req.params.id,
             search: 'search'
+        },
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
         }
-    }, function(e, r, b) {
+    }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         if (e || !b) { return; }
@@ -218,31 +229,31 @@ app.get('/tlhc/search/:id', function(req, res) {
         })
     });
 });
-app.get('/tlhc/login/', function(req, res) {
+app.get('/tlhc/login/', (req, res) => {
     res.render('s-login', {
         title: 'ㄉㄌㄐㄕ - 登入',
         post: '/tlhc/login/',
         system: true
     });
 });
-app.post('/tlhc/login/', function(req, res) {
+app.post('/tlhc/login/', (req, res) => {
     getCookie(req, res)
 });
-app.get('/tlhc/score/', function(req, res) {
+app.get('/tlhc/score/', (req, res) => {
     if (req.session.tlhc) {
         getScore(req.session.tlhc, res)
     } else {
         res.redirect("/tlhc/login/")
     }
 });
-app.get('/tlhc/day/', function(req, res) {
+app.get('/tlhc/day/', (req, res) => {
     if (req.session.tlhc) {
         getDay(req.session.tlhc, res)
     } else {
         res.redirect("/tlhc/login/")
     }
 });
-app.get('/tlhc/rewards/', function(req, res) {
+app.get('/tlhc/rewards/', (req, res) => {
     if (req.session.tlhc) {
         getRewards(req.session.tlhc, res)
     } else {
@@ -261,6 +272,9 @@ function getCookie(req, res) {
             'login_r7_c5.x': 0,
             'login_r7_c5.y': 0,
             Chk: 'Y'
+        },
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
         }
     }, function(e, r, b) {
         // 錯誤代碼 
@@ -274,9 +288,10 @@ function getCookie(req, res) {
             headers: {
                 //some header
                 'Cookie': r.headers['set-cookie'],
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
                 //some header
             }
-        }, function(e, r, b) {
+        }, (e, r, b) => {
             /* e: 錯誤代碼 */
             /* b: 傳回的資料內容 */
             var b = iconv.decode(b, 'Big5')
@@ -310,9 +325,10 @@ function getScore(cookie, res) {
         headers: {
             //some header
             'Cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
             //some header
         }
-    }, function(e, r, b) {
+    }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         var b = iconv.decode(b, 'Big5')
@@ -343,9 +359,10 @@ function getDay(cookie, res) {
         headers: {
             //some header
             'Cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
             //some header
         }
-    }, function(e, r, b) {
+    }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         var b = iconv.decode(b, 'Big5')
@@ -374,9 +391,10 @@ function getRewards(cookie, res) {
         headers: {
             //some header
             'Cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
             //some header
         }
-    }, function(e, r, b) {
+    }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         var b = iconv.decode(b, 'Big5')
@@ -397,17 +415,23 @@ function getRewards(cookie, res) {
     });
 }
 
-app.get('/tlhc/score/logout', function(req, res) {
+app.get('/tlhc/score/logout', (req, res) => {
     req.session.destroy()
     res.redirect("/tlhc/score/")
 }); // 登出
 
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
     res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
 });
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).render('error', { title: '錯誤 - 500', message: '看來工程師不小心打翻了香菇雞湯' })
 }); // error
 
-app.listen(3000, () => console.log(Date() + " working on http://localhost:3000"))
+
+app.listen(3000, () => {
+    console.log("棒棒勝 Dedu gnehs.net")
+    console.log("https://github.com/TWScore/TLHCrawler")
+    console.log("-*-*-*-*-*-*-")
+    console.log(Date() + " working on http://localhost:3000")
+})
