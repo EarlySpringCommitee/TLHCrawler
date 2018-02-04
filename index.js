@@ -8,8 +8,9 @@ const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Trianglify = require('trianglify'); // trianglify
+const og = require('./ogimage.js'); // 隨機 OG 圖片
 const app = express()
-
+og.generateOGImage()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
@@ -39,19 +40,13 @@ app.listen(3000, () => {
     console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 })
 app.get('/og/og.png', (req, res) => {
-    var pattern = Trianglify({ width: 1200, height: 500 })
-    var img = [
-        '1',
-        '2',
-        '3',
-        '4',
-    ];
-    //算出要輸出的圖片
-    var imgnum = Math.floor(Math.random() * img.length);
-    var img = __dirname + '/ogimage/' + img[imgnum] + '.png'
-
-    res.sendFile(img)
-        //og
+    fs.readdir("./ogimage/", function(err, files) {
+        console.log(files)
+        var imgnum = Math.floor(Math.random() * files.length);
+        var img = __dirname + "/ogimage/" + files[imgnum]
+        res.sendFile(img)
+    });
+    //og
 })
 app.get('/', (req, res) => {
     links = [{
