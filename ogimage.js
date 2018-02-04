@@ -10,7 +10,6 @@ function generateOGImage() {
         cell_size: Math.floor(Math.random() * 40) + 30,
     });
     saveImage(background.png(), "background.png")
-    console.log("owo")
 }
 
 

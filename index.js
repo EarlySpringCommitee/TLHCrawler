@@ -10,12 +10,13 @@ const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Trianglify = require('trianglify'); // trianglify
 const og = require('./ogimage.js'); // 隨機 OG 圖片
 const app = express()
-og.generateOGImage()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
+
+//og.generateOGImage()  //產生隨機背景
 //拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',
