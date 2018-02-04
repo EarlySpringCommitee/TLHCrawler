@@ -16,8 +16,8 @@ app.use(bodyParser.urlencoded({
     extended: true,
 }));
 
-//og.generateOGImage()  //產生隨機背景
-//拿餅乾
+og.generateOGImage() //產生隨機背景
+    //拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',
     resave: false,
