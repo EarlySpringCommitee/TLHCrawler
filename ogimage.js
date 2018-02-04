@@ -6,8 +6,8 @@ function generateOGImage() {
     var background = Trianglify({
         width: 1400,
         height: 756,
-        stroke_width: Math.floor(Math.random() * 20) + 40,
-        cell_size: Math.floor(Math.random() * 40) + 20,
+        stroke_width: Math.floor(Math.random() * 60) + 40,
+        cell_size: Math.floor(Math.random() * 40) + 30,
     });
     saveImage(background.png(), "background.png")
     console.log("owo")
@@ -39,7 +39,6 @@ function saveOGImage() {
         .save("./ogimage/" + Math.floor(Math.random() * 999999) + ".png", { //Save the image to a file, with the quality of 50
             quality: 100
         });
-    console.log("owo")
 
 }
 exports.generateOGImage = generateOGImage;
