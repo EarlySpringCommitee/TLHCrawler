@@ -27,7 +27,6 @@ function saveImage(data, filename) {
         if (err) {
             console.error(err);
         }
-        console.log('file ' + filename + ' saved.')
         saveOGImage()
     });
 }
@@ -39,5 +38,6 @@ function saveOGImage() {
             quality: 100
         });
 
+    console.log('random ogimage saved.')
 }
 exports.generateOGImage = generateOGImage;
