@@ -28,10 +28,15 @@ app.use('/icon', express.static('icon'))
     //設定 /js /icon /css 目錄
 
 app.listen(3000, () => {
-    console.log("棒棒勝 Dedu gnehs.net")
+    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    console.log("           棒棒勝 gnehs.net")
+    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    console.log("GitHub")
     console.log("https://github.com/TWScore/TLHCrawler")
-    console.log("-*-*-*-*-*-*-")
-    console.log(Date() + " working on http://localhost:3000")
+    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    console.log(Date())
+    console.log("working on http://localhost:3000")
+    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
 })
 app.get('/og/og.png', (req, res) => {
     var pattern = Trianglify({ width: 1200, height: 500 })
