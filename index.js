@@ -32,13 +32,11 @@ app.use('/icon', express.static('icon'))
 app.listen(3000, () => {
     console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
     console.log("           棒棒勝 gnehs.net")
-    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-    console.log("GitHub")
+    console.log("\nGitHub")
     console.log("https://github.com/TWScore/TLHCrawler")
     console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-    console.log(Date())
-    console.log("working on http://localhost:3000")
-    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    console.log('\n' + Date())
+    console.log("working on http://localhost:3000\n")
 })
 app.get('/og/og.png', (req, res) => {
     fs.readdir("./ogimage/", function(err, files) {
