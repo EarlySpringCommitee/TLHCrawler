@@ -1,15 +1,14 @@
-FROM mhart/alpine-node
+FROM mhart/alpine-node:latest
 
 # Create app directory
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
-# Install app dependencies
-COPY package.json /usr/src/app/
-RUN apk add --no-cache make gcc g++ python
-RUN npm install
-
+RUN mkdir -p /app
+WORKDIR /app
 # Bundle app source
-COPY . /usr/src/app
+COPY . /app
+# Install app dependencies
+COPY package.json /app/
+RUN npm install --production
+
 
 EXPOSE 3000
-CMD ["node", "index.js"]
+CMD ["npm", "start"]
