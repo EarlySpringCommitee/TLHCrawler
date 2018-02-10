@@ -1,11 +1,14 @@
-FROM mhart/alpine-node:8
+FROM mhart/alpine-node
 
-WORKDIR /app
-COPY . .
-# If you have native dependencies, you'll need extra tools
-# RUN apk add --no-cache make gcc g++ python
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+# Install app dependencies
+COPY package.json /usr/src/app/
 RUN npm install --production
 
-EXPOSE 3000
+# Bundle app source
+COPY . /usr/src/app
 
-CMD [ "npm", "start" ]
+EXPOSE 3000
+CMD ["node", "index.js"]
