@@ -22,8 +22,8 @@ $(document).ready(function() {
         }
     });
 
-    $('#content table').attr("style", "")
-    $('#content table').attr("class", "ts celled table")
+    $('#content table:not(.imagetable)').attr("style", "")
+    $('#content table:not(.imagetable)').attr("class", "ts celled table")
     $('#content td').attr("style", "")
     $('#content img').attr('src', function() {
         var osrc = $(this).attr('src')
