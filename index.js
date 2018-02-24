@@ -160,8 +160,7 @@ app.get('/tlhc/post/:id', (req, res) => {
         var title = $("#Dyn_2_2 .h4.item-title").text();
         var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
         if (content == null)
-            var content = $("#Dyn_2_2 .ptcontent ").html();
-        console.log(content)
+            var content = $("#Dyn_2_2 .ptcontent").html();
         var view = $(".PtStatistic span").text();
         var files = $('.baseTB a');
         var fileData = [];

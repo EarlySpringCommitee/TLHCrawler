@@ -14,19 +14,22 @@ html
         script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
         script(src="//cdnjs.cloudflare.com/ajax/libs/trianglify/1.2.0/trianglify.min.js")
         script(src='/js/ripple.min.js')
+        script(src='/js/instantclick.min.js')
         script(src='/js/script.js')
-        if(originalURL)
-            script console.log('originalURL 
-                =originalURL
-                |')
         include _tags.pug
         if(tlhc)
             +social_tags(tlhc.title,tlhc.content,'/og/og.png?'+Math.floor(Math.random() * 1024))
         else
             +social_tags(title,'斗六家商的可愛爬蟲，可以替你查詢成績，也可以查看學校最新公告','/og/og.png')
     body
+        if(originalURL)
+            script console.log('originalURL 
+                =originalURL
+                |')
+            iframe#read(style='display:none;',src=originalURL)
         header.ts.heading.vertically.padded.fluid.slate
             .image
                 script headerImg()
+                img#headerImg
             .ts.container
                 h1.ts.center.aligned.header!= title

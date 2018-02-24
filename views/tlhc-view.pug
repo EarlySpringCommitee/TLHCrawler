@@ -1,8 +1,7 @@
 include _header.pug
 include _nav.pug
 .ts.container
-    h3.ts.header=tlhc.title
-
+    h3.ts.post.header=tlhc.title
     if(tlhc.content)
         #content.ts.basic.segment!=tlhc.content
     else

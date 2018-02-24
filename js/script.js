@@ -1,4 +1,6 @@
 $(document).ready(function() {
+    headerImg()
+    InstantClick.init();
     $.ripple(".items a.item,.ts.button,a.card,.menu a.item", {
         debug: false, // Turn Ripple.js logging on/off
         on: 'mousedown', // The event to trigger a ripple effect
@@ -55,5 +57,5 @@ function headerImg() {
         var headerImg = perviewImg.png()
         window.sessionStorage["headerImg"] = headerImg
     }
-    document.write('<img src="' + headerImg + '">');
+    $('#headerImg').attr('src', headerImg)
 }
