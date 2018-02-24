@@ -36,12 +36,16 @@ app.listen(3000, () => {
     console.log("working on http://localhost:3000\n")
 })
 app.get('/og/og.png', (req, res) => {
-    fs.readdir("./ogimage/", function(err, files) {
-        var imgnum = Math.floor(Math.random() * files.length);
-        var img = __dirname + "/ogimage/" + files[imgnum]
-        res.sendFile(img)
+    var files = fs.readdirSync("./ogimage/").filter(function(i, n) {
+        if (i.toString().indexOf('.png') > -1 && i.toString().indexOf('._') < 0)
+            return i
     });
     //og
+    var imgnum = Math.floor(Math.random() * files.length);
+    var img = __dirname + "/ogimage/" + files[imgnum]
+    try {
+        res.sendFile(img)
+    } catch (err) {}
 })
 app.get('/', (req, res) => {
     links = [{
