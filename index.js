@@ -7,8 +7,6 @@ const express = require('express'); // Node.js Web 架構
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
-const Trianglify = require('trianglify'); // trianglify
-//const og = require('./ogimage.js'); // 隨機 OG 圖片
 const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
