@@ -37,7 +37,6 @@ app.listen(3000, () => {
 })
 app.get('/og/og.png', (req, res) => {
     fs.readdir("./ogimage/", function(err, files) {
-        console.log(files)
         var imgnum = Math.floor(Math.random() * files.length);
         var img = __dirname + "/ogimage/" + files[imgnum]
         res.sendFile(img)
