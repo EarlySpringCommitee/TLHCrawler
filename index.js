@@ -141,6 +141,10 @@ app.get('/tlhc/pages/:id', (req, res) => {
 
 app.get('/tlhc/post/:id', (req, res) => {
     //res.send('USER ' + req.params.id);
+    if (req.params.id.indexOf(',') < 0) {
+        res.redirect("/tlhc/pages/" + req.params.id)
+        return
+    }
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
     request({
         url: originalURL,
@@ -161,6 +165,10 @@ app.get('/tlhc/post/:id', (req, res) => {
         var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
         if (content == null)
             var content = $("#Dyn_2_2 .ptcontent").html();
+        if (content && content.indexOf('http://web.tlhc.ylc.edu.tw/files/') > -1) {
+            console.log(123)
+            content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
+        }
         var view = $(".PtStatistic span").text();
         var files = $('.baseTB a');
         var fileData = [];
