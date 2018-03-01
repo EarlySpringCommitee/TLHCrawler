@@ -101,6 +101,7 @@ app.get('/tlhc/pages/:id', (req, res) => {
             })
             return;
         }
+        var $ = cheerio.load(b);
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             ajaxcode = ajaxcode.split("'")[1]
@@ -122,7 +123,6 @@ app.get('/tlhc/pages/:id', (req, res) => {
                 console.log(b)
             })
         }
-        var $ = cheerio.load(b);
         var tlhcData = [];
         var pageData = [];
         var tag = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
@@ -193,6 +193,7 @@ app.get('/tlhc/post/:id', (req, res) => {
             })
             return;
         }
+        var $ = cheerio.load(b);
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             ajaxcode = ajaxcode.split("'")[1]
@@ -215,7 +216,6 @@ app.get('/tlhc/post/:id', (req, res) => {
             })
         }
 
-        var $ = cheerio.load(b);
         var tlhcData = [];
         var title = $("#Dyn_2_2 .h4.item-title").text();
         var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
