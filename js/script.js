@@ -1,5 +1,6 @@
 $(document).ready(function() {
     headerImg()
+    readContent()
     InstantClick.init();
     $.ripple(".items a.item,.ts.button,a.card,.menu a.item", {
         debug: false, // Turn Ripple.js logging on/off
@@ -23,16 +24,6 @@ $(document).ready(function() {
             search()
         }
     });
-
-    $('#content table:not(.imagetable)').attr("style", "")
-    $('#content table:not(.imagetable)').attr("class", "ts celled table")
-    $('#content td').attr("style", "")
-    $('#content img').attr('src', function() {
-        var osrc = $(this).attr('src')
-        return 'http://web.tlhc.ylc.edu.tw' + osrc
-    })
-    $('#content img').attr("style", "")
-    $('#content img').attr("class", "ts centered rounded image")
 });
 
 function search() {
@@ -58,4 +49,18 @@ function headerImg() {
         window.sessionStorage["headerImg"] = headerImg
     }
     $('#headerImg').attr('src', headerImg)
+}
+
+function readContent() {
+
+
+    $('#content table:not(.imagetable)').attr("style", "")
+    $('#content table:not(.imagetable)').attr("class", "ts celled table")
+    $('#content td').attr("style", "")
+    $('#content img').attr('src', function() {
+        var osrc = $(this).attr('src')
+        return 'http://web.tlhc.ylc.edu.tw' + osrc
+    })
+    $('#content img').attr("style", "")
+    $('#content img').attr("class", "ts centered rounded image")
 }

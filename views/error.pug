@@ -4,6 +4,8 @@ include _nav.pug
     .ts.vertically.padded.slate
         .ts.massive.header!= title
             .sub.header!= message
+        if(buttonLink)
+            a.ts.primary.button(href=buttonLink)=button
 
 include _footer.pug
 

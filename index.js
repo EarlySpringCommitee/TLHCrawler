@@ -92,6 +92,36 @@ app.get('/tlhc/pages/:id', (req, res) => {
             res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
             return;
         }
+        if (b.indexOf('資料群組') == -1 && b.indexOf('標題') == -1 && b.indexOf('日期') == -1) {
+            res.render('error', {
+                title: '錯誤 - 這不是一個目錄頁面',
+                message: '也許你該試試下面的連結',
+                button: '點擊這裡嘗試使用文章模板',
+                buttonLink: '/tlhc/post/' + req.params.id
+            })
+            return;
+        }
+        var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
+        if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
+            ajaxcode = ajaxcode.split("'")[1]
+            console.log(ajaxcode)
+                //這是需要 post 請求的頁面
+            request.post({
+                url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
+                form: {
+                    rs: 'sajaxSubmit'
+                },
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+                }
+            }, function(e, r, b) {
+                // 錯誤代碼 
+                // 傳回的資料內容 
+                if (e || !b) { return }
+                console.log(b)
+            })
+        }
         var $ = cheerio.load(b);
         var tlhcData = [];
         var pageData = [];
@@ -117,7 +147,6 @@ app.get('/tlhc/pages/:id', (req, res) => {
             res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
             return
         }
-
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
                 'text': $(pages[i]).text(),
@@ -141,10 +170,6 @@ app.get('/tlhc/pages/:id', (req, res) => {
 
 app.get('/tlhc/post/:id', (req, res) => {
     //res.send('USER ' + req.params.id);
-    if (req.params.id.indexOf(',') < 0) {
-        res.redirect("/tlhc/pages/" + req.params.id)
-        return
-    }
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
     request({
         url: originalURL,
@@ -159,6 +184,37 @@ app.get('/tlhc/post/:id', (req, res) => {
             res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
             return;
         }
+        if (b.indexOf('資料群組') != -1 && b.indexOf('標題') != -1 && b.indexOf('日期') != -1) {
+            res.render('error', {
+                title: '錯誤 - 這不是一個文章頁面',
+                message: '也許你該試試下面的連結',
+                button: '點擊這裡嘗試使用目錄模板',
+                buttonLink: '/tlhc/pages/' + req.params.id
+            })
+            return;
+        }
+        var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
+        if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
+            ajaxcode = ajaxcode.split("'")[1]
+            console.log(ajaxcode)
+                //這是需要 post 請求的頁面
+            request.post({
+                url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
+                form: {
+                    rs: 'sajaxSubmit'
+                },
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+                }
+            }, function(e, r, b) {
+                // 錯誤代碼 
+                // 傳回的資料內容 
+                if (e || !b) { return }
+                console.log(b)
+            })
+        }
+
         var $ = cheerio.load(b);
         var tlhcData = [];
         var title = $("#Dyn_2_2 .h4.item-title").text();
@@ -166,7 +222,6 @@ app.get('/tlhc/post/:id', (req, res) => {
         if (content == null)
             var content = $("#Dyn_2_2 .ptcontent").html();
         if (content && content.indexOf('http://web.tlhc.ylc.edu.tw/files/') > -1) {
-            console.log(123)
             content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
         }
         var view = $(".PtStatistic span").text();
