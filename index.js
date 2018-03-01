@@ -96,7 +96,7 @@ app.get('/tlhc/pages/:id', (req, res) => {
             res.render('error', {
                 title: '錯誤 - 這不是一個目錄頁面',
                 message: '也許你該試試下面的連結',
-                button: '點擊這裡嘗試使用文章模板',
+                button: '嘗試使用文章模板',
                 buttonLink: '/tlhc/post/' + req.params.id
             })
             return;
@@ -188,7 +188,7 @@ app.get('/tlhc/post/:id', (req, res) => {
             res.render('error', {
                 title: '錯誤 - 這不是一個文章頁面',
                 message: '也許你該試試下面的連結',
-                button: '點擊這裡嘗試使用目錄模板',
+                button: '嘗試使用目錄模板',
                 buttonLink: '/tlhc/pages/' + req.params.id
             })
             return;
