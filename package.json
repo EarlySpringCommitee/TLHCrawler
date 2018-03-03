@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
-        "test": "node index.js"
+        "test": "nodemon index.js"
     },
     "repository": {
         "type": "git",
@@ -22,6 +22,7 @@
         "cheerio": "^1.0.0-rc.2",
         "express": "^4.16.2",
         "express-session": "^1.15.6",
+        "html-excerpt": "^0.1.0",
         "iconv-lite": "^0.4.19",
         "jsonfile": "^4.0.0",
         "pug": "^2.0.0-rc.4",

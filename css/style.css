@@ -167,6 +167,10 @@ NAV
     text-indent: 0 !important;
 }
 
+#content span {
+    display: initial;
+}
+
 #content a,
 #content a * {
     color: rgb(93, 73, 171) !important;

@@ -32,4 +32,7 @@ html
                 script headerImg();readContent() 
                 img#headerImg
             .ts.container
-                h1.ts.center.aligned.header!= title
+                if(headerTitle)
+                    h1.ts.center.aligned.header!= headerTitle
+                else
+                    h1.ts.center.aligned.header!= title

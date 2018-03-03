@@ -1,6 +1,7 @@
 ﻿// 載入
 const fs = require('fs'); //檔案系統
 const jsonfile = require('jsonfile'); //讀 json 的咚咚
+const excerpt = require("html-excerpt"); // 取摘要
 const request = require("request"); // HTTP 客戶端輔助工具
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const express = require('express'); // Node.js Web 架構
@@ -27,13 +28,23 @@ app.use('/icon', express.static('icon'))
     //設定 /js /icon /css 目錄
 
 app.listen(3000, () => {
-    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
-    console.log("           棒棒勝 gnehs.net")
-    console.log("\nGitHub")
-    console.log("https://github.com/TWScore/TLHCrawler")
-    console.log("-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-")
+    console.log("")
+    console.log("   ╭─────────────────────────────────────╮")
+    console.log("   │                                     │")
+    console.log("   │    TLHCrawler                       │")
+    console.log("   │    github.com/TWScore/TLHCrawler    │")
+    console.log("   │                                     │")
+    console.log("   ╰─────────────────────────────────────╯")
     console.log('\n' + Date())
     console.log("working on http://localhost:3000\n")
+        /*
+
+   ╭─────────────────────────────────────╮
+   │                                     │
+   │   Update available 5.6.0 → 5.7.1    │
+   │     Run npm i -g npm to update      │
+   │                                     │
+   ╰─────────────────────────────────────╯*/
 })
 app.get('/og/og.png', (req, res) => {
     var files = fs.readdirSync("./ogimage/").filter(function(i, n) {
@@ -193,7 +204,12 @@ app.get('/tlhc/post/:id', (req, res) => {
             })
             return;
         }
+
         var $ = cheerio.load(b);
+        var title = $('title').text().replace(new RegExp('- 國立斗六高級家事商業職業學校', "g"), '')
+        var headerTitle = excerpt.text(title, 25, '...')
+        var view = $(".PtStatistic span").text()
+
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             ajaxcode = ajaxcode.split("'")[1]
@@ -213,18 +229,20 @@ app.get('/tlhc/post/:id', (req, res) => {
                 // 傳回的資料內容 
                 if (e || !b) { return }
                 console.log(b)
+                var $ = cheerio.load(b);
+                var content = $("Content").html();
             })
+        } else {
+            var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
+            if (content == null)
+                var content = $("#Dyn_2_2 .ptcontent").html();
+            if (content && content.indexOf('http://web.tlhc.ylc.edu.tw/files/') > -1) {
+                content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
+            }
         }
 
-        var tlhcData = [];
-        var title = $("#Dyn_2_2 .h4.item-title").text();
-        var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
-        if (content == null)
-            var content = $("#Dyn_2_2 .ptcontent").html();
-        if (content && content.indexOf('http://web.tlhc.ylc.edu.tw/files/') > -1) {
-            content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
-        }
-        var view = $(".PtStatistic span").text();
+        //var tlhcData = [];
+
         var files = $('.baseTB a');
         var fileData = [];
         for (var i = 0; i < files.length; i++) {
@@ -248,11 +266,12 @@ app.get('/tlhc/post/:id', (req, res) => {
             'view': view,
         }
         res.render('tlhc-view', {
-            title: 'ㄉㄌㄐㄕ',
+            title: 'ㄉㄌㄐㄕ - ' + title,
             tlhc: tlhcData,
             files: fileData,
             originalURL: originalURL,
-            view: view
+            view: view,
+            headerTitle: headerTitle
         })
     });
 });
