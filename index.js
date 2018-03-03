@@ -376,7 +376,7 @@ function getCookie(req, res) {
         if (e || !b) { return }
         req.session.tlhc = r.headers['set-cookie'];
         request({
-            url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
+            url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
             method: "GET",
             encoding: null,
             headers: {
@@ -390,6 +390,7 @@ function getCookie(req, res) {
             /* b: 傳回的資料內容 */
             var b = iconv.decode(b, 'Big5')
             if (e || !b) { return }
+            var $ = cheerio.load(b);
             if (b == '無權使用 請登入') {
                 res.render('s-login', {
                     title: 'ㄉㄌㄐㄕ - 登入',
@@ -399,9 +400,15 @@ function getCookie(req, res) {
                 })
                 return
             } else {
+                var userInfo = {
+                    name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text(),
+                    number: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text()
+                }
+                console.log(userInfo)
                 res.render('s-login-success', {
                     title: 'ㄉㄌㄐㄕ - 登入成功',
-                    system: true
+                    system: true,
+                    user: userInfo
                 })
             }
         });

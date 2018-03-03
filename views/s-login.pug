@@ -1,6 +1,6 @@
 include _header.pug
 include _nav.pug
-script(src='/js/login.js')
+script(src='/js/login.js',data-no-instant)
 .ts.container
 	if(message)
 		h1.ts.center.aligned.negative.poyon.header 提醒
@@ -8,7 +8,7 @@ script(src='/js/login.js')
 	else
 		h1.ts.center.aligned.header 嗨！
 			.sub.header 輸入您的學號及身分證字號並開始使用
-	#login.ts.centered.secondary.segment
+	#login.ts.centered.secondary.segment.narrow
 		form.ts.form(method='post',role='form',action=post,onsubmit='return check()')
 			.field
 				label 學號

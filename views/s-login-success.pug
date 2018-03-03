@@ -1,9 +1,28 @@
 include _header.pug
 include _nav.pug
 .ts.container
-    .ts.vertically.padded.slate
-        .ts.massive.header= title
-            .sub.header 使用上方選單開始使用
+    .ts.centered.card.narrow
+        .secondary.very.padded.extra.content
+            .ts.icon.header
+                i.user.icon
+        .content
+            .ts.center.aligned.header= title
+                .sub.header 使用上方選單開始使用
+    .ts.centered.card.narrow
+        .padded.content
+            .ts.list
+                .item
+                    i.user.icon
+                    .content
+                        .header 已登入帳號
+                        .description=user.name
+                .item
+                    i.id.card.icon
+                    .content
+                        .header 學號
+                        .description=user.number
+
+    
 
 include _footer.pug
 
