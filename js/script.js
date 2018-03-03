@@ -23,6 +23,8 @@ $(document).ready(function() {
             search()
         }
     });
+    $('body').attr("style", "")
+    $('body').attr("class", "fade in")
 });
 
 function search() {

@@ -197,3 +197,17 @@ NAV
 .ts.selection.items>.item .file-icon:after {
     font-size: 6px !important;
 }
+
+.fade.in {
+    animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-1vh);
+    }
+    to {
+        opacity: 1;
+    }
+}
