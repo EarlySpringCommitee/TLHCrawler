@@ -75,7 +75,8 @@ NAV
 
 #score tr:nth-child(1)>td,
 #day tr:nth-child(1)>td,
-#total tr:nth-child(1)>td {
+#total tr:nth-child(1)>td,
+.color.first.line.table tr:nth-child(1)>td {
     background: #f7f7f7;
     font-weight: 500;
     color: #404040;

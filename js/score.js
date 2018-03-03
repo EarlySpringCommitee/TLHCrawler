@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    $("#score ,#total,#day").attr('style', '')
+    $("#score ,#total,#day,.color.first.line.table").attr('style', '')
     $("#score tr:first-child ,#total tr:last-child,#day tr:last-child").remove()
 
     $('#score td ,#total td ,#day td').html(function() {

@@ -37,14 +37,6 @@ app.listen(3000, () => {
     console.log("   ╰─────────────────────────────────────╯")
     console.log('\n' + Date())
     console.log("working on http://localhost:3000\n")
-        /*
-
-   ╭─────────────────────────────────────╮
-   │                                     │
-   │   Update available 5.6.0 → 5.7.1    │
-   │     Run npm i -g npm to update      │
-   │                                     │
-   ╰─────────────────────────────────────╯*/
 })
 app.get('/og/og.png', (req, res) => {
     var files = fs.readdirSync("./ogimage/").filter(function(i, n) {
@@ -323,6 +315,9 @@ app.get('/tlhc/search/:id', (req, res) => {
         })
     });
 });
+app.get('/about/', (req, res) => {
+    res.render('about', { title: 'ㄉㄌㄐㄕ - 關於' });
+});
 app.get('/tlhc/login/', (req, res) => {
     res.render('s-login', {
         title: 'ㄉㄌㄐㄕ - 登入',
@@ -354,6 +349,7 @@ app.get('/tlhc/rewards/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
+
 
 function getCookie(req, res) {
     var userID = req.body['userID']
@@ -402,7 +398,7 @@ function getCookie(req, res) {
             } else {
                 var userInfo = {
                     name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text(),
-                    number: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text()
+                    id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text()
                 }
                 console.log(userInfo)
                 res.render('s-login-success', {

@@ -1,0 +1,30 @@
+include _header.pug
+script(src='/js/score.js')
+include _nav.pug
+.ts.container
+	h3.ts.header 基本資料
+		.sub.header 確定資料是不是你的（？
+	.ts.stackable.three.cards
+		mixin card(header,description,icon)
+			.ts.card
+				.content
+					.header= header
+					.description= description
+				.symbol
+					i.icon(class=icon)
+		+card('學號',user.id,'qrcode')
+		+card('姓名',user.name,'user')
+		+card('班級',user.class,'student')
+	br
+    each item in tables
+        h3.ts.header=item.title
+            .sub.header 若無法看見完整內容可利用 
+                kbd Shift+滾輪
+                |  或是手指來移動
+        .gs.scroll
+            table.ts.definition.compact.striped.celled.table.color.first.line(style='display:none')
+                !=item.table
+    else
+        .ts.header 未找到符合條件的資料
+	br
+include _footer.pug
