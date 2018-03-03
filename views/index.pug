@@ -1,8 +1,26 @@
 include _header.pug
 include _nav.pug
 .ts.container
+    .ts.card
+        .video  
+            .ts.embed(class='21:9')
+                img(src='https://i.imgur.com/lOETuw6.jpg')
+            .header(style='z-index: 999;') 這是一隻狗狗
+                .sub.header 不為什麼，只是想讓你知道他多可愛
+    h3.ts.header 學校佈告欄
     .ts.doubling.four.cards
         each item in links
+            a.ts.card(href=item.link)
+                .content
+                    .header=item.header
+                    .description=item.description
+        else
+            .ts.card
+                .content
+                    .description noithing
+    h3.ts.header 一些尼可能會用到的連結
+    .ts.doubling.four.cards
+        each item in someLinks
             a.ts.card(href=item.link)
                 .content
                     .header=item.header

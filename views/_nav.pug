@@ -1,13 +1,13 @@
 #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
     .ts.container
-        a.item(href='/') 首頁
         if(!user)
+            a.item(href='/') 首頁
+            a.item(href='/about/') 關於
             a.item(href='/tlhc/login/') 登入
         else
             a.item(href='/tlhc/score/') 成績
             a.item(href='/tlhc/day/') 出勤
             a.item(href='/tlhc/rewards/') 獎懲
-        a.item(href='/about/') 關於
         .right.fitted.item
             if(user)
                 a.item(href='/tlhc/score/logout') 登出

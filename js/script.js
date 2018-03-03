@@ -1,7 +1,6 @@
 $(document).ready(function() {
     headerImg()
     readContent()
-    InstantClick.init();
     $.ripple(".items a.item,.ts.button,a.card,.menu a.item", {
         debug: false, // Turn Ripple.js logging on/off
         on: 'mousedown', // The event to trigger a ripple effect
@@ -56,6 +55,7 @@ function readContent() {
 
     $('#content table:not(.imagetable)').attr("style", "")
     $('#content table:not(.imagetable)').attr("class", "ts celled table")
+    $('#content table:not(.imagetable)').wrap('<div class="gs scroll"></div>')
     $('#content td').attr("style", "")
     $('#content img').attr('src', function() {
         var osrc = $(this).attr('src')
