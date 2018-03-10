@@ -191,7 +191,7 @@ NAV
 /* file icon*/
 
 .ts.selection.items>.item .file-icon:before {
-    border-color: #f7f7f7 #f7f7f7 rgba(255, 255, 255, .35) rgba(255, 255, 255, .35);
+    border-color: #333333 #333333 rgba(255, 255, 255, .35) rgba(255, 255, 255, .35);
 }
 
 .ts.selection.items>.item .file-icon:after {
