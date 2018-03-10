@@ -28,7 +28,10 @@ html
             //-iframe#read(style='display:none;',src=originalURL)
         header.ts.heading.vertically.padded.fluid.slate
             .image
-                script headerImg();readContent() 
+                -if(system)
+                    script const isSystem=true
+                -else
+                    script const isSystem=false
                 img#headerImg
             .ts.container
                 if(headerTitle)
