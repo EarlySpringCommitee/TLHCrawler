@@ -25,6 +25,15 @@ $(document).ready(function() {
     });
     $('body').attr("style", "")
     $('body').attr("class", "fade in")
+        // 幻燈片
+    $('.slick').slick({
+        dots: true,
+        fade: true,
+        speed: 500,
+        autoplay: true,
+        autoplaySpeed: 2000,
+        arrows: false
+    });
 });
 
 function search() {

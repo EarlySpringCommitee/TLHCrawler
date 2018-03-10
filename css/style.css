@@ -202,6 +202,31 @@ NAV
     animation: fadeIn .4s ease;
 }
 
+
+/*=============
+幻燈片
+=============*/
+
+.slick-slide .ts.embed {
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 10px;
+    box-shadow: 0 5px 10px 1px rgba(167, 167, 167, 0.2)!important;
+}
+
+.slick-slide .ts.header {
+    z-index: 999;
+    position: absolute;
+    bottom: 20px;
+    border-radius: 5px;
+    text-shadow: 0 1px 3px #000000fa;
+}
+
+.slick-slide .ts.header,
+.slick-slide .ts.header .sub.header {
+    color: white;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

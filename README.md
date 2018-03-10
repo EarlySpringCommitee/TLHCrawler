@@ -19,3 +19,9 @@
 [gnehs/Tocas-UI-Xiaoan](https://github.com/gnehs/Tocas-UI-Xiaoan)
 
 [TeaMeow/TocasUI](https://github.com/TeaMeow/TocasUI)
+
+[kenwheeler/slick](https://github.com/kenwheeler/slick)
+
+[qrohlf/trianglify](https://github.com/qrohlf/trianglify)
+
+[jquery/jquery](https://github.com/jquery/jquery)
