@@ -12,6 +12,10 @@
 3. 搭拉！
 ## Docker
 [Docker Hub](https://hub.docker.com/r/gnehs/tlhc_crawler/)
+### 建議掛載檔案/資料夾
+`/app/config.js` 首頁的連結和 Slideshow 的設定檔
+
+`/app/ogimage/` 隨機 OGimage 圖片的資料夾
 ## 前端使用ㄉ東東
 [picturepan2/fileicon.css](https://github.com/picturepan2/fileicon.css)
 
