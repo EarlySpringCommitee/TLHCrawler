@@ -28,43 +28,44 @@ exports.links = [{
 }, {
     "name": "一些你可能用到的相關連結",
     "table": [{
-        "header": "行事曆",
-        "description": "可愛的行事曆",
-        "link": "http://web.tlhc.ylc.edu.tw/ezfiles/1/1001/img/7/161383665.pdf"
-    }, {
         "header": "Web 學生選課系統",
-        "description": "不安全 Desu",
+        "description": "庫",
         "link": "http://register.tlhc.ylc.edu.tw/stdcourse3/"
     }, {
         "header": "設備報修",
-        "description": "設計得很有障礙的表格",
+        "description": "設備組那邊ㄉ",
         "link": "https://docs.google.com/forms/d/e/1FAIpQLSe1ex8qCBmaWWR0BwK4felr_BI4eV2CJ1bM0eng71OfrsUKsw/viewform"
     }, {
         "header": "學生社團選填",
-        "description": "我賭一百隻長頸鹿跟成績系統同一家出的",
+        "description": "庫",
         "link": "http://register.tlhc.ylc.edu.tw/clgstd/Index.aspx"
     }, {
         "header": "志工服務管理系統",
-        "description": "跟成績系統同一家的系統",
+        "description": "庫",
         "link": "http://163.27.124.31/EPSTD/"
     }, {
         "header": "首頁",
-        "description": "對，就是學校首頁",
+        "description": "學校首頁",
         "link": "http://web.tlhc.ylc.edu.tw/bin/home.php"
     }, {
         "header": "雲端社群播客(哀居踢)",
-        "description": "幹不要把文字放進圖片",
+        "description": "好",
         "link": "http://igtplus.tlhc.ylc.edu.tw/"
     }]
 }]
 exports.slide = [{
-    "header": "狗狗",
-    "description": "對，就是狗狗",
-    "img": "//i.imgur.com/lOETuw6.jpg",
-    "link": "http://web.tlhc.ylc.edu.tw/bin/home.php"
+    "header": "ㄉㄌㄐㄕ歡迎尼",
+    "description": "哈囉！",
+    "img": "https://i.imgur.com/8NPV00a.png",
+    "link": "https://tlhc.gnehs.net/"
 }, {
-    "header": "還是狗狗",
-    "description": "對，就是狗狗",
-    "img": "//i.imgur.com/lOETuw6.jpg",
-    "link": "http://web.tlhc.ylc.edu.tw/bin/home.php"
+    "header": "成績系統",
+    "description": "美麗的成績頁面",
+    "img": "https://i.imgur.com/1OYusYk.png",
+    "link": "https://tlhc.gnehs.net/tlhc/score/"
+}, {
+    "header": "成績系統",
+    "description": "適合各種裝置使用的成績頁面",
+    "img": "https://i.imgur.com/Lyh2EHo.jpg",
+    "link": "https://tlhc.gnehs.net/tlhc/score/"
 }]
