@@ -4,18 +4,25 @@ $(document).ready(function() {
     $("#score tr:first-child ,#total tr:last-child,#day tr:last-child").remove()
 
     $('#score td ,#total td ,#day td').html(function() {
-        var text = $(this).text()
+        var text = $(this).text().replace(/[s]+/g, "");
         if (text < 60 && text > 0) {
+            // 不及格
             $(this).addClass('negative')
-                // 不及格
+        }
+        if (text <= 100 && text >= 80) {
+            // 八十分
+            $(this).addClass('positive')
         }
         if (text <= 100 && text >= 0) {
+            // 如果是分數，加上等寬字元
             $(this).addClass('score')
-                // 如果是分數，加上等寬字元
         }
-        if (text == '曠課 ') {
+        if (text.match('曠課') || text.match('遲到') || text.match('升降旗缺席')) {
+            // 壞壞
             $(this).addClass('negative')
-                //曠課
+        }
+        if (text.match('成績輸入期間')) {
+            var text = "";
         }
         return text
     })

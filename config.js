@@ -62,7 +62,7 @@ exports.slide = [{
 }, {
     "header": "成績系統",
     "description": "美麗的成績頁面",
-    "img": "https://i.imgur.com/1OYusYk.png",
+    "img": "https://i.imgur.com/iXMNnwK.png",
     "link": "https://tlhc.gnehs.net/tlhc/score/"
 }, {
     "header": "成績系統",

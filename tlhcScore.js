@@ -53,8 +53,8 @@ exports.getCookie = (req, res) => {
                 return
             } else {
                 var userInfo = {
-                    name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text(),
-                    id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text()
+                    name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text().replace(/\n/g, ''),
+                    id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text().replace(/\n/g, '')
                 }
                 res.render('s-login-success', {
                     title: 'ㄉㄌㄐㄕ - 登入成功',
@@ -91,15 +91,21 @@ exports.getScore = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
-            name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
-            class: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
-            num: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+            id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
+            name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
+            class: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
+            num: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
         }
 
         var score = $("body>center>table:nth-child(3) td>table>tbody")
         var total = $("body>center>table:nth-child(4) td>table>tbody")
-        res.render('s-score-view', { title: 'ㄉㄌㄐㄕ - 成績', user: user, score: score.html(), total: total.html(), system: true })
+        res.render('s-score-view', {
+            title: 'ㄉㄌㄐㄕ - 成績',
+            user: user,
+            score: score.html().replace(/\n/g, ''),
+            total: total.html().replace(/\n/g, ''),
+            system: true
+        })
     });
 }
 
@@ -125,13 +131,18 @@ exports.getDay = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
-            name: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
-            class: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
-            num: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+            id: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
+            name: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
+            class: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
+            num: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
         }
         var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-        res.render('s-default-view', { title: 'ㄉㄌㄐㄕ - 出勤', user: user, day: day.html(), system: true })
+        res.render('s-default-view', {
+            title: 'ㄉㄌㄐㄕ - 出勤',
+            user: user,
+            day: day.html().replace(/\n/g, ''),
+            system: true
+        })
     });
 }
 
@@ -157,12 +168,18 @@ exports.getRewards = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(2) .DataFONT").text(),
-            name: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(4) .DataFONT").text(),
-            class: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(6) .DataFONT").text(),
-            num: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(8) .DataFONT").text(),
+            id: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
+            name: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
+            class: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
+            num: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
         }
         var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-        res.render('s-default-view', { title: 'ㄉㄌㄐㄕ - 獎懲', user: user, day: day.html(), rewards: true, system: true })
+        res.render('s-default-view', {
+            title: 'ㄉㄌㄐㄕ - 獎懲',
+            user: user,
+            day: day.html().replace(/\n/g, ''),
+            rewards: true,
+            system: true
+        })
     });
 }
