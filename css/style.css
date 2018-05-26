@@ -258,8 +258,43 @@ header .header {
     行事曆
 =============*/
 
-.fc-state-default {
+.fc-state-default.fc-button {
     background-image: none !important;
     box-shadow: none !important;
     border: 1px solid #e9e9e9 !important;
+}
+
+.fc-scroller {
+    height: auto !important;
+}
+
+.fc-basic-view .fc-day-top .fc-day-number {
+    float: none !important;
+    font-size: 6vw;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    opacity: .6;
+}
+
+.fc-day-header.fc-widget-header {
+    font-size: 1.25em
+}
+
+.fc-list-item td,
+.fc-list-heading td {
+    border-radius: 0.125rem
+}
+
+.fc-unthemed .fc-content,
+.fc-unthemed .fc-divider,
+.fc-unthemed .fc-list-heading td,
+.fc-unthemed .fc-list-view,
+.fc-unthemed .fc-popover,
+.fc-unthemed .fc-row,
+.fc-unthemed tbody,
+.fc-unthemed td,
+.fc-unthemed th,
+.fc-unthemed thead {
+    border-color: #0000 !important;
 }
