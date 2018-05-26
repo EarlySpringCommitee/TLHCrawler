@@ -17,7 +17,7 @@ app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-
+app.disable('x-powered-by'); // 停用 X-Powered-By 標頭
 //拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',

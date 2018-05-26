@@ -86,10 +86,10 @@ exports.getPage = function(url, pageID, res) {
 
         for (var i = 0; i < tag.length; i++) {
             var preJoin = {
-                'tag': $(tag[i]).text(),
-                'title': $(title[i]).text(),
+                'tag': $(tag[i]).text().replace(/\n/g, ''),
+                'title': $(title[i]).text().replace(/\n/g, ''),
                 'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
-                'date': $(date[i]).text()
+                'date': $(date[i]).text().replace(/\n/g, '')
             }
             tlhcData.push(preJoin);
         }
@@ -156,8 +156,9 @@ exports.getPost = function(url, pageID, res) {
                 content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
             }
         }
-
-        //var tlhcData = [];
+        var content = content.replace(/\n/g, '')
+        console.log(content)
+            //var tlhcData = [];
 
         var files = $('.baseTB a');
         var fileData = [];
