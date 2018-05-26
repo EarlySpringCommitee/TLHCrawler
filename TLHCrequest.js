@@ -4,6 +4,7 @@
 const request = require("request"); // HTTP 客戶端輔助工具
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const excerpt = require("html-excerpt"); // 取摘要
+const Base64 = require('js-base64').Base64; // Base64
 const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0';
 // 獲取頁面
 exports.getPage = function(url, pageID, res) {
@@ -78,7 +79,7 @@ exports.getPage = function(url, pageID, res) {
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
                 'text': $(pages[i]).text(),
-                'link': $(pages[i]).attr('href').split("/")[4],
+                'link': Base64.encodeURI($(pages[i]).attr('href').split("/")[4]),
             }
             pageData.push(preJoin);
         }
@@ -87,7 +88,7 @@ exports.getPage = function(url, pageID, res) {
             var preJoin = {
                 'tag': $(tag[i]).text(),
                 'title': $(title[i]).text(),
-                'link': '/tlhc/post/' + $(link[i]).attr('href').split("/files/")[1],
+                'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
                 'date': $(date[i]).text()
             }
             tlhcData.push(preJoin);

@@ -10,6 +10,7 @@ const express = require('express'); // Node.js Web 架構
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
+const Base64 = require('js-base64').Base64; // Base64
 const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
@@ -64,13 +65,13 @@ app.get('/about/', (req, res) => {
 //------------公佈欄------------
 // ㄉㄌㄐㄕ
 app.get('/tlhc/pages/:id', (req, res) => {
-    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
+    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
     tlhcRequest.getPage(originalURL, req.params.id, res)
 });
 
 app.get('/tlhc/post/:id', (req, res) => {
     //res.send('USER ' + req.params.id);
-    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + req.params.id
+    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
     tlhcRequest.getPost(originalURL, req.params.id, res)
 });
 

@@ -26,6 +26,22 @@ header .header {
 }
 
 
+/*  RWD  */
+
+@media (max-width: 768px) {
+    body {
+        font-size: 12px;
+    }
+    header {
+        padding: 5em .2em !important;
+        padding-bottom: calc(4em + 48px) !important;
+    }
+    header .header {
+        font-size: 1.6em !important;
+    }
+}
+
+
 /*==========
 NAV
 ==========*/

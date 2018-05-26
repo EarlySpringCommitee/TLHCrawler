@@ -1,29 +1,30 @@
+const Base64 = require('js-base64').Base64; // Base64
 exports.links = [{
     "name": "學校佈告欄",
     "table": [{
         "header": "校園公告",
         "description": "好像很重要，又沒那麼重要",
-        "link": "/tlhc/pages/40-1001-15-1.php"
+        "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-15-1.php")
     }, {
         "header": "榮譽榜",
         "description": "實際上沒人去看的東西，只會害你升旗站更久",
-        "link": "/tlhc/pages/40-1001-38-1.php"
+        "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-38-1.php")
     }, {
         "header": "轉知資訊-政令宣導",
         "description": "一些比賽跟你完全不會想點進去看的東西",
-        "link": "/tlhc/pages/40-1001-29-1.php"
+        "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-29-1.php")
     }, {
         "header": "圖書館公告",
         "description": "消失在學校網頁上ㄉ圖書館公告",
-        "link": "/tlhc/pages/40-1001-21-1.php"
+        "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-21-1.php")
     }, {
         "header": "獎助學金公告",
         "description": "能拿錢的情報",
-        "link": "/tlhc/pages/40-1001-30-1.php"
+        "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-30-1.php")
     }, {
         "header": "教務處公告",
         "description": "招生考試之類的",
-        "link": "/tlhc/pages/40-1001-28-1.php"
+        "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-28-1.php")
     }]
 }, {
     "name": "一些你可能用到的相關連結",
