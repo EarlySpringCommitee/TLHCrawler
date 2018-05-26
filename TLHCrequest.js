@@ -127,7 +127,7 @@ exports.getPost = function(url, pageID, res) {
         var view = $(".PtStatistic span").text()
 
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
-        if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
+        if (ajaxcode && ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             ajaxcode = ajaxcode.split("'")[1]
             console.log(ajaxcode)
                 //這是需要 post 請求的頁面
