@@ -69,4 +69,9 @@ exports.slide = [{
     "description": "適合各種裝置使用的成績頁面",
     "img": "https://i.imgur.com/Lyh2EHo.jpg",
     "link": "https://tlhc.gnehs.net/tlhc/score/"
+}, {
+    "header": "加入橫幅",
+    "description": "免費在此加入您的橫幅",
+    "img": "https://i.imgur.com/dH4dAE2.jpg",
+    "link": "http://telegra.ph/addtlhc-05-26"
 }]
