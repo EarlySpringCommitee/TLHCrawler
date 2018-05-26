@@ -56,7 +56,6 @@ exports.getCookie = (req, res) => {
                     name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text(),
                     id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text()
                 }
-                console.log(userInfo)
                 res.render('s-login-success', {
                     title: 'ㄉㄌㄐㄕ - 登入成功',
                     system: true,

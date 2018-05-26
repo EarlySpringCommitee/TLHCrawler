@@ -1,7 +1,7 @@
 ﻿// 載入
 const fs = require('fs'); //檔案系統
 const tlhcRequest = require('./TLHCrequest.js'); //因為程式碼太長分出來的模塊
-const tlhcScore = require('./tlhcScore.js'); //因為程式碼太長分出來的模塊
+const tlhcScore = require('./TLHCScore.js'); //因為程式碼太長分出來的模塊
 const config = require('./config.js'); //因為程式碼太長分出來的模塊
 const excerpt = require("html-excerpt"); // 取摘要
 const request = require("request"); // HTTP 客戶端輔助工具
@@ -11,13 +11,14 @@ const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Base64 = require('js-base64').Base64; // Base64
+const helmet = require('helmet'); // 防範您的應用程式出現已知的 Web 漏洞
 const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-app.disable('x-powered-by'); // 停用 X-Powered-By 標頭
+app.use(helmet());
 //拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',
