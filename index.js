@@ -18,7 +18,7 @@ app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-app.use(helmet.hidePoweredBy({ setTo: 'ASP.NET' }));
+app.use(helmet.hidePoweredBy({ setTo: 'PHP/5.2.1' }));
 //拿餅乾
 app.use(session({
     secret: 'ㄐㄐ讚',

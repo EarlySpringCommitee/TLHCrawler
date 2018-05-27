@@ -27,8 +27,6 @@
 
 [kenwheeler/slick](https://github.com/kenwheeler/slick)
 
-[qrohlf/trianglify](https://github.com/qrohlf/trianglify)
-
 [jquery/jquery](https://github.com/jquery/jquery)
 
 [sweetalert2/sweetalert2](https://github.com/sweetalert2/sweetalert2)
