@@ -19,6 +19,7 @@ kbd {
 header {
     padding: 5em 2em !important;
     padding-bottom: calc(4em + 48px) !important;
+    background: #838282 !important;
 }
 
 header .header {
@@ -218,25 +219,6 @@ header .header {
 
 .ts.selection.items>.item .file-icon:after {
     font-size: 9px !important;
-}
-
-
-/*=============
-    @keyframes
-=============*/
-
-.fade.in {
-    animation: fadeIn .4s ease;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-1vh);
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 

@@ -18,9 +18,7 @@ $(document).ready(function() {
             search()
         }
     });
-    $('body').attr("style", "")
-    $('body').attr("class", "fade in")
-        // 幻燈片
+    // 幻燈片
     $('.slick').slick({
         dots: true,
         fade: true,
