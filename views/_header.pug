@@ -40,10 +40,9 @@ html
         header.ts.heading.vertically.padded.fluid.slate
             .image
                 -if(system)
-                    script const isSystem=true
+                    img(src='https://i.imgur.com/E4DJGb0.png')
                 -else
-                    script const isSystem=false
-                img#headerImg
+                    img(src='https://i.imgur.com/N1BDwHP.png')
             .ts.container
                 if(headerTitle)
                     h1.ts.center.aligned.header!= headerTitle

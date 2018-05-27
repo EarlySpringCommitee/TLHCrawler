@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    headerImg(isSystem)
+    //headerImg(isSystem)
     readContent()
     $.ripple(".items a.item,.ts.button,a.card,.menu a.item", {
         debug: false, // Turn Ripple.js logging on/off

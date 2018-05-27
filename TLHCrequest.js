@@ -11,9 +11,7 @@ exports.getPage = function(url, pageID, res) {
     request({
         url: url,
         method: "GET",
-        headers: {
-            'User-Agent': userAgent,
-        }
+        headers: { 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -26,15 +24,15 @@ exports.getPage = function(url, pageID, res) {
                 title: '錯誤 - 這不是一個目錄頁面',
                 message: '也許你該試試下面的連結',
                 button: '嘗試使用文章模板',
-                buttonLink: '/tlhc/post/' + req.params.id
+                buttonLink: '/tlhc/post/' + Base64.encodeURI(pageID)
             })
             return;
         }
         var $ = cheerio.load(b);
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
+            //這是需要 post 請求的頁面
             ajaxcode = ajaxcode.split("'")[1]
-                //這是需要 post 請求的頁面
             request.post({
                 url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
                 form: {
@@ -50,30 +48,23 @@ exports.getPage = function(url, pageID, res) {
                 if (e || !b) { return }
             })
         }
-        var tlhcData = [];
-        var pageData = [];
         var tag = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
         var title = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2)");
         var link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
         var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
         var pages = $(".navigator-inner a.pagenum");
 
-        var pgid = pageID.split("-")[2]
-        var pgTitle = 'ㄉㄌㄐㄕ'
+        var pgTitle = 'ㄉㄌㄐㄕ - ' + $('#Dyn_2_1 .md_middle .mm_01 a.path:nth-child(2)').html()
 
-        if (pgid == 15) { var pgTitle = pgTitle + " - 校園公告" }
-        if (pgid == 29) { var pgTitle = pgTitle + " - 轉知資訊 / 政令宣導" }
-        if (pgid == 30) { var pgTitle = pgTitle + " - 獎助學金公告" }
-        if (pgid == 28) { var pgTitle = pgTitle + " - 教務處公告" }
-        if (pgid == 38) { var pgTitle = pgTitle + " - 榮譽榜" }
-        if (pgid == 21) { var pgTitle = pgTitle + " - 圖書館公告" }
-        if (pgid == 66) { var pgTitle = pgTitle + " - 資處科公告" }
+        var pgid = pageID.split("-")[2]
         if (pgid == 246) {
             // 這頁不知道為啥一直出錯 Orz
             // http://web.tlhc.ylc.edu.tw/files/11-1004-246-2.php
             res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
             return
         }
+        // 獲取頁碼
+        var pageData = [];
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
                 'text': $(pages[i]).text(),
@@ -81,7 +72,8 @@ exports.getPage = function(url, pageID, res) {
             }
             pageData.push(preJoin);
         }
-
+        // 獲取文章
+        var tlhcData = [];
         for (var i = 0; i < tag.length; i++) {
             var preJoin = {
                 'tag': $(tag[i]).text().replace(/\n/g, ''),
@@ -99,9 +91,7 @@ exports.getPost = function(url, pageID, res) {
     request({
         url: url,
         method: "GET",
-        headers: {
-            'User-Agent': userAgent,
-        }
+        headers: { 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -190,9 +180,7 @@ exports.getPost = function(url, pageID, res) {
 exports.search = function(search, res, page) {
     request.get({
         url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(search) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
-        headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0'
-        }
+        headers: { 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
