@@ -76,11 +76,10 @@ app.get('/tlhc/post/:id', (req, res) => {
 });
 
 app.get('/searchPage/', (req, res) => {
-    res.render('error', { title: '錯誤', message: '搜尋功能已被停用' })
+    res.render('searchPage', { title: 'ㄉㄌㄐㄕ - 搜尋' });
 });
-app.get('/tlhc/search/:id', (req, res) => {
-    res.render('error', { title: '錯誤', message: '搜尋功能已被停用' })
-        //tlhcRequest.search(req.params.id, res)
+app.get('/tlhc/search/:id/:page', (req, res) => {
+    tlhcRequest.search(req.params.id, res, req.params.page)
 });
 //------------成績系統------------
 //登入

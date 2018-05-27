@@ -38,7 +38,7 @@ function search() {
         alert("未輸入任何內容")
         return
     }
-    location.href = '/tlhc/search/' + search
+    location.href = '/tlhc/search/' + search + '/1'
 }
 
 function headerImg(isSystem) {

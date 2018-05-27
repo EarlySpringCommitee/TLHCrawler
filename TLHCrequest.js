@@ -187,16 +187,11 @@ exports.getPost = function(url, pageID, res) {
     });
 };
 // 搜尋
-exports.search = function(search, res) {
-    request.post({
-        url: "http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?" + search,
-        form: {
-            SchKey: search,
-            search: 'search'
-        },
+exports.search = function(search, res, page) {
+    request.get({
+        url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(search) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-            'content-type': 'application/x-www-form-urlencoded'
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0'
         }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
@@ -224,7 +219,7 @@ exports.search = function(search, res) {
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
                 'text': $(pages[i]).text(),
-                'link': $(pages[i]).attr('href').split("?")[1],
+                'link': $(pages[i]).attr('href').split("?")[1].split("&")[0].split("=")[1],
             }
             pageData.push(preJoin);
         }
