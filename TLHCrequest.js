@@ -224,7 +224,7 @@ exports.search = function(search, res, page) {
             pageData.push(preJoin);
         }
         res.render('tlhc-search', {
-            title: 'ㄉㄌㄐㄕ - 搜尋',
+            title: 'ㄉㄌㄐㄕ - 搜尋：' + search,
             tlhc: tlhcData,
             pages: pageData
         })
