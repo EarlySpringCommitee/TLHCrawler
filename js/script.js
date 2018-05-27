@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    //headerImg(isSystem)
     readContent()
     $.ripple(".items a.item,.ts.button,a.card,.menu a.item", {
         debug: false, // Turn Ripple.js logging on/off
@@ -46,23 +45,6 @@ function search() {
     location.href = '/tlhc/search/' + search + '/1'
 }
 
-function headerImg(isSystem) {
-    var imageID = (isSystem ? "ScoreImg" : "headerImg");
-    if (window.sessionStorage[imageID]) {
-        var readImg = window.sessionStorage[imageID]
-    } else {
-        var perviewImg = Trianglify({
-            width: 2560,
-            height: 2560,
-            stroke_width: 200,
-            cell_size: 100,
-        });
-        var readImg = perviewImg.png()
-        window.sessionStorage[imageID] = readImg
-    }
-    console.log(imageID)
-    $('#headerImg').attr('src', readImg)
-}
 
 
 function readContent() {
