@@ -212,14 +212,14 @@ exports.search = function(search, res, page) {
             var preJoin = {
                 'header': $(header[i]).text(),
                 'content': $(content[i]).text(),
-                'link': '/tlhc/post/' + $(header[i]).attr('href').split("/")[4]
+                'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
             }
             tlhcData.push(preJoin);
         }
         for (var i = 0; i < pages.length; i++) {
             var preJoin = {
                 'text': $(pages[i]).text(),
-                'link': $(pages[i]).attr('href').split("?")[1].split("&")[0].split("=")[1],
+                'link': $(pages[i]).attr('href').match(/\d+/)[0],
             }
             pageData.push(preJoin);
         }
