@@ -67,12 +67,12 @@ app.get('/about/', (req, res) => {
 // ㄉㄌㄐㄕ
 app.get('/tlhc/pages/:id', (req, res) => {
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
-    tlhcRequest.getPage(originalURL, req.params.id, res)
+    tlhcRequest.getPage(originalURL, Base64.decode(req.params.id), res)
 });
 
 app.get('/tlhc/post/:id', (req, res) => {
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
-    tlhcRequest.getPost(originalURL, req.params.id, res)
+    tlhcRequest.getPost(originalURL, Base64.decode(req.params.id), res)
 });
 
 app.get('/tlhc/search/', (req, res) => {
