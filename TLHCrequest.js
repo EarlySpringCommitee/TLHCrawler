@@ -226,7 +226,8 @@ exports.search = function(search, res, page) {
         res.render('tlhc-search', {
             title: 'ㄉㄌㄐㄕ - 搜尋：' + search,
             tlhc: tlhcData,
-            pages: pageData
+            pages: pageData,
+            search: search
         })
     });
 };

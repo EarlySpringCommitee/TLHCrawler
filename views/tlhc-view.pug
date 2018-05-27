@@ -5,8 +5,11 @@ include _nav.pug
     if(tlhc.content)
         #content.ts.basic.segment!=tlhc.content
     else
-        #content.ts.basic.segment 無法讀取到內文，請重新整理試試
-            | 這可能是一個已被發現的錯誤，可至 https://github.com/TWScore/TLHCrawler/issues/2 查看最新修復進度
+        #content.ts.basic.segment 
+            p 無內文，請重新整理試試，或是這篇文章根本沒內文
+            p 這可能是一個已被發現的錯誤，可至 
+                a(href='https://github.com/EarlySpringCommitee/TLHCrawler/issues/2') issues#2 
+                |  查看最新修復進度
 
     .ts.selection.items
         each file in files

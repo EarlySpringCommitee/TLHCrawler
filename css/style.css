@@ -158,6 +158,10 @@ header .header {
     background-color: #4b7baa;
 }
 
+.gs.scroll td {
+    white-space: nowrap;
+}
+
 
 /* hide trash */
 

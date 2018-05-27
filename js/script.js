@@ -35,7 +35,11 @@ $(document).ready(function() {
 function search() {
     var search = document.getElementById('search').value
     if (!search) {
-        alert("未輸入任何內容")
+        swal({
+            title: "糟糕！",
+            text: "您未輸入任何關鍵字",
+            icon: "error",
+        });
         return
     }
     $('[onclick="search()"]').addClass('loading')
@@ -64,14 +68,17 @@ function headerImg(isSystem) {
 function readContent() {
 
 
-    $('#content table:not(.imagetable)').attr("style", "")
-    $('#content table:not(.imagetable)').attr("class", "ts celled table")
+    $('#content table:not(.imagetable)').attr("class", "ts celled table").removeAttr("border").removeAttr("style")
     $('#content table:not(.imagetable)').wrap('<div class="gs scroll"></div>')
-    $('#content td').attr("style", "")
+
+    $('#content td,#content tr').removeAttr("style").removeAttr("nowrap")
+    $('#content td').html(function() {
+        return $(this).text()
+    })
     $('#content img').attr('src', function() {
         var osrc = $(this).attr('src')
         return 'http://web.tlhc.ylc.edu.tw' + osrc
     })
-    $('#content img').attr("style", "")
+    $('#content img').removeAttr("style")
     $('#content img').attr("class", "ts centered rounded image")
 }

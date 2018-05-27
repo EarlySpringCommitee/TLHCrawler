@@ -75,8 +75,8 @@ app.get('/tlhc/post/:id', (req, res) => {
     tlhcRequest.getPost(originalURL, req.params.id, res)
 });
 
-app.get('/searchPage/', (req, res) => {
-    res.render('searchPage', { title: 'ㄉㄌㄐㄕ - 搜尋' });
+app.get('/tlhc/search/', (req, res) => {
+    res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
 });
 app.get('/tlhc/search/:id/:page', (req, res) => {
     tlhcRequest.search(req.params.id, res, req.params.page)
