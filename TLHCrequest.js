@@ -34,7 +34,6 @@ exports.getPage = function(url, pageID, res) {
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             ajaxcode = ajaxcode.split("'")[1]
-            console.log(ajaxcode)
                 //這是需要 post 請求的頁面
             request.post({
                 url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
@@ -49,7 +48,6 @@ exports.getPage = function(url, pageID, res) {
                 // 錯誤代碼 
                 // 傳回的資料內容 
                 if (e || !b) { return }
-                console.log(b)
             })
         }
         var tlhcData = [];
@@ -129,7 +127,6 @@ exports.getPost = function(url, pageID, res) {
         var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode && ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             ajaxcode = ajaxcode.split("'")[1]
-            console.log(ajaxcode)
                 //這是需要 post 請求的頁面
             request.post({
                 url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
@@ -144,7 +141,6 @@ exports.getPost = function(url, pageID, res) {
                 // 錯誤代碼 
                 // 傳回的資料內容 
                 if (e || !b) { return }
-                console.log(b)
                 var $ = cheerio.load(b);
                 var content = $("Content").html();
             })
@@ -157,8 +153,6 @@ exports.getPost = function(url, pageID, res) {
             }
         }
         var content = content.replace(/\n/g, '')
-        console.log(content)
-            //var tlhcData = [];
 
         var files = $('.baseTB a');
         var fileData = [];
@@ -202,6 +196,7 @@ exports.search = function(search, res) {
         },
         headers: {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+            'content-type': 'application/x-www-form-urlencoded'
         }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */

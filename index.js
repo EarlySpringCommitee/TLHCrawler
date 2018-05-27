@@ -71,13 +71,16 @@ app.get('/tlhc/pages/:id', (req, res) => {
 });
 
 app.get('/tlhc/post/:id', (req, res) => {
-    //res.send('USER ' + req.params.id);
     var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
     tlhcRequest.getPost(originalURL, req.params.id, res)
 });
 
+app.get('/searchPage/', (req, res) => {
+    res.render('error', { title: '錯誤', message: '搜尋功能已被停用' })
+});
 app.get('/tlhc/search/:id', (req, res) => {
-    tlhcRequest.search(req.params.id, res)
+    res.render('error', { title: '錯誤', message: '搜尋功能已被停用' })
+        //tlhcRequest.search(req.params.id, res)
 });
 //------------成績系統------------
 //登入

@@ -204,18 +204,35 @@ header .header {
 }
 
 
-/* file icon*/
+/*=============
+    file icon
+=============*/
 
 .ts.selection.items>.item .file-icon:before {
     border-color: #333333 #333333 rgba(255, 255, 255, .35) rgba(255, 255, 255, .35);
 }
 
 .ts.selection.items>.item .file-icon:after {
-    font-size: 6px !important;
+    font-size: 9px !important;
 }
+
+
+/*=============
+    @keyframes
+=============*/
 
 .fade.in {
     animation: fadeIn .4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-1vh);
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 
@@ -243,16 +260,6 @@ header .header {
     color: white;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-1vh);
-    }
-    to {
-        opacity: 1;
-    }
-}
-
 
 /*=============
     行事曆
@@ -266,6 +273,9 @@ header .header {
 
 .fc-scroller {
     height: auto !important;
+    min-height: 400px !important;
+    max-height: max-content !important;
+    overflow: hidden !important;
 }
 
 .fc-basic-view .fc-day-top .fc-day-number {
