@@ -11,7 +11,7 @@
 2. 執行 `node index.js`
 3. 搭拉！
 ## Docker
-[Docker Hub](https://hub.docker.com/r/gnehs/tlhc_crawler/)
+[Docker Hub](https://hub.docker.com/r/gnehs/tlhcrawler/)
 ### 建議掛載檔案/資料夾
 `/app/config.js` 首頁的連結和 Slideshow 的設定檔
 
@@ -30,3 +30,7 @@
 [qrohlf/trianglify](https://github.com/qrohlf/trianglify)
 
 [jquery/jquery](https://github.com/jquery/jquery)
+
+[sweetalert2/sweetalert2](https://github.com/sweetalert2/sweetalert2)
+
+[fullcalendar/fullcalendar](https://github.com/fullcalendar/fullcalendar)
