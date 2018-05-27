@@ -38,6 +38,7 @@ function search() {
         alert("未輸入任何內容")
         return
     }
+    $('[onclick="search()"]').addClass('loading')
     location.href = '/tlhc/search/' + search + '/1'
 }
 
