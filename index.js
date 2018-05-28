@@ -58,7 +58,7 @@ app.get('/og/og.png', (req, res) => {
 app.get('/', (req, res) => {
     let links = config.links
     let slide = config.slide
-    res.render('index', { title: 'ㄉㄌㄐㄕ - 公告', links: links, slide: slide })
+    res.render('index', { title: 'ㄉㄌㄐㄕ', links: links, slide: slide })
 })
 app.get('/about/', (req, res) => {
     res.render('about', { title: 'ㄉㄌㄐㄕ - 關於' });
