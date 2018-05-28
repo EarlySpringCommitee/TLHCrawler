@@ -94,9 +94,26 @@ app.post('/tlhc/login/', (req, res) => {
     tlhcScore.getCookie(req, res)
 });
 //成績
+// 成績選擇頁面
 app.get('/tlhc/score/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getScore(req.session.tlhc, res)
+        tlhcScore.getScorePage(req.session.tlhc, res)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
+// 本學期成績
+app.get('/tlhc/score/latest/', (req, res) => {
+    if (req.session.tlhc) {
+        tlhcScore.getLatestScore(req.session.tlhc, res)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
+// 學期總成績
+app.get('/tlhc/score/semester/:semester', (req, res) => {
+    if (req.session.tlhc) {
+        tlhcScore.getSemesterScore(req.session.tlhc, res, Base64.decode(req.params.semester))
     } else {
         res.redirect("/tlhc/login/")
     }

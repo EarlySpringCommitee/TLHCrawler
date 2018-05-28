@@ -1,21 +1,14 @@
 include _header.pug
 include _nav.pug
-mixin getStartCard(title,link,icon) 
-    a.ts.card(href=link)
-        .secondary.very.padded.extra.content
-            .ts.icon.header
-                i.icon(class=icon)
-        .padded.content
-            .ts.center.aligned.header=title
 
 .ts.container
     h2.ts.center.aligned.header 從這裡開始
         .sub.header='您好，'+user.name
     .ts.doubling.four.cards
-        +getStartCard('查成績','/tlhc/score/','pie chart') 
-        +getStartCard('出勤','/tlhc/day/','student') 
-        +getStartCard('獎懲','/tlhc/rewards/','legal') 
-        +getStartCard('登出','/tlhc/score/logout','sign out') 
+        +selectCard('查成績','/tlhc/score/','pie chart') 
+        +selectCard('出勤','/tlhc/day/','student') 
+        +selectCard('獎懲','/tlhc/rewards/','legal') 
+        +selectCard('登出','/tlhc/score/logout','sign out') 
 
     
 

@@ -5,6 +5,7 @@ const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const express = require('express'); // Node.js Web 架構
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
+const Base64 = require('js-base64').Base64; // Base64
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 
 exports.getCookie = (req, res) => {
@@ -69,16 +70,61 @@ exports.getCookie = (req, res) => {
 
 }
 
-exports.getScore = (cookie, res) => {
+exports.getScorePage = (cookie, res) => {
+    request({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCO.asp",
+        method: "GET",
+        encoding: null,
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+        }
+    }, (e, r, b) => {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        var b = iconv.decode(b, 'Big5')
+        if (e || !b) { return }
+        if (b == '無權使用 請登入') {
+            res.redirect("/tlhc/login/")
+            return
+        }
+        var $ = cheerio.load(b)
+        var user = {
+            id: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
+            name: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
+            class: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
+            num: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
+        }
+        var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
+        var selector = [{
+            'name': '本學期段考成績',
+            'link': '/tlhc/score/latest/',
+            'icon': 'paw'
+        }]
+        for (var i = 0; i < link.length; i++) {
+            var preJoin = {
+                'name': $(link[i]).text() + '總成績',
+                'link': '/tlhc/score/semester/' + Base64.encodeURI($(link[i]).attr('href').split('STD_YEARSCODTL.asp?')[1]),
+                'icon': 'pie chart'
+            }
+            selector.push(preJoin);
+        }
+        res.render('s-selector', {
+            title: 'ㄉㄌㄐㄕ - 成績',
+            user: user,
+            selector: selector,
+            system: true
+        })
+    });
+}
+exports.getLatestScore = (cookie, res) => {
     request({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
         method: "GET",
         encoding: null,
         headers: {
-            //some header
             'Cookie': cookie,
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-            //some header
         }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
@@ -104,6 +150,52 @@ exports.getScore = (cookie, res) => {
             user: user,
             score: score.html().replace(/\n/g, ''),
             total: total.html().replace(/\n/g, ''),
+            system: true
+        })
+    });
+}
+exports.getSemesterScore = (cookie, res, semester) => {
+    request({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCODTL.asp?" + semester,
+        method: "GET",
+        encoding: null,
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+        }
+    }, (e, r, b) => {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        var b = iconv.decode(b, 'Big5')
+        if (e || !b) { return }
+        if (b == '無權使用 請登入') {
+            res.redirect("/tlhc/login/")
+            return
+        }
+        var $ = cheerio.load(b)
+        var user = {
+            id: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > font:nth-child(1)").text().replace(/\n/g, ''),
+            name: $("form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(4) > font:nth-child(1)").text().replace(/\n/g, ''),
+            class: $("form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(6) > font:nth-child(1)").text().replace(/\n/g, ''),
+            num: $("td.DataTD:nth-child(8) > font:nth-child(1)").text().replace(/\n/g, ''),
+        }
+
+        var scoreTable = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1)")
+        var scoreTitle = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1) a font")
+        var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
+        var tables = [{
+            'title': scoreTitle.text().replace(/\n/g, ''),
+            'table': scoreTable.html().replace(/\n/g, ''),
+            'tableID': 'score'
+        }, {
+            'title': '排名',
+            'table': rankTable.html().replace(/\n/g, ''),
+            'tableID': 'rank'
+        }]
+        res.render('s-multi-table', {
+            title: 'ㄉㄌㄐㄕ - 學期成績',
+            user: user,
+            tables: tables,
             system: true
         })
     });

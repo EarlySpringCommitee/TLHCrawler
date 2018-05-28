@@ -5,13 +5,6 @@ include _nav.pug
 	h3.ts.header 基本資料
 		.sub.header 確定成績是不是你的（？
 	.ts.stackable.three.cards
-		mixin card(header,description,icon)
-			.ts.card
-				.content
-					.header= header
-					.description= description
-				.symbol
-					i.icon(class=icon)
 		+card('學號',user.id,'qrcode')
 		+card('姓名',user.name,'user')
 		+card('班級',user.class,'student')

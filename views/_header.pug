@@ -47,3 +47,18 @@ html
                     h1.ts.center.aligned.header!= headerTitle
                 else
                     h1.ts.center.aligned.header!= title
+//- 一些常用的東西
+mixin card(header,description,icon)
+    .ts.card
+        .content
+            .header= header
+            .description= description
+        .symbol
+            i.icon(class=icon)
+mixin selectCard(title,link,icon) 
+    a.ts.card(href=link)
+        .secondary.very.padded.extra.content
+            .ts.icon.header
+                i.icon(class=icon)
+        .padded.content
+            .ts.center.aligned.header=title
