@@ -55,8 +55,8 @@ exports.links = [{
     }]
 }]
 exports.slide = [{
-    "header": "ㄉㄌㄐㄕ歡迎尼",
-    "description": "哈囉！",
+    "header": "哈囉！",
+    "description": "ㄉㄌㄐㄕ歡迎尼",
     "img": "https://i.imgur.com/8NPV00a.png",
     "link": "https://tlhc.gnehs.net/"
 }, {
@@ -65,9 +65,9 @@ exports.slide = [{
     "img": "https://i.imgur.com/iXMNnwK.png",
     "link": "https://tlhc.gnehs.net/tlhc/score/"
 }, {
-    "header": "成績系統",
-    "description": "適合各種裝置使用的成績頁面",
-    "img": "https://i.imgur.com/Lyh2EHo.jpg",
+    "header": "新功能！",
+    "description": "現在已可查詢歷年成績及獎懲",
+    "img": "https://i.imgur.com/7TiFwjR.png",
     "link": "https://tlhc.gnehs.net/tlhc/score/"
 }, {
     "header": "加入橫幅",

@@ -93,6 +93,11 @@ app.get('/tlhc/login/', (req, res) => {
 app.post('/tlhc/login/', (req, res) => {
     tlhcScore.getCookie(req, res)
 });
+// 登出
+app.get('/tlhc/score/logout', (req, res) => {
+    req.session.destroy()
+    res.redirect("/tlhc/login/")
+});
 //-------成績
 // 成績選擇頁面
 app.get('/tlhc/score/', (req, res) => {
@@ -127,7 +132,7 @@ app.get('/tlhc/day/', (req, res) => {
     }
 });
 //------- 獎懲
-//獎
+// 獎懲選擇頁面
 app.get('/tlhc/rewards/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getRewardsPage(req.session.tlhc, res)
@@ -135,17 +140,13 @@ app.get('/tlhc/rewards/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
+// 學期獎懲紀錄
 app.get('/tlhc/rewards/:year/:grade/:term/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getRewards(req.session.tlhc, res, req.params.year, req.params.grade, req.params.term)
     } else {
         res.redirect("/tlhc/login/")
     }
-});
-// 登出
-app.get('/tlhc/score/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect("/tlhc/login/")
 });
 //------------錯誤頁------------
 app.use((req, res, next) => {
