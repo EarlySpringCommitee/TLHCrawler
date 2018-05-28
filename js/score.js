@@ -1,4 +1,21 @@
 $(document).ready(function() {
+    // 匯出資料
+    if ($("table")) {
+        var downloadDiv = $("<div />", {
+            class: "ts relaxed separated primary labeled icon buttons"
+        });
+        $("table").each(function(i) {
+            var downloadLink = $("<a />", {
+                href: exportReportTableToCSV($(this), '匯出.csv'),
+                html: "<i class='download icon'></i>匯出" + $(this).attr('data-name'),
+                download: $(this).attr('data-name') + "_匯出.csv",
+                class: "ts button"
+            })
+            downloadDiv.prepend(downloadLink)
+        })
+        $('.ts.stackable.three.cards+br').after(downloadDiv)
+        downloadDiv.before('<h3 class="ts header">匯出資料<div class="sub header">將表格轉換成 .csv 檔案</div></h3>')
+    }
 
     $("table").attr('style', '')
     $("#score tr:first-child ,#total tr:last-child ,#day tr:last-child ,#rank tr:last-child").remove()
@@ -36,3 +53,73 @@ $(document).ready(function() {
         return text
     })
 });
+
+// https://stackoverflow.com/questions/24610694/export-html-table-to-csv-in-google-chrome-browser/24611096
+function exportReportTableToCSV($table, filename) {
+    var dumpd = '';
+    var csvData = '';
+
+    $table.each(function() {
+        var $rows = $(this).find('tr:has(td)');
+        var $header = $(this).find('tr:has(th)');
+
+        tmpColDelim = String.fromCharCode(11), // vertical tab character
+            tmpRowDelim = String.fromCharCode(0), // null character
+
+            colDelim = '","',
+            rowDelim = '"\r\n"',
+
+            csv = '"' + $header.map(function(i, head) {
+                var $head = $(head),
+                    $cols = $head.find('th');
+
+                return $cols.map(function(j, col) {
+                    var $col = $(col),
+                        text = $col.text();
+
+                    if (text == "&nbsp;")
+                        text = "";
+                    if (text == "PROGRAMS")
+                        text = "";
+                    console.log(text);
+                    return text.replace('"', '""');
+
+                }).get().join(tmpColDelim);
+
+            }).get().join(tmpRowDelim)
+            .split(tmpRowDelim).join(rowDelim)
+            .split(tmpColDelim).join(colDelim) + '"';
+
+        csv += '\r\n';
+
+        csv += '"' + $rows.map(function(i, row) {
+                var $row = $(row),
+                    $cols = $row.find('td');
+
+                return $cols.map(function(j, col) {
+                    var $col = $(col);
+                    var text;
+                    if ($($(col)).find("input:checkbox").length > 0)
+                        text = $($(col)).find("input:checkbox").prop('checked') ? 'Yes' : 'No';
+                    else
+                        text = $col.text();
+
+                    if (text === "") {
+                        text = "";
+                    }
+
+                    return text.replace('"', '""');
+
+                }).get().join(tmpColDelim);
+
+            }).get().join(tmpRowDelim)
+            .split(tmpRowDelim).join(rowDelim)
+            .split(tmpColDelim).join(colDelim) + '"';
+
+        dumpd += csv + "\n\n";
+    });
+
+    var csvData = new Blob(["\uFEFF" + dumpd], { type: 'text/csv;charset=utf-8;' });
+    var csvUrl = URL.createObjectURL(csvData);
+    return csvUrl
+}

@@ -48,7 +48,6 @@ exports.getCookie = (req, res) => {
             var b = iconv.decode(b, 'Big5')
             if (e || !b) { return }
             var $ = cheerio.load(b);
-            console.log(b)
             if (b.match('抱歉,您無權限使用本程式!')) {
                 res.render('s-login', {
                     title: 'ㄉㄌㄐㄕ - 登入',
