@@ -184,7 +184,7 @@ exports.getSemesterScore = (cookie, res, semester) => {
         var scoreTitle = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1) a font")
         var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
         var tables = [{
-            'title': scoreTitle.text().replace(/\n/g, ''),
+            'title': scoreTitle.text().replace(/\n/g, '') + '總成績',
             'table': scoreTable.html().replace(/\n/g, ''),
             'tableID': 'score'
         }, {
@@ -193,7 +193,7 @@ exports.getSemesterScore = (cookie, res, semester) => {
             'tableID': 'rank'
         }]
         res.render('s-multi-table', {
-            title: 'ㄉㄌㄐㄕ - 學期成績',
+            title: 'ㄉㄌㄐㄕ - ' + scoreTitle.text().replace(/\n/g, '') + '總成績',
             user: user,
             tables: tables,
             system: true
