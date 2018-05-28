@@ -1,9 +1,10 @@
 $(document).ready(function() {
 
-    $("#score ,#total,#day,.color.first.line.table").attr('style', '')
-    $("#score tr:first-child ,#total tr:last-child,#day tr:last-child,#rank tr:last-child").remove()
+    $("table").attr('style', '')
+    $("#score tr:first-child ,#total tr:last-child ,#day tr:last-child ,#rank tr:last-child").remove()
+    $("#rewards tr:first-child ,#rewards tr:last-child").remove()
     $('td').removeAttr('class')
-    $('#score td ,#total td ,#day td').html(function() {
+    $('#score td ,#total td ,#day td ,#rewards td').html(function() {
         var text = $(this).text().replace(/[s]+/g, "");
         if (text < 60 && text > 0) {
             // 不及格

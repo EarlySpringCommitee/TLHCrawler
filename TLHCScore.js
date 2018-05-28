@@ -1,5 +1,6 @@
-// 載入
-
+//
+//  基本設定
+//
 const request = require("request"); // HTTP 客戶端輔助工具
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const express = require('express'); // Node.js Web 架構
@@ -7,7 +8,10 @@ const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
 const Base64 = require('js-base64').Base64; // Base64
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
+const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0';
 
+// ------------------- 登入
+// 登入帳號並取得 Cookie
 exports.getCookie = (req, res) => {
     var userID = req.body['userID']
     var userPASS = req.body['userPASS']
@@ -57,27 +61,28 @@ exports.getCookie = (req, res) => {
                     name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text().replace(/\n/g, ''),
                     id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text().replace(/\n/g, '')
                 }
+                var selector = [{
+                    'name': '查成績',
+                    'link': '/tlhc/score/',
+                    'icon': 'pie chart'
+                }, {
+                    'name': '出勤',
+                    'link': '/tlhc/day/',
+                    'icon': 'student'
+                }, {
+                    'name': '獎懲',
+                    'link': '/tlhc/rewards/',
+                    'icon': 'legal'
+                }, {
+                    'name': '登出',
+                    'link': '/tlhc/score/logout/',
+                    'icon': 'sign out'
+                }]
                 res.render('s-selector', {
                     title: 'ㄉㄌㄐㄕ - 登入成功',
                     header: '從這裡開始',
                     system: true,
-                    selector: [{
-                        'name': '查成績',
-                        'link': '/tlhc/score/',
-                        'icon': 'pie chart'
-                    }, {
-                        'name': '出勤',
-                        'link': '/tlhc/day/',
-                        'icon': 'student'
-                    }, {
-                        'name': '獎懲',
-                        'link': '/tlhc/rewards/',
-                        'icon': 'legal'
-                    }, {
-                        'name': '登出',
-                        'link': '/tlhc/score/logout/',
-                        'icon': 'sign out'
-                    }],
+                    selector: selector,
                     user: userInfo
                 })
             }
@@ -88,15 +93,14 @@ exports.getCookie = (req, res) => {
 
 }
 
+// ------------------- 成績
+// 取得總成績選擇頁面
 exports.getScorePage = (cookie, res) => {
     request({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCO.asp",
         method: "GET",
         encoding: null,
-        headers: {
-            'Cookie': cookie,
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-        }
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -108,10 +112,10 @@ exports.getScorePage = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
-            name: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
-            class: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
-            num: $("form[action=\"STD_YEARSCO.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
+            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
         }
         var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
         var selector = [{
@@ -140,15 +144,14 @@ exports.getScorePage = (cookie, res) => {
         })
     });
 }
+
+// 取得本學期成績
 exports.getLatestScore = (cookie, res) => {
     request({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
         method: "GET",
         encoding: null,
-        headers: {
-            'Cookie': cookie,
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-        }
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -160,12 +163,11 @@ exports.getLatestScore = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
-            name: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
-            class: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
-            num: $("form[action=\"STD_SCORE.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
+            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
         }
-
         var score = $("body>center>table:nth-child(3) td>table>tbody")
         var total = $("body>center>table:nth-child(4) td>table>tbody")
         res.render('s-score-view', {
@@ -177,16 +179,15 @@ exports.getLatestScore = (cookie, res) => {
         })
     });
 }
+
+// 取得學期成績
 exports.getSemesterScore = (cookie, res, year, grade, term) => {
     var url = "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCODTL.asp?std_year=" + year + "&std_grade=" + grade + "&std_term=" + term
     request({
         url: url,
         method: "GET",
         encoding: null,
-        headers: {
-            'Cookie': cookie,
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-        }
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -198,12 +199,11 @@ exports.getSemesterScore = (cookie, res, year, grade, term) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(2) > font:nth-child(1)").text().replace(/\n/g, ''),
-            name: $("form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(4) > font:nth-child(1)").text().replace(/\n/g, ''),
-            class: $("form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(6) > font:nth-child(1)").text().replace(/\n/g, ''),
-            num: $("td.DataTD:nth-child(8) > font:nth-child(1)").text().replace(/\n/g, ''),
+            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
         }
-
         var scoreTable = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1)")
         var scoreTitle = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1) a font")
         var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
@@ -225,17 +225,13 @@ exports.getSemesterScore = (cookie, res, year, grade, term) => {
     });
 }
 
+// ------------------- 取得出勤
 exports.getDay = (cookie, res) => {
     request({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_DAY.asp",
         method: "GET",
         encoding: null,
-        headers: {
-            //some header
-            'Cookie': cookie,
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-            //some header
-        }
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -247,32 +243,34 @@ exports.getDay = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
-            name: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
-            class: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
-            num: $("form[action=\"STD_DAY.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
+            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
         }
         var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-        res.render('s-default-view', {
+        var tables = [{
+            'title': '出勤紀錄',
+            'table': day.html().replace(/\n/g, ''),
+            'tableID': 'day'
+        }]
+        res.render('s-multi-table', {
             title: 'ㄉㄌㄐㄕ - 出勤',
             user: user,
-            day: day.html().replace(/\n/g, ''),
+            tables: tables,
             system: true
         })
     });
 }
 
-exports.getRewards = (cookie, res) => {
+// ------------------- 取得獎懲
+// 取得獎懲選擇頁面
+exports.getRewardsPage = (cookie, res) => {
     request({
-        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_CHK.asp",
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHK.asp",
         method: "GET",
         encoding: null,
-        headers: {
-            //some header
-            'Cookie': cookie,
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-            //some header
-        }
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
@@ -284,17 +282,67 @@ exports.getRewards = (cookie, res) => {
         }
         var $ = cheerio.load(b)
         var user = {
-            id: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(2) .DataFONT").text().replace(/\n/g, ''),
-            name: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(4) .DataFONT").text().replace(/\n/g, ''),
-            class: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(6) .DataFONT").text().replace(/\n/g, ''),
-            num: $("form[action=\"STD_CHK.asp\"] table .DataTD:nth-child(8) .DataFONT").text().replace(/\n/g, ''),
+            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
         }
-        var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-        res.render('s-default-view', {
+        var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
+        var selector = []
+        for (var i = 0; i < link.length; i++) {
+            var std = $(link[i]).attr('href').split('STD_YEARCHKDTL.asp?')[1].split('&')
+            var std_year = std[0].split('=')[1]
+            var std_grade = std[1].split('=')[1]
+            var std_term = std[2].split('=')[1]
+            var preJoin = {
+                'name': $(link[i]).text(),
+                'link': '/tlhc/rewards/' + std_year + '/' + std_grade + '/' + std_term + '/',
+                'icon': 'legal'
+            }
+            selector.push(preJoin);
+        }
+        res.render('s-selector', {
+            title: 'ㄉㄌㄐㄕ - 獎懲',
+            header: '選擇獎懲記錄',
+            user: user,
+            selector: selector,
+            system: true
+        })
+    });
+}
+exports.getRewards = (cookie, res, year, grade, term) => {
+    request({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHKDTL.asp?std_year=" + year + "&std_grade=" + grade + "&std_term=" + term,
+        method: "GET",
+        encoding: null,
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+    }, (e, r, b) => {
+        /* e: 錯誤代碼 */
+        /* b: 傳回的資料內容 */
+        var b = iconv.decode(b, 'Big5')
+        if (e || !b) { return }
+        if (b == '無權使用 請登入') {
+            res.redirect("/tlhc/login/")
+            return
+        }
+        var $ = cheerio.load(b)
+        var user = {
+            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
+        }
+        var rewardsTable = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
+        var rewardsTitle = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody a font").text()
+        var tables = [{
+            'title': rewardsTitle + '獎懲紀錄',
+            'table': rewardsTable.html().replace(/\n/g, ''),
+            'tableID': 'rewards'
+        }]
+        res.render('s-multi-table', {
             title: 'ㄉㄌㄐㄕ - 獎懲',
             user: user,
-            day: day.html().replace(/\n/g, ''),
-            rewards: true,
+            tables: tables,
             system: true
         })
     });

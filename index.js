@@ -82,7 +82,7 @@ app.get('/tlhc/search/:id/:page', (req, res) => {
     tlhcRequest.search(req.params.id, res, req.params.page)
 });
 //------------成績系統------------
-//登入
+// 登入
 app.get('/tlhc/login/', (req, res) => {
     res.render('s-login', {
         title: 'ㄉㄌㄐㄕ - 登入',
@@ -93,7 +93,7 @@ app.get('/tlhc/login/', (req, res) => {
 app.post('/tlhc/login/', (req, res) => {
     tlhcScore.getCookie(req, res)
 });
-//成績
+//-------成績
 // 成績選擇頁面
 app.get('/tlhc/score/', (req, res) => {
     if (req.session.tlhc) {
@@ -126,10 +126,18 @@ app.get('/tlhc/day/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
+//------- 獎懲
 //獎
 app.get('/tlhc/rewards/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getRewards(req.session.tlhc, res)
+        tlhcScore.getRewardsPage(req.session.tlhc, res)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
+app.get('/tlhc/rewards/:year/:grade/:term/', (req, res) => {
+    if (req.session.tlhc) {
+        tlhcScore.getRewards(req.session.tlhc, res, req.params.year, req.params.grade, req.params.term)
     } else {
         res.redirect("/tlhc/login/")
     }
@@ -137,7 +145,7 @@ app.get('/tlhc/rewards/', (req, res) => {
 // 登出
 app.get('/tlhc/score/logout', (req, res) => {
     req.session.destroy()
-    res.redirect("/tlhc/score/")
+    res.redirect("/tlhc/login/")
 });
 //------------錯誤頁------------
 app.use((req, res, next) => {
