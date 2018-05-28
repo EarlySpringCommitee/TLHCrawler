@@ -111,9 +111,9 @@ app.get('/tlhc/score/latest/', (req, res) => {
     }
 });
 // 學期總成績
-app.get('/tlhc/score/semester/:semester', (req, res) => {
+app.get('/tlhc/score/semester/:year/:grade/:term/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getSemesterScore(req.session.tlhc, res, Base64.decode(req.params.semester))
+        tlhcScore.getSemesterScore(req.session.tlhc, res, req.params.year, req.params.grade, req.params.term)
     } else {
         res.redirect("/tlhc/login/")
     }

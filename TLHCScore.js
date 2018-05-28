@@ -57,9 +57,27 @@ exports.getCookie = (req, res) => {
                     name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text().replace(/\n/g, ''),
                     id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text().replace(/\n/g, '')
                 }
-                res.render('s-login-success', {
+                res.render('s-selector', {
                     title: 'ㄉㄌㄐㄕ - 登入成功',
+                    header: '從這裡開始',
                     system: true,
+                    selector: [{
+                        'name': '查成績',
+                        'link': '/tlhc/score/',
+                        'icon': 'pie chart'
+                    }, {
+                        'name': '出勤',
+                        'link': '/tlhc/day/',
+                        'icon': 'student'
+                    }, {
+                        'name': '獎懲',
+                        'link': '/tlhc/rewards/',
+                        'icon': 'legal'
+                    }, {
+                        'name': '登出',
+                        'link': '/tlhc/score/logout/',
+                        'icon': 'sign out'
+                    }],
                     user: userInfo
                 })
             }
@@ -102,15 +120,20 @@ exports.getScorePage = (cookie, res) => {
             'icon': 'paw'
         }]
         for (var i = 0; i < link.length; i++) {
+            var std = $(link[i]).attr('href').split('STD_YEARSCODTL.asp?')[1].split('&')
+            var std_year = std[0].split('=')[1]
+            var std_grade = std[1].split('=')[1]
+            var std_term = std[2].split('=')[1]
             var preJoin = {
                 'name': $(link[i]).text() + '總成績',
-                'link': '/tlhc/score/semester/' + Base64.encodeURI($(link[i]).attr('href').split('STD_YEARSCODTL.asp?')[1]),
+                'link': '/tlhc/score/semester/' + std_year + '/' + std_grade + '/' + std_term + '/',
                 'icon': 'pie chart'
             }
             selector.push(preJoin);
         }
         res.render('s-selector', {
             title: 'ㄉㄌㄐㄕ - 成績',
+            header: '選擇成績記錄',
             user: user,
             selector: selector,
             system: true
@@ -154,9 +177,10 @@ exports.getLatestScore = (cookie, res) => {
         })
     });
 }
-exports.getSemesterScore = (cookie, res, semester) => {
+exports.getSemesterScore = (cookie, res, year, grade, term) => {
+    var url = "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCODTL.asp?std_year=" + year + "&std_grade=" + grade + "&std_term=" + term
     request({
-        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCODTL.asp?" + semester,
+        url: url,
         method: "GET",
         encoding: null,
         headers: {
@@ -184,8 +208,8 @@ exports.getSemesterScore = (cookie, res, semester) => {
         var scoreTitle = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1) a font")
         var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
         var tables = [{
-            'title': scoreTitle.text().replace(/\n/g, '') + '總成績',
-            'table': scoreTable.html().replace(/\n/g, ''),
+            'title': scoreTitle.text() + '總成績',
+            'table': scoreTable.html(),
             'tableID': 'score'
         }, {
             'title': '排名',
