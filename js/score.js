@@ -8,7 +8,7 @@ $(document).ready(function() {
             var downloadLink = $("<a />", {
                 href: exportReportTableToCSV($(this), '匯出.csv'),
                 html: "<i class='download icon'></i>匯出" + $(this).attr('data-name'),
-                download: $(this).attr('data-name') + "_匯出.csv",
+                download: $(this).attr('data-name') + "_ㄉㄌㄐㄕ匯出.csv",
                 class: "ts button"
             })
             downloadDiv.prepend(downloadLink)
