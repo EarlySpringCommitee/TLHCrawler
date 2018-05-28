@@ -7,14 +7,14 @@ script(src='/js/login.js')
 			.sub.header=message
 	else
 		h1.ts.center.aligned.header 嗨！
-			.sub.header 輸入您的學號及身分證字號並開始使用
+			.sub.header 輸入您的學號及身份證字號並開始使用
 	#login.ts.centered.secondary.segment.narrow
 		form.ts.form(method='post',role='form',action=post,onsubmit='return check()')
 			.field
 				label 學號
 				input(type='text', placeholder='', id='userID', name='userID',required)
 			.field
-				label 身分證字號
+				label 身份證字號
 				input(type='password', placeholder='', id='userPASS', name='userPASS',style='text-transform:uppercase',required)
 			.field
 				.ts.checkbox

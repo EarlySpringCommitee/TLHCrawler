@@ -48,11 +48,12 @@ exports.getCookie = (req, res) => {
             var b = iconv.decode(b, 'Big5')
             if (e || !b) { return }
             var $ = cheerio.load(b);
-            if (b == '無權使用 請登入') {
+            console.log(b)
+            if (b.match('抱歉,您無權限使用本程式!')) {
                 res.render('s-login', {
                     title: 'ㄉㄌㄐㄕ - 登入',
                     post: '/tlhc/login/',
-                    message: '請檢查輸入的學號及身分證字號是否正確',
+                    message: '請檢查輸入的學號及身份證字號是否正確',
                     system: true
                 })
                 return
