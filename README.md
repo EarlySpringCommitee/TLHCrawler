@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/TWScore/tlhc-crawler/blob/master/icon/icon.png?raw=true">
+  <img src="https://i.imgur.com/U3n7Was.png">
 </p>
 
 # tlhc-crawler
