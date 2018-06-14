@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://i.imgur.com/U3n7Was.png">
+  <img src="https://i.imgur.com/U3n7Was.png" width="400px">
 </p>
 
 # TLHCrawler
