@@ -39,7 +39,7 @@ exports.links = [{
     }, {
         "header": "學生社團選填",
         "description": "庫",
-        "link": "http://register.tlhc.ylc.edu.tw/clgstd/Index.aspx"
+        "link": "http://register.tlhc.ylc.edu.tw/ClgStd/"
     }, {
         "header": "志工服務管理系統",
         "description": "庫",
