@@ -183,7 +183,7 @@ function getLatestScore(data) {
         {
             'title': '本學期段考排名',
             'table': total.html().replace(/\n/g, ''),
-            'tableID': 'rank'
+            'tableID': 'total'
         }
     ]
     return tables
