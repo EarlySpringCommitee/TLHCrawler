@@ -3,15 +3,15 @@ exports.links = [{
     "name": "學校佈告欄",
     "table": [{
         "header": "校園公告",
-        "description": "好像很重要，又沒那麼重要",
+        "description": "吼吼",
         "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-15-1.php")
     }, {
         "header": "榮譽榜",
-        "description": "實際上沒人去看的東西，只會害你升旗站更久",
+        "description": "吼吼",
         "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-38-1.php")
     }, {
         "header": "轉知資訊-政令宣導",
-        "description": "一些比賽跟你完全不會想點進去看的東西",
+        "description": "吼吼",
         "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-29-1.php")
     }, {
         "header": "圖書館公告",
