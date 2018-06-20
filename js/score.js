@@ -11,7 +11,7 @@ $(document).ready(function() {
                 download: $(this).attr('data-name') + "_ㄉㄌㄐㄕ匯出.csv",
                 class: "ts button"
             })
-            downloadDiv.prepend(downloadLink)
+            downloadDiv.append(downloadLink)
         })
         $('.ts.stackable.three.cards+br').after(downloadDiv)
         downloadDiv.before('<h3 class="ts header">匯出資料<div class="sub header">將表格轉換成 .csv 檔案</div></h3>')
