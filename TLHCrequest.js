@@ -142,7 +142,8 @@ exports.getPost = function(url, pageID, res) {
                 content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
             }
         }
-        var content = content.replace(/\n/g, '')
+        if (content)
+            var content = content.replace(/\n/g, '')
 
         var files = $('.baseTB a');
         var fileData = [];
