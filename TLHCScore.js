@@ -2,6 +2,17 @@
 //  基本設定
 //
 const request = require("request"); // HTTP 客戶端輔助工具
+function doRequest(url) {
+    return new Promise(function(resolve, reject) {
+        request(url, function(error, res, body) {
+            if (!error && res.statusCode == 200) {
+                resolve(body);
+            } else {
+                reject(error);
+            }
+        });
+    });
+}
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const express = require('express'); // Node.js Web 架構
 const bodyParser = require('body-parser'); // 讀入 post 請求
@@ -95,134 +106,108 @@ exports.getCookie = (req, res) => {
 
 // ------------------- 成績
 // 取得總成績選擇頁面
-exports.getScorePage = (cookie, res) => {
-    request({
+exports.getScorePage = async function(cookie, res) {
+
+    let ScoreSelectRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCO.asp",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5')
-        if (e || !b) { return }
-        if (b == '無權使用 請登入') {
-            res.redirect("/tlhc/login/")
-            return
-        }
-        var $ = cheerio.load(b)
-        var user = {
-            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-        }
-        var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
-        var selector = [{
-            'name': '本學期段考成績',
-            'link': '/tlhc/score/latest/',
-            'icon': 'paw'
-        }]
-        for (var i = 0; i < link.length; i++) {
-            var std = $(link[i]).attr('href').split('STD_YEARSCODTL.asp?')[1].split('&')
-            var std_year = std[0].split('=')[1]
-            var std_grade = std[1].split('=')[1]
-            var std_term = std[2].split('=')[1]
-            var preJoin = {
-                'name': $(link[i]).text() + '總成績',
-                'link': '/tlhc/score/semester/' + std_year + '/' + std_grade + '/' + std_term + '/',
-                'icon': 'pie chart'
-            }
-            selector.push(preJoin);
-        }
-        res.render('s-selector', {
-            title: 'ㄉㄌㄐㄕ - 成績',
-            header: '選擇成績記錄',
-            user: user,
-            selector: selector,
-            system: true
-        })
     });
-}
+    var ScoreSelectPage = iconv.decode(ScoreSelectRequest, 'Big5')
+    if (ScoreSelectPage == '無權使用 請登入') {
+        res.redirect("/tlhc/login/")
+        return
+    }
+    var $ = cheerio.load(ScoreSelectPage)
+    var user = {
+        id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+        name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+        class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+        num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
+    }
+    let tables = [];
 
-// 取得本學期成績
-exports.getLatestScore = (cookie, res) => {
-    request({
+    //取得本學期成績
+    let LatestScoreRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5')
-        if (e || !b) { return }
-        if (b == '無權使用 請登入') {
-            res.redirect("/tlhc/login/")
-            return
-        }
-        var $ = cheerio.load(b)
-        var user = {
-            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-        }
-        var score = $("body>center>table:nth-child(3) td>table>tbody")
-        var total = $("body>center>table:nth-child(4) td>table>tbody")
-        res.render('s-score-view', {
-            title: 'ㄉㄌㄐㄕ - 成績',
-            user: user,
-            score: score.html().replace(/\n/g, ''),
-            total: total.html().replace(/\n/g, ''),
-            system: true
-        })
     });
+    let LatestScore = iconv.decode(LatestScoreRequest, 'Big5')
+    let LatestScoreData = getLatestScore(LatestScore)
+    tables.push(LatestScoreData);
+    // 取得學期總成績
+    var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
+    for (var i = 0; i < link.length; i++) {
+        let getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[i]).attr('href')
+        let ScoreSemesterRequest = await doRequest({
+            url: getURL,
+            method: "GET",
+            encoding: null,
+            headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        });
+        let data = iconv.decode(ScoreSemesterRequest, 'Big5')
+        let table = getSemesterScore(data)
+        tables.push(table);
+    }
+    /*
+        tables.reduce((a, b) => a.concat(b), [])
+        https://stackoverflow.com/a/46715585
+    */
+    res.render('s-multi-table', {
+        title: 'ㄉㄌㄐㄕ - 成績',
+        user: user,
+        tables: tables.reduce((a, b) => a.concat(b), []),
+        system: true
+    })
 }
 
-// 取得學期成績
-exports.getSemesterScore = (cookie, res, year, grade, term) => {
-    var url = "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCODTL.asp?std_year=" + year + "&std_grade=" + grade + "&std_term=" + term
-    request({
-        url: url,
-        method: "GET",
-        encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5')
-        if (e || !b) { return }
-        if (b == '無權使用 請登入') {
-            res.redirect("/tlhc/login/")
-            return
-        }
-        var $ = cheerio.load(b)
-        var user = {
-            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-        }
-        var scoreTable = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1)")
-        var scoreTitle = $("body > center:nth-child(1) > table:nth-child(3) table:nth-child(1) > tbody:nth-child(1) a font")
-        var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
-        var tables = [{
-            'title': scoreTitle.text() + '總成績',
-            'table': scoreTable.html(),
+// 整理本學期成績網頁並取出表格
+function getLatestScore(data) {
+    var $ = cheerio.load(data)
+    var user = {
+        id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+        name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+        class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+        num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
+    }
+    var score = $("body>center>table:nth-child(3) td>table>tbody")
+    var total = $("body>center>table:nth-child(4) td>table>tbody")
+    var tables = [{
+            'title': '本學期段考成績',
+            'table': score.html().replace(/\n/g, ''),
             'tableID': 'score'
-        }, {
-            'title': '排名',
+        },
+        {
+            'title': '本學期段考排名',
+            'table': total.html().replace(/\n/g, ''),
+            'tableID': 'rank'
+        }
+    ]
+    return tables
+}
+
+// 整理學期成績網頁並取出表格
+function getSemesterScore(data) {
+    var $ = cheerio.load(data)
+    var scoreTable = $("body > center:nth-child(1) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
+    var scoreTitle = $(".FormHeaderFONT")
+    var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
+    var tables = [{
+            'title': scoreTitle.text() + '總成績',
+            'table': scoreTable.html().replace(/\n/g, ''),
+            'tableID': 'score'
+        },
+        {
+            'title': scoreTitle.text() + '排名',
             'table': rankTable.html().replace(/\n/g, ''),
             'tableID': 'rank'
-        }]
-        res.render('s-multi-table', {
-            title: 'ㄉㄌㄐㄕ - ' + scoreTitle.text().replace(/\n/g, '') + '總成績',
-            user: user,
-            tables: tables,
-            system: true
-        })
-    });
+        }
+    ]
+    return tables
+
 }
 
 // ------------------- 取得出勤
@@ -265,85 +250,60 @@ exports.getDay = (cookie, res) => {
 
 // ------------------- 取得獎懲
 // 取得獎懲選擇頁面
-exports.getRewardsPage = (cookie, res) => {
-    request({
+exports.getRewardsPage = async function(cookie, res) {
+
+
+    let RewardsSelectRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHK.asp",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5')
-        if (e || !b) { return }
-        if (b == '無權使用 請登入') {
-            res.redirect("/tlhc/login/")
-            return
-        }
-        var $ = cheerio.load(b)
-        var user = {
-            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-        }
-        var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
-        var selector = []
-        for (var i = 0; i < link.length; i++) {
-            var std = $(link[i]).attr('href').split('STD_YEARCHKDTL.asp?')[1].split('&')
-            var std_year = std[0].split('=')[1]
-            var std_grade = std[1].split('=')[1]
-            var std_term = std[2].split('=')[1]
-            var preJoin = {
-                'name': $(link[i]).text(),
-                'link': '/tlhc/rewards/' + std_year + '/' + std_grade + '/' + std_term + '/',
-                'icon': 'legal'
-            }
-            selector.push(preJoin);
-        }
-        res.render('s-selector', {
-            title: 'ㄉㄌㄐㄕ - 獎懲',
-            header: '選擇獎懲記錄',
-            user: user,
-            selector: selector,
-            system: true
-        })
     });
+    var RewardsSelectPage = iconv.decode(RewardsSelectRequest, 'Big5')
+    if (RewardsSelectPage == '無權使用 請登入') {
+        res.redirect("/tlhc/login/")
+        return
+    }
+    var $ = cheerio.load(RewardsSelectPage)
+    var user = {
+        id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
+        name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
+        class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
+        num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
+    }
+
+    // 拿資料囉
+    let tables = [];
+    var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
+    for (var i = 0; i < link.length; i++) {
+        var getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[i]).attr('href')
+        let RewardsRequest = await doRequest({
+            url: getURL,
+            method: "GET",
+            encoding: null,
+            headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        });
+        let data = iconv.decode(RewardsRequest, 'Big5')
+        let table = getRewards(data)
+        tables.push(table);
+    }
+
+    res.render('s-multi-table', {
+        title: 'ㄉㄌㄐㄕ - 出勤',
+        user: user,
+        tables: tables.reduce((a, b) => a.concat(b), []),
+        system: true
+    })
 }
-exports.getRewards = (cookie, res, year, grade, term) => {
-    request({
-        url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHKDTL.asp?std_year=" + year + "&std_grade=" + grade + "&std_term=" + term,
-        method: "GET",
-        encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        var b = iconv.decode(b, 'Big5')
-        if (e || !b) { return }
-        if (b == '無權使用 請登入') {
-            res.redirect("/tlhc/login/")
-            return
-        }
-        var $ = cheerio.load(b)
-        var user = {
-            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-        }
-        var rewardsTable = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-        var rewardsTitle = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody a font").text()
-        var tables = [{
-            'title': rewardsTitle + '獎懲紀錄',
-            'table': rewardsTable.html().replace(/\n/g, ''),
-            'tableID': 'rewards'
-        }]
-        res.render('s-multi-table', {
-            title: 'ㄉㄌㄐㄕ - 獎懲',
-            user: user,
-            tables: tables,
-            system: true
-        })
-    });
+
+function getRewards(data) {
+    var $ = cheerio.load(data)
+    var rewardsTable = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
+    var rewardsTitle = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody a font").text()
+    var tables = [{
+        'title': rewardsTitle + '獎懲紀錄',
+        'table': rewardsTable.html().replace(/\n/g, ''),
+        'tableID': 'rewards'
+    }]
+    return tables
 }
