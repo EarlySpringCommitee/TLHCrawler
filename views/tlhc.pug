@@ -1,14 +1,14 @@
 include _header.pug
 include _nav.pug
 .ts.container
-    .ts.stackable.three.cards
+    .ts.divided.items
         each item in tlhc
-            a.ts.card(href=item.link)
+            a.item(href=item.link)
                 .content
                     .header=item.title
-                .extra.content
-                    .ts.basic.label=item.date
-                    .ts.basic.label=item.tag
+                    .middoted.meta
+                        span=item.date
+                        span=item.tag
         else
             .ts.header 未找到符合條件的資料
     br
