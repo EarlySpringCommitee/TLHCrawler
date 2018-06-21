@@ -15,12 +15,14 @@ $(document).ready(function() {
         $('.ts.stackable.three.cards+br').after(downloadDiv)
         downloadDiv.before('<h3 class="ts header">匯出資料<div class="sub header">將表格轉換成 .csv 檔案</div></h3>')
     }
-
-    $("table").attr('style', '')
-    $("#score tr:first-child ,#total tr:last-child ,#day tr:last-child ,#rank tr:last-child,#group tr:last-child,#group tr td:last-child").remove()
-    $("#rewards tr:first-child ,#rewards tr:last-child").remove()
+    $("table").removeAttr('style')
+    $("[data-table] tr:last-child").remove()
+    $("[data-table=\"rank\"]").removeClass("first line")
+    $("[data-table=\"score\"] tr:first-child").remove()
+    $("[data-table=\"rewards\"] tr:first-child").remove()
+    $("[data-table=\"group\"] tr td:last-child").remove()
     $('td').removeAttr('class')
-    $('#score td ,#total td ,#day td ,#rewards td').html(function() {
+    $('[data-table=\"score\"] td,[data-table=\"day\"] td,[data-table=\"rewards\"] td').html(function() {
         var text = $(this).text().replace(/[s]+/g, "");
         if (text < 60 && text > 0) {
             // 不及格
@@ -33,6 +35,14 @@ $(document).ready(function() {
         if (text <= 100 && text >= 0) {
             // 如果是分數，加上等寬字元
             $(this).addClass('score')
+        }
+        if (text.match('大功') || text.match('小功') || text.match('嘉獎')) {
+            // 棒棒
+            $(this).addClass('positive')
+        }
+        if (text.match('大過') || text.match('小過') || text.match('警告') || text.match('缺點')) {
+            // 壞壞
+            $(this).addClass('negative')
         }
         if (text.match('曠課') || text.match('遲到') || text.match('升降旗缺席')) {
             // 壞壞
