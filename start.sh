@@ -1,2 +1,2 @@
 cd /Volumes/Data/文件/GitHub/TLHCrawler/
-nodemon index.js
+nodemon --ignore 'js/*.js' index.js 

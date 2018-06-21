@@ -81,6 +81,10 @@ header .header {
     卡片
 ==========*/
 
+.ts.card {
+    overflow: hidden;
+}
+
 .ts.cards a.ts.card:hover {
     transform: scale(1.02) !important;
 }
