@@ -13,12 +13,16 @@ include _nav.pug
 
     .ts.selection.items
         each file in files
-            a.item(href=file.file,download=file.name)
+            .item
                 i.large.icon
                     i.file-icon(data-type=file.type)
-                .content
-                    .header 附件
-                    .extra=file.name
+                .middle.aligned.content
+                    .header=file.name
+                .middle.aligned.actions
+                        a.ts.button(href=file.file,download=file.name) 下載
+                        .or
+                        a.ts.positive.button(href='https://docs.google.com/viewer?url='+file.file,target="_blank") 預覽
+
 
     button.ts.fluid.labeled.icon.button(onclick='history.back()')
         i.arrow.left.icon
