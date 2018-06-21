@@ -307,7 +307,7 @@ exports.getRewardsPage = async function(cookie, res) {
     }
 
     res.render('s-multi-table', {
-        title: 'ㄉㄌㄐㄕ - 出勤',
+        title: 'ㄉㄌㄐㄕ - 獎懲紀錄',
         user: user,
         tables: tables.reduce((a, b) => a.concat(b), []),
         system: true
@@ -352,7 +352,7 @@ exports.getGroupPage = async function(cookie, res) {
     }]
 
     res.render('s-multi-table', {
-        title: 'ㄉㄌㄐㄕ - 出勤',
+        title: 'ㄉㄌㄐㄕ - 社團及幹部',
         user: user,
         tables: tables.reduce((a, b) => a.concat(b), []),
         system: true
