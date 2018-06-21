@@ -94,9 +94,6 @@ header .header {
     成績
 ==========*/
 
-#score tr:nth-child(1)>td,
-#day tr:nth-child(1)>td,
-#total tr:nth-child(1)>td,
 .color.first.line.table tr:nth-child(1)>td {
     background: #f7f7f7;
     font-weight: 500;
@@ -104,13 +101,7 @@ header .header {
     font-size: 1em;
 }
 
-#score tr:last-child {
-    display: none;
-}
-
-#score td.score,
-#total td.score,
-#total tr:nth-child(1n+2) td:nth-child(1n+2) {
+td.score {
     font-family: 'Roboto Mono', monospace !important;
 }
 
