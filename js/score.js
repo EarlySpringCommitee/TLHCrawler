@@ -39,15 +39,11 @@ $(document).ready(function() {
             // 如果是分數，加上等寬字元
             $(this).addClass('score')
         }
-        if (text.match('大功') || text.match('小功') || text.match('嘉獎')) {
+        if (text.match(/大功|小功|嘉獎/)) {
             // 棒棒
             $(this).addClass('positive')
         }
-        if (text.match('大過') || text.match('小過') || text.match('警告') || text.match('缺點')) {
-            // 壞壞
-            $(this).addClass('negative')
-        }
-        if (text.match('曠課') || text.match('遲到') || text.match('升降旗缺席')) {
+        if (text.match(/曠課|遲到|升降旗缺席|小過|警告|缺點/)) {
             // 壞壞
             $(this).addClass('negative')
         }
