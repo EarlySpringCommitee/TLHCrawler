@@ -6,19 +6,23 @@ include _nav.pug
         input#search(type='text',placeholder='搜尋',value=search)
         button.ts.button(onclick="search()") 搜尋
 .ts.container
-    .ts.stackable.two.cards
-        if tlhc
-            each item in tlhc
-                    a.ts.card(href=item.link)
-                        .content
-                            .header=item.header
-                            .description=item.content
-            else
-                .ts.header 未找到符合條件的資料
     br
-    #navigator
-        .ts.buttons
+    -if(tlhc.length>0)
+        .ts.divided.items
+            each item in tlhc
+                a.item(href=item.link)
+                    .content
+                        .header=item.header
+                        .description=item.content
+    -else
+        h3.ts.center.aligned.icon.header 
+            i.frown.icon
+            |糟糕
+            .sub.header 未找到符合條件的資料
+    br
+    #navigator.gs.scroll.non-style
+        .ts.info.buttons
             if pages
                 each page in pages
-                    a.ts.info.button(href=page.link)=page.text
+                    a.ts.button(href=page.link)=page.text
 include _footer.pug
