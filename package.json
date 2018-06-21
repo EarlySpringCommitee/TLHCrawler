@@ -1,6 +1,6 @@
 {
     "name": "node-web-crawler",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "description": "網頁爬蟲",
     "main": "index.js",
     "scripts": {
