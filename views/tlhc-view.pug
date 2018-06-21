@@ -16,9 +16,9 @@ include _nav.pug
             .item
                 i.large.icon
                     i.file-icon(data-type=file.type)
-                .middle.aligned.content
+                .content(style="align-self: center;")
                     .header=file.name
-                .middle.aligned.actions
+                .actions
                     .ts.buttons
                         a.ts.button(href=file.file,download=file.name) 下載
                         .or
