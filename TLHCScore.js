@@ -68,40 +68,60 @@ exports.getCookie = (req, res) => {
                 })
                 return
             } else {
-                var userInfo = {
-                    name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text().replace(/\n/g, ''),
-                    id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text().replace(/\n/g, '')
-                }
-                var selector = [{
-                    'name': '查成績',
-                    'link': '/tlhc/score/',
-                    'icon': 'pie chart'
-                }, {
-                    'name': '出勤',
-                    'link': '/tlhc/day/',
-                    'icon': 'student'
-                }, {
-                    'name': '獎懲',
-                    'link': '/tlhc/rewards/',
-                    'icon': 'legal'
-                }, {
-                    'name': '登出',
-                    'link': '/tlhc/score/logout/',
-                    'icon': 'sign out'
-                }]
-                res.render('s-selector', {
-                    title: 'ㄉㄌㄐㄕ - 登入成功',
-                    header: '從這裡開始',
-                    system: true,
-                    selector: selector,
-                    user: userInfo
-                })
+                //登入成功
+                res.redirect("/tlhc/system/")
             }
         });
         //一開始用帳密跟學校換餅乾
         //然後餅乾存在 session 裡面
     });
 
+}
+exports.getSystem = async function(cookie, res) {
+    let StudentInfoRequest = await doRequest({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
+        method: "GET",
+        encoding: null,
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+    });
+    let StudentInfo = iconv.decode(StudentInfoRequest, 'Big5')
+    if (StudentInfo.match('抱歉,您無權限使用本程式!') || StudentInfo.match('無權使用 請登入')) {
+        res.redirect("/tlhc/login/")
+        return
+    }
+    var $ = cheerio.load(StudentInfo)
+    var userInfo = {
+        name: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(4) .ContectFont").text().replace(/\n/g, ''),
+        id: $("form[action=\"STDINFO.asp\"] table tr:nth-child(2) td:nth-child(2) .ContectFont").text().replace(/\n/g, '')
+    }
+    var selector = [{
+        'name': '成績',
+        'link': '/tlhc/score/',
+        'icon': 'pie chart'
+    }, {
+        'name': '出勤',
+        'link': '/tlhc/day/',
+        'icon': 'student'
+    }, {
+        'name': '獎懲',
+        'link': '/tlhc/rewards/',
+        'icon': 'legal'
+    }, {
+        'name': '社團及幹部',
+        'link': '/tlhc/group/',
+        'icon': 'users'
+    }, {
+        'name': '登出',
+        'link': '/tlhc/score/logout/',
+        'icon': 'sign out'
+    }]
+    res.render('s-selector', {
+        title: 'ㄉㄌㄐㄕ - 登入成功',
+        header: '從這裡開始',
+        system: true,
+        selector: selector,
+        user: userInfo
+    })
 }
 
 // ------------------- 成績
@@ -251,8 +271,6 @@ exports.getDay = (cookie, res) => {
 // ------------------- 取得獎懲
 // 取得獎懲選擇頁面
 exports.getRewardsPage = async function(cookie, res) {
-
-
     let RewardsSelectRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHK.asp",
         method: "GET",
@@ -306,4 +324,37 @@ function getRewards(data) {
         'tableID': 'rewards'
     }]
     return tables
+}
+
+// ------------------- 取得社團
+exports.getGroupPage = async function(cookie, res) {
+    let GroupPageRequest = await doRequest({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STDClgQry.asp",
+        method: "GET",
+        encoding: null,
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+    });
+    var GroupPage = iconv.decode(GroupPageRequest, 'Big5')
+    if (GroupPage == '無權使用 請登入') {
+        res.redirect("/tlhc/login/")
+        return
+    }
+    var $ = cheerio.load(GroupPage)
+    var user = {
+        name: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(6) > font:nth-child(1)").text(),
+        num: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text()
+    }
+
+    var tables = [{
+        'title': '社團及幹部紀錄',
+        'table': $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody").html().replace(/\n/g, ''),
+        'tableID': 'group'
+    }]
+
+    res.render('s-multi-table', {
+        title: 'ㄉㄌㄐㄕ - 出勤',
+        user: user,
+        tables: tables.reduce((a, b) => a.concat(b), []),
+        system: true
+    })
 }

@@ -3,11 +3,11 @@ exports.links = [{
     "name": "學校佈告欄",
     "table": [{
         "header": "校園公告",
-        "description": "吼吼",
+        "description": "來看看最新ㄉ公告(##",
         "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-15-1.php")
     }, {
         "header": "榮譽榜",
-        "description": "吼吼",
+        "description": "哇嗚",
         "link": "/tlhc/pages/" + Base64.encodeURI("40-1001-38-1.php")
     }, {
         "header": "轉知資訊-政令宣導",

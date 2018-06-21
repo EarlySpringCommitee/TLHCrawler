@@ -2,12 +2,16 @@ include _header.pug
 script(src='/js/score.js')
 include _nav.pug
 .ts.container
-    h3.ts.header 基本資料
-        .sub.header 確定資料是不是你的（？
-    .ts.stackable.three.cards
-        +card('學號',user.id,'qrcode')
-        +card('姓名',user.name,'user')
-        +card('班級',user.class,'student')
+    -if(user)
+        h3.ts.header 基本資料
+            .sub.header 確定資料是不是你的（？
+        .ts.stackable.three.cards
+            -if(user.id)
+                +card('學號',user.id,'qrcode')
+            -if(user.name)
+                +card('姓名',user.name,'user')
+            -if(user.class)
+                +card('班級',user.class,'student')
     br
     each item in tables
         h3.ts.header=item.title

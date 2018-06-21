@@ -93,13 +93,15 @@ app.get('/tlhc/login/', (req, res) => {
 app.post('/tlhc/login/', (req, res) => {
     tlhcScore.getCookie(req, res)
 });
+app.get('/tlhc/system/', (req, res) => {
+    tlhcScore.getSystem(req.session.tlhc, res)
+});
 // 登出
 app.get('/tlhc/score/logout', (req, res) => {
     req.session.destroy()
     res.redirect("/tlhc/login/")
 });
-//-------成績
-// 成績選擇頁面
+//------- 成績
 app.get('/tlhc/score/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getScorePage(req.session.tlhc, res)
@@ -107,23 +109,7 @@ app.get('/tlhc/score/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
-// 本學期成績
-app.get('/tlhc/score/latest/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getLatestScore(req.session.tlhc, res)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
-// 學期總成績
-app.get('/tlhc/score/semester/:year/:grade/:term/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getSemesterScore(req.session.tlhc, res, req.params.year, req.params.grade, req.params.term)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
-//出勤
+//------- 出勤
 app.get('/tlhc/day/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getDay(req.session.tlhc, res)
@@ -132,7 +118,6 @@ app.get('/tlhc/day/', (req, res) => {
     }
 });
 //------- 獎懲
-// 獎懲選擇頁面
 app.get('/tlhc/rewards/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getRewardsPage(req.session.tlhc, res)
@@ -140,10 +125,10 @@ app.get('/tlhc/rewards/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
-// 學期獎懲紀錄
-app.get('/tlhc/rewards/:year/:grade/:term/', (req, res) => {
+//------- 社團及幹部
+app.get('/tlhc/group/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getRewards(req.session.tlhc, res, req.params.year, req.params.grade, req.params.term)
+        tlhcScore.getGroupPage(req.session.tlhc, res)
     } else {
         res.redirect("/tlhc/login/")
     }

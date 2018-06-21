@@ -17,7 +17,7 @@ $(document).ready(function() {
     }
 
     $("table").attr('style', '')
-    $("#score tr:first-child ,#total tr:last-child ,#day tr:last-child ,#rank tr:last-child").remove()
+    $("#score tr:first-child ,#total tr:last-child ,#day tr:last-child ,#rank tr:last-child,#group tr:last-child,#group tr td:last-child").remove()
     $("#rewards tr:first-child ,#rewards tr:last-child").remove()
     $('td').removeAttr('class')
     $('#score td ,#total td ,#day td ,#rewards td').html(function() {
