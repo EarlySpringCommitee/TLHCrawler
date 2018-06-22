@@ -13,6 +13,29 @@ kbd {
 
 
 /*===========
+    Botton
+===========*/
+
+.ts.button.primary,
+.ts.buttons.primary .button {
+    background: #5755d9 !important;
+    border-color: #5755d9 !important;
+}
+
+.ts.button.primary:hover,
+.ts.buttons.primary .button:hover {
+    background: #4240d4 !important;
+    border-color: #4240d4 !important;
+}
+
+.ts.button.primary:active,
+.ts.buttons.primary .button:active {
+    background: #3a38d2 !important;
+    border-color: #3a38d2 !important;
+}
+
+
+/*===========
     Header
 ===========*/
 

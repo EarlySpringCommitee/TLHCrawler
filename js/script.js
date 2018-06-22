@@ -27,6 +27,9 @@ $(document).ready(function() {
         autoplaySpeed: 2000,
         arrows: false
     });
+    cheet('↑ ↑ ↓ ↓ ← → ← → b a', function() {
+        $("body").attr("style", "transform: skewY(6deg);transition: all .4s;")
+    });
 });
 
 function search() {

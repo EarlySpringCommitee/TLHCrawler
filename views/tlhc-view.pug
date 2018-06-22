@@ -22,10 +22,10 @@ include _nav.pug
                     .ts.buttons
                         a.ts.button(href=file.file,download=file.name) 下載
                         .or
-                        a.ts.positive.button(href='https://docs.google.com/viewer?url='+file.file,target="_blank") 預覽
+                        a.ts.primary.button(href='https://docs.google.com/viewer?url='+file.file,target="_blank") 預覽
 
 
-    button.ts.fluid.labeled.icon.button(onclick='history.back()')
+    button.ts.primary.labeled.icon.button(onclick='history.back()')
         i.arrow.left.icon
         | 回上頁
 include _footer.pug
