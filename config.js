@@ -58,17 +58,22 @@ exports.slide = [{
     "header": "哈囉！",
     "description": "ㄉㄌㄐㄕ歡迎尼",
     "img": "https://i.imgur.com/8NPV00a.png",
-    "link": "https://tlhc.gnehs.net/"
+    "link": "#"
 }, {
     "header": "成績系統",
-    "description": "美麗的成績頁面",
-    "img": "https://i.imgur.com/iXMNnwK.png",
-    "link": "https://tlhc.gnehs.net/tlhc/score/"
+    "description": "可於同一頁面查看所有學期成績",
+    "img": "https://i.imgur.com/F9mdIVH.png",
+    "link": "/tlhc/score/"
 }, {
     "header": "新功能！",
-    "description": "現在已可查詢歷年成績及獎懲",
-    "img": "https://i.imgur.com/7TiFwjR.png",
-    "link": "https://tlhc.gnehs.net/tlhc/score/"
+    "description": "現在已可查詢社團及幹部紀錄",
+    "img": "https://i.imgur.com/sUNpC7q.png",
+    "link": "/tlhc/group/"
+}, {
+    "header": "手機版",
+    "description": "使用任何裝置皆可瀏覽",
+    "img": "https://i.imgur.com/c4NQVRm.png",
+    "link": "#"
 }, {
     "header": "加入橫幅",
     "description": "免費在此加入您的橫幅",
