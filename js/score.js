@@ -26,7 +26,7 @@ $(document).ready(function() {
     $("[data-table=\"total\"] tr:nth-child(1n+2) td:nth-child(1n+2)").addClass("score")
     $("[data-table=\"rank\"] tr td:nth-child(1n+2)").addClass("score")
     $('[data-table=\"score\"] td,[data-table=\"day\"] td,[data-table=\"rewards\"] td').html(function() {
-        var text = $(this).text().replace(/[s]+/g, "");
+        var text = $(this).text().trim();
         if (text < 60 && text > 0) {
             // 不及格
             $(this).addClass('negative')
@@ -53,7 +53,7 @@ $(document).ready(function() {
         return text
     })
     $('[data-table=\"rank\"] td,[data-table=\"total\"] td').html(function() {
-        var text = $(this).text().replace(/[s]+/g, "");
+        var text = $(this).text().trim();
         if (text.match('成績輸入期間')) {
             var text = "";
         }
