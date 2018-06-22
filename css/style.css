@@ -34,6 +34,10 @@ kbd {
     border-color: #3a38d2 !important;
 }
 
+.ts.button:hover {
+    animation: poyon 0.4s;
+}
+
 
 /*===========
     Header
@@ -310,4 +314,25 @@ td.score {
 .fc-unthemed th,
 .fc-unthemed thead {
     border-color: #0000 !important;
+}
+
+
+/*=============
+      動畫
+=============*/
+
+@keyframes poyon {
+    0%,
+    100% {
+        transform: scale(1, 1);
+    }
+    25% {
+        transform: scale(0.9, 1.1);
+    }
+    50% {
+        transform: scale(1.1, 0.9);
+    }
+    75% {
+        transform: scale(0.97, 1.03);
+    }
 }
