@@ -122,7 +122,8 @@ function exportReportTableToCSV($table, filename) {
             }).get().join(tmpRowDelim)
             .split(tmpRowDelim).join(rowDelim)
             .split(tmpColDelim).join(colDelim) + '"';
-
+        // 塞廣告
+        csv += '\r\n' + '"⭐️ 使用 TLHCrawler 匯出 ⭐️"\r\n"網址：tlhc.gnehs.net"'
         dumpd += csv + "\n\n";
     });
 
