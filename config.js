@@ -77,6 +77,6 @@ exports.slide = [{
 }, {
     "header": "加入橫幅",
     "description": "免費在此加入您的橫幅",
-    "img": "https://i.imgur.com/dH4dAE2.jpg",
+    "img": "https://i.imgur.com/PpiLxni.png",
     "link": "http://telegra.ph/addtlhc-05-26"
 }]
