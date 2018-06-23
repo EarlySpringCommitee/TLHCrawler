@@ -56,7 +56,10 @@ function readContent() {
 
     $('#content td,#content tr').removeAttr("style").removeAttr("nowrap")
     $('#content td').html(function() {
-        return $(this).text()
+        if ($(this).children("p"))
+            return $(this).html()
+        else
+            return $(this).text()
     })
     $('#content img').attr('src', function() {
         var osrc = $(this).attr('src')
