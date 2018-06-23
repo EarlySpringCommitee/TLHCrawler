@@ -6,7 +6,6 @@ include _nav.pug
         input#search(type='text',placeholder='搜尋',value=search)
         button.ts.button(onclick="search()") 搜尋
 .ts.container
-    br
     -if(tlhc)
         -if(tlhc.length>0)
             .ts.divided.items
@@ -16,11 +15,13 @@ include _nav.pug
                             .header=item.header
                             .description=item.content
         -else
+            br
             h3.ts.center.aligned.icon.header 
                 i.frown.icon
                 |糟糕
                 .sub.header 未找到符合條件的資料
     -else
+        br
         h3.ts.center.aligned.icon.header 
             i.search.icon
             |尼好
