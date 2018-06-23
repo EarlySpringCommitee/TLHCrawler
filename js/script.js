@@ -64,4 +64,11 @@ function readContent() {
     })
     $('#content img').removeAttr("style")
     $('#content img').attr("class", "ts centered rounded image")
+    $('#content a').attr("href", function() {
+        let href = $(this).attr("href")
+        if (href.indexOf('http://web.tlhc.ylc.edu.tw/files/') > -1) {
+            let href = href.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
+        }
+        return href
+    })
 }

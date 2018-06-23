@@ -2,34 +2,86 @@
 //  基本設定
 //
 const request = require("request"); // HTTP 客戶端輔助工具
+function doRequest(url) {
+    return new Promise(function(resolve, reject) {
+        request(url, function(error, res, body) {
+            if (!error && res.statusCode == 200) {
+                resolve(body);
+            } else {
+                reject(error);
+            }
+        });
+    });
+}
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const excerpt = require("html-excerpt"); // 取摘要
 const Base64 = require('js-base64').Base64; // Base64
 const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0';
+const moment = require('moment'); // 時間處理
+moment.locale('zh-tw');
+
 // 獲取頁面
-exports.getPage = function(url, pageID, res) {
-    request({
+exports.getPage = async function(url, pageID, res) {
+    //請求
+    let PageData = await doRequest({
         url: url,
         method: "GET",
         headers: { 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        if (e || !b) {
-            res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
-            return;
+    });
+    //沒拿到資料
+    if (!PageData) {
+        res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        return;
+    }
+    //可能是文章模板
+    if (PageData.indexOf('資料群組') == -1 && PageData.indexOf('標題') == -1 && PageData.indexOf('日期') == -1) {
+        res.render('error', {
+            title: '錯誤 - 這不是一個目錄頁面',
+            message: '也許你該試試下面的連結',
+            button: '嘗試使用文章模板',
+            buttonLink: '/tlhc/post/' + Base64.encodeURI(pageID)
+        })
+        return;
+    }
+    var $ = cheerio.load(PageData);
+
+    var author = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
+    var title = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2)");
+    var link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
+    var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
+    var pages = $(".navigator-inner a.pagenum");
+
+    var pgTitle = 'ㄉㄌㄐㄕ - ' + $('#Dyn_2_1 .md_middle .mm_01 a.path:nth-child(2)').html()
+
+    var pgid = pageID.split("-")[2]
+    if (pgid == 246) {
+        // 這頁不知道為啥一直出錯 Orz
+        // http://web.tlhc.ylc.edu.tw/files/11-1004-246-2.php
+        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        return
+    }
+    // 獲取頁碼
+    var pageData = [];
+    for (var i = 0; i < pages.length; i++) {
+        var preJoin = {
+            'text': $(pages[i]).text(),
+            'link': Base64.encodeURI($(pages[i]).attr('href').split("/")[4]),
         }
-        if (b.indexOf('資料群組') == -1 && b.indexOf('標題') == -1 && b.indexOf('日期') == -1) {
-            res.render('error', {
-                title: '錯誤 - 這不是一個目錄頁面',
-                message: '也許你該試試下面的連結',
-                button: '嘗試使用文章模板',
-                buttonLink: '/tlhc/post/' + Base64.encodeURI(pageID)
-            })
-            return;
+        pageData.push(preJoin);
+    }
+    // 獲取文章
+    var tlhcData = [];
+    for (var i = 0; i < author.length; i++) {
+        let time = moment($(date[i]).text().trim(), 'YYYY/MM/DD').utcOffset("+08:00").fromNow()
+        var preJoin = {
+            'tags': [time, $(author[i]).text().trim(), $(date[i]).text().trim()],
+            'title': $(title[i]).text().replace(/\n/g, ''),
+            'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
         }
-        var $ = cheerio.load(b);
-        var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
+        tlhcData.push(preJoin);
+    }
+    res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData, originalURL: url })
+        /*var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             //這是需要 post 請求的頁面
             ajaxcode = ajaxcode.split("'")[1]
@@ -47,135 +99,92 @@ exports.getPage = function(url, pageID, res) {
                 // 傳回的資料內容 
                 if (e || !b) { return }
             })
-        }
-        var tag = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
-        var title = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2)");
-        var link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
-        var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
-        var pages = $(".navigator-inner a.pagenum");
-
-        var pgTitle = 'ㄉㄌㄐㄕ - ' + $('#Dyn_2_1 .md_middle .mm_01 a.path:nth-child(2)').html()
-
-        var pgid = pageID.split("-")[2]
-        if (pgid == 246) {
-            // 這頁不知道為啥一直出錯 Orz
-            // http://web.tlhc.ylc.edu.tw/files/11-1004-246-2.php
-            res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
-            return
-        }
-        // 獲取頁碼
-        var pageData = [];
-        for (var i = 0; i < pages.length; i++) {
-            var preJoin = {
-                'text': $(pages[i]).text(),
-                'link': Base64.encodeURI($(pages[i]).attr('href').split("/")[4]),
-            }
-            pageData.push(preJoin);
-        }
-        // 獲取文章
-        var tlhcData = [];
-        for (var i = 0; i < tag.length; i++) {
-            var preJoin = {
-                'tag': $(tag[i]).text().replace(/\n/g, ''),
-                'title': $(title[i]).text().replace(/\n/g, ''),
-                'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
-                'date': $(date[i]).text().replace(/\n/g, '')
-            }
-            tlhcData.push(preJoin);
-        }
-        res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData, originalURL: url })
-    });
+        }*/
 };
 // 獲取文章
-exports.getPost = function(url, pageID, res) {
-    request({
+exports.getPost = async function(url, pageID, res) {
+
+    //請求
+    let PostData = await doRequest({
         url: url,
         method: "GET",
         headers: { 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        if (e || !b) {
-            res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
-            return;
-        }
-        if (b.indexOf('資料群組') != -1 && b.indexOf('標題') != -1 && b.indexOf('日期') != -1) {
-            res.render('error', {
-                title: '錯誤 - 這不是一個文章頁面',
-                message: '也許你該試試下面的連結',
-                button: '嘗試使用目錄模板',
-                buttonLink: '/tlhc/pages/' + pageID
-            })
-            return;
-        }
-
-        var $ = cheerio.load(b);
-        var title = $('title').text().replace(new RegExp('- 國立斗六高級家事商業職業學校', "g"), '')
-        var headerTitle = excerpt.text(title, 25, '...')
-        var view = $(".PtStatistic span").text()
-
-        var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
-        if (ajaxcode && ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
-            ajaxcode = ajaxcode.split("'")[1]
-                //這是需要 post 請求的頁面
-            request.post({
-                url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
-                form: {
-                    rs: 'sajaxSubmit'
-                },
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-                }
-            }, function(e, r, b) {
-                // 錯誤代碼 
-                // 傳回的資料內容 
-                if (e || !b) { return }
-                var $ = cheerio.load(b);
-                var content = $("Content").html();
-            })
-        } else {
-            var content = $("#Dyn_2_2 .ptcontent tr td:nth-child(2)").html();
-            if (content == null)
-                var content = $("#Dyn_2_2 .ptcontent").html();
-            if (content && content.indexOf('http://web.tlhc.ylc.edu.tw/files/') > -1) {
-                content = content.replace(new RegExp('http://web.tlhc.ylc.edu.tw/files/', "g"), '/tlhc/post/')
-            }
-        }
-        if (content)
-            var content = content.replace(/\n/g, '')
-
-        var files = $('.baseTB a');
-        var fileData = [];
-        for (var i = 0; i < files.length; i++) {
-            if ($(files[i]).text() != "下載附件") {
-                var file = $(files[i]).attr('href')
-                if ($(files[i]).attr('href') == 'javascript:void(0)') {
-                    var file = $(files[i]).attr('onclick').split("'")[3]
-                }
-                var preJoin = {
-                    'name': $(files[i]).text(),
-                    'file': 'http://web.tlhc.ylc.edu.tw' + file,
-                    'type': file.split(".")[1],
-                }
-                fileData.push(preJoin);
-            }
-        }
-
-        var tlhcData = {
-            'title': title,
-            'content': content,
-            'view': view,
-        }
-        res.render('tlhc-view', {
-            title: 'ㄉㄌㄐㄕ - ' + title,
-            tlhc: tlhcData,
-            files: fileData,
-            originalURL: url,
-            view: view,
-            headerTitle: headerTitle
-        })
     });
+
+    //沒資料
+    if (!PostData) {
+        res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        return;
+    }
+    //可能是目錄
+    if (PostData.indexOf('資料群組') != -1 && PostData.indexOf('標題') != -1 && PostData.indexOf('日期') != -1) {
+        res.render('error', {
+            title: '錯誤 - 這不是一個文章頁面',
+            message: '也許你該試試下面的連結',
+            button: '嘗試使用目錄模板',
+            buttonLink: '/tlhc/pages/' + pageID
+        })
+        return;
+    }
+    var $ = cheerio.load(PostData);
+    var title = $('title').text().replace(/- 國立斗六高級家事商業職業學校/, '')
+    var headerTitle = excerpt.text(title, 25, '...')
+        //設定內容範圍
+    var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
+    if (ajaxcode && ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
+        ajaxcode = ajaxcode.split("'")[1];
+        //這是需要 post 請求的頁面
+
+        let ajaxData = await doRequest({
+            url: "http://web.tlhc.ylc.edu.tw" + ajaxcode,
+            form: {
+                rs: 'sajaxSubmit'
+            },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+            }
+        });
+
+        var $ = cheerio.load(ajaxData);
+        var content = $("Content").html();
+
+    } else {
+        if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:nth-child(2)").html())
+            var content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:nth-child(2)").html().trim();
+        else if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html())
+            var content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html().trim();
+        else
+            var content = $("#Dyn_2_2 .ptcontent").html().trim();
+    }
+    var files = $('.baseTB a');
+    var fileData = [];
+    for (var i = 0; i < files.length; i++) {
+        if ($(files[i]).text() != "下載附件") {
+            var file = $(files[i]).attr('href')
+            if ($(files[i]).attr('href') == 'javascript:void(0)') {
+                var file = $(files[i]).attr('onclick').split("'")[3]
+            }
+            var preJoin = {
+                'name': $(files[i]).text(),
+                'file': 'http://web.tlhc.ylc.edu.tw' + file,
+                'type': file.split(".")[1],
+            }
+            fileData.push(preJoin);
+        }
+    }
+
+    var tlhcData = {
+        'title': title,
+        'content': content
+    }
+    res.render('tlhc-view', {
+        title: 'ㄉㄌㄐㄕ - ' + title,
+        tlhc: tlhcData,
+        files: fileData,
+        originalURL: url,
+        headerTitle: headerTitle
+    })
 };
 // 搜尋
 exports.search = function(search, res, page) {

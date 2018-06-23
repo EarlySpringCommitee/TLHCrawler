@@ -105,6 +105,24 @@ header .header {
 
 
 /*==========
+    item
+==========*/
+
+.ts.divided.items>.item {
+    border-top: 1px solid #5755d933;
+    padding: 1.2em 1em;
+}
+
+.ts.items a.item .content .header {
+    transition: all .05s;
+}
+
+.ts.items a.item:hover .content .header {
+    color: #5755d9 !important;
+}
+
+
+/*==========
     卡片
 ==========*/
 
@@ -116,10 +134,18 @@ header .header {
     transform: scale(1.02) !important;
 }
 
+.ts.cards a.ts.card:active {
+    transform: scale(.98) !important;
+}
+
 
 /*==========
     成績
 ==========*/
+
+.ts.table {
+    border-radius: 0;
+}
 
 .color.first.line.table tr:nth-child(1)>td {
     background: #f7f7f7;
@@ -137,8 +163,6 @@ td.score {
     overflow-y: hidden;
     max-width: 100vw;
     border: 1px solid #e9e9e9;
-    border-radius: .28571rem;
-    box-shadow: 0 5px 10px 1px rgba(167, 167, 167, 0.2);
 }
 
 .gs.scroll.non-style {
@@ -208,6 +232,7 @@ td.score {
     box-shadow: 0 0 rgba(0, 0, 0, 0) !important;
     line-height: 1.5em !important;
     text-indent: 0 !important;
+    font-weight: normal !important;
 }
 
 #content span {

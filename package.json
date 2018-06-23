@@ -27,6 +27,7 @@
         "iconv-lite": "^0.4.23",
         "js-base64": "^2.4.5",
         "jsonfile": "^4.0.0",
+        "moment": "^2.22.2",
         "pug": "^2.0.3",
         "request": "^2.87.0",
         "sync-request": "^5.0.0"

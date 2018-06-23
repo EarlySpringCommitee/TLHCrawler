@@ -7,8 +7,8 @@ include _nav.pug
                 .content
                     .header=item.title
                     .middoted.meta
-                        span=item.date
-                        span=item.tag
+                        each tag in item.tags
+                            span=tag
         else
             .ts.header 未找到符合條件的資料
     br

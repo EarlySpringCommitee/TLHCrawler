@@ -38,15 +38,15 @@ exports.links = [{
         "link": "https://docs.google.com/forms/d/e/1FAIpQLSe1ex8qCBmaWWR0BwK4felr_BI4eV2CJ1bM0eng71OfrsUKsw/viewform"
     }, {
         "header": "學生社團選填",
-        "description": "庫",
+        "description": "只有上學期初才會開放",
         "link": "http://register.tlhc.ylc.edu.tw/ClgStd/"
     }, {
         "header": "志工服務管理系統",
         "description": "庫",
         "link": "http://163.27.124.31/EPSTD/"
     }, {
-        "header": "首頁",
-        "description": "學校首頁",
+        "header": "學校首頁",
+        "description": "學校ㄉ首頁",
         "link": "http://web.tlhc.ylc.edu.tw/bin/home.php"
     }, {
         "header": "雲端社群播客(哀居踢)",
