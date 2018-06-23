@@ -55,12 +55,6 @@ function readContent() {
     $('#content table:not(.imagetable)').wrap('<div class="gs scroll"></div>')
 
     $('#content td,#content tr').removeAttr("style").removeAttr("nowrap")
-    $('#content td').html(function() {
-        if ($(this).children("p"))
-            return $(this).html()
-        else
-            return $(this).text()
-    })
     $('#content img').attr('src', function() {
         var osrc = $(this).attr('src')
         return 'http://web.tlhc.ylc.edu.tw' + osrc

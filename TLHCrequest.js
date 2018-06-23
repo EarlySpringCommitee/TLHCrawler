@@ -187,45 +187,56 @@ exports.getPost = async function(url, pageID, res) {
     })
 };
 // 搜尋
-exports.search = function(search, res, page) {
-    request.get({
-        url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(search) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
-        headers: { 'User-Agent': userAgent }
-    }, (e, r, b) => {
-        /* e: 錯誤代碼 */
-        /* b: 傳回的資料內容 */
-        if (e || !b) { return; }
-        var $ = cheerio.load(b);
-        var tlhcData = [];
-        var pageData = [];
-        var table = $(".baseTB.list_TIDY");
-        var header = $(".baseTB.list_TIDY tr>td.mc .h5 a");
-        var content = $(".baseTB.list_TIDY tr>td.mc .message");
-        var pages = $(".navigator-inner a.pagenum");
-        if (content == undefined) {
-            res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
-            return
+exports.search = async function(search, res, page) {
+    if (page == "1") {
+        var SearchData = await doRequest({
+            url: "http://web.tlhc.ylc.edu.tw/bin/ptsearch.php",
+            method: "POST",
+            form: {
+                SchKey: search,
+                search: "search"
+            },
+            headers: { 'User-Agent': userAgent }
+        });
+    } else {
+        var SearchData = await doRequest({
+            url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(search) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
+            method: "GET",
+            headers: { 'User-Agent': userAgent }
+        });
+    }
+    var $ = cheerio.load(SearchData);
+    //var table = $(".baseTB.list_TIDY");
+    //文章內容
+    var tlhcData = [];
+    var header = $(".baseTB.list_TIDY tr>td.mc .h5 a");
+    var content = $(".baseTB.list_TIDY tr>td.mc .message");
+    if (content == undefined) {
+        res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
+        return
+    }
+    for (var i = 0; i < header.length; i++) {
+        var preJoin = {
+            'header': $(header[i]).text(),
+            'content': $(content[i]).text(),
+            'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
         }
-        for (var i = 0; i < header.length; i++) {
-            var preJoin = {
-                'header': $(header[i]).text(),
-                'content': $(content[i]).text(),
-                'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
-            }
-            tlhcData.push(preJoin);
+        tlhcData.push(preJoin);
+    }
+    //換頁導航
+    var pageData = [];
+    var pages = $(".navigator-inner a.pagenum");
+    for (var i = 0; i < pages.length; i++) {
+        var preJoin = {
+            'text': $(pages[i]).text(),
+            'link': $(pages[i]).attr('href').match(/\d+/)[0],
         }
-        for (var i = 0; i < pages.length; i++) {
-            var preJoin = {
-                'text': $(pages[i]).text(),
-                'link': $(pages[i]).attr('href').match(/\d+/)[0],
-            }
-            pageData.push(preJoin);
-        }
-        res.render('tlhc-search', {
-            title: 'ㄉㄌㄐㄕ - 搜尋：' + search,
-            tlhc: tlhcData,
-            pages: pageData,
-            search: search
-        })
-    });
+        pageData.push(preJoin);
+    }
+    res.render('tlhc-search', {
+        title: 'ㄉㄌㄐㄕ - 搜尋：' + search,
+        tlhc: tlhcData,
+        pages: pageData,
+        search: search
+    })
 };
