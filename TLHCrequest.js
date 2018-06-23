@@ -8,7 +8,7 @@ function doRequest(url) {
             if (!error && res.statusCode == 200) {
                 resolve(body);
             } else {
-                reject(error);
+                resolve(error);
             }
         });
     });
@@ -30,7 +30,7 @@ exports.getPage = async function(url, pageID, res) {
     });
     //沒拿到資料
     if (!PageData) {
-        res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
         return;
     }
     //可能是文章模板
@@ -110,10 +110,9 @@ exports.getPost = async function(url, pageID, res) {
         method: "GET",
         headers: { 'User-Agent': userAgent }
     });
-
     //沒資料
     if (!PostData) {
-        res.render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
         return;
     }
     //可能是目錄

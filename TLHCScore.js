@@ -8,7 +8,7 @@ function doRequest(url) {
             if (!error && res.statusCode == 200) {
                 resolve(body);
             } else {
-                reject(error);
+                resolve(error);
             }
         });
     });
@@ -85,7 +85,7 @@ exports.getSystem = async function(cookie, res) {
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     });
     let StudentInfo = iconv.decode(StudentInfoRequest, 'Big5')
-    if (StudentInfo.match('抱歉,您無權限使用本程式!') || StudentInfo.match('無權使用 請登入')) {
+    if (StudentInfo.match(/抱歉,您無權限使用本程式!|無權使用 請登入/)) {
         res.redirect("/tlhc/login/")
         return
     }

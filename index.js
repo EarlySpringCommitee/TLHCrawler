@@ -66,13 +66,24 @@ app.get('/about/', (req, res) => {
 //------------公佈欄------------
 // ㄉㄌㄐㄕ
 app.get('/tlhc/pages/:id', (req, res) => {
-    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
-    tlhcRequest.getPage(originalURL, Base64.decode(req.params.id), res)
+    let url = Base64.decode(req.params.id)
+    if (url.indexOf(".php") > -1) {
+        var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
+        tlhcRequest.getPage(originalURL, Base64.decode(req.params.id), res)
+    } else {
+        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+    }
 });
 
 app.get('/tlhc/post/:id', (req, res) => {
-    var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + Base64.decode(req.params.id)
-    tlhcRequest.getPost(originalURL, Base64.decode(req.params.id), res)
+    let url = Base64.decode(req.params.id)
+    console.log(url.indexOf(".php") > -1)
+    if (url.indexOf(".php") > -1) {
+        var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
+        tlhcRequest.getPost(originalURL, Base64.decode(req.params.id), res)
+    } else {
+        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+    }
 });
 
 app.get('/tlhc/search/', (req, res) => {
