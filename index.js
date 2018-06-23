@@ -77,7 +77,6 @@ app.get('/tlhc/pages/:id', (req, res) => {
 
 app.get('/tlhc/post/:id', (req, res) => {
     let url = Base64.decode(req.params.id)
-    console.log(url.indexOf(".php") > -1)
     if (url.indexOf(".php") > -1) {
         var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
         tlhcRequest.getPost(originalURL, Base64.decode(req.params.id), res)

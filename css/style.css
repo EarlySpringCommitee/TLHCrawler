@@ -75,10 +75,9 @@ header .header {
 ==========*/
 
 #nav {
-    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.14);
-    margin-bottom: 35px;
+    margin-bottom: 30px;
     margin-top: -48px;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, .6);
     overflow: scroll;
     width: 100vw;
 }
