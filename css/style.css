@@ -119,7 +119,7 @@ header .header {
     bottom: 0;
     transition: opacity .25s, transform .2s;
     visibility: hidden;
-    background-color: #FFF;
+    background-color: RGBA(255, 255, 255, 0.95);
     padding-top: 20px;
 }
 
