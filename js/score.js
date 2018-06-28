@@ -27,7 +27,7 @@ $(document).ready(function() {
     $("[data-table=\"rank\"] tr td:nth-child(1n+2)").addClass("score")
     $('[data-table=\"score\"] td,[data-table=\"day\"] td,[data-table=\"rewards\"] td').html(function() {
         var text = $(this).text().trim();
-        if (text < 60 && text > 0) {
+        if (text < 60 && text > 0 || text == '0') {
             // 不及格
             $(this).addClass('negative')
         }
