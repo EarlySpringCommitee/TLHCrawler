@@ -34,10 +34,6 @@ kbd {
     border-color: #3a38d2 !important;
 }
 
-.ts.button:hover {
-    animation: poyon 0.4s;
-}
-
 
 /*===========
     Header
@@ -110,14 +106,11 @@ header .header {
 #systemMenu {
     width: 100vw;
     height: 100%;
-    opacity: .7;
+    opacity: 0;
     z-index: 6;
     position: absolute;
-    transform: translateX(-100%);
-    right: 0;
     top: 0;
-    bottom: 0;
-    transition: opacity .25s, transform .2s;
+    transition: all .25s ease-in-out;
     visibility: hidden;
     background-color: RGBA(255, 255, 255, 0.95);
     padding-top: 20px;
@@ -127,6 +120,17 @@ header .header {
     transform: none;
     opacity: 1;
     visibility: visible;
+}
+
+#systemMenu .ts.container {
+    transform: translateY(-10%);
+    transition: all .25s ease-in-out;
+    opacity: 0;
+}
+
+#systemMenu:target .ts.container {
+    transform: none;
+    opacity: 1;
 }
 
 
@@ -369,25 +373,4 @@ td.score {
 .fc-unthemed th,
 .fc-unthemed thead {
     border-color: #0000 !important;
-}
-
-
-/*=============
-      動畫
-=============*/
-
-@keyframes poyon {
-    0%,
-    100% {
-        transform: scale(1, 1);
-    }
-    25% {
-        transform: scale(0.9, 1.1);
-    }
-    50% {
-        transform: scale(1.1, 0.9);
-    }
-    75% {
-        transform: scale(0.97, 1.03);
-    }
 }

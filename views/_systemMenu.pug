@@ -7,13 +7,16 @@ mixin selectCard(title,link,icon)
             .ts.center.aligned.header=title
 #systemMenu
     .ts.container
-        .ts.massive.header 選單
+        .ts.grid
+            .stretched.column
+                .ts.massive.header 選單
+            .column
+                a.ts.close.massive.button(href='#') 
         .ts.doubling.four.cards
             +selectCard('成績','/tlhc/score/','pie chart') 
             +selectCard('出勤','/tlhc/day/','student') 
             +selectCard('獎懲','/tlhc/rewards/','legal') 
             +selectCard('社團及幹部','/tlhc/group/','users') 
             +selectCard('登出','/tlhc/score/logout/','sign out') 
-            +selectCard('關閉選單','#','remove') 
             //-+selectCard(name,link,icon) 
 
