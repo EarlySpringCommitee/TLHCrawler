@@ -2,7 +2,7 @@ include _header.pug
 .ts.container
     h2.ts.center.aligned.header=header||title
         .sub.header=subheader||'您好，'+user.name
-    .ts.doubling.four.cards
+    //-.ts.doubling.four.cards
         each item in selector
             +selectCard(item.name,item.link,item.icon) 
         else

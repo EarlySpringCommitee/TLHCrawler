@@ -10,14 +10,12 @@ html
         link(href='/css/slick.css',rel='stylesheet')
         link(href='/css/style.css',rel='stylesheet')
         link(href='/css/slick-theme.css',rel='stylesheet')
-        link(href='/css/ripple.min.css',rel='stylesheet')
         link(href='/css/fileicon.css',rel='stylesheet')
         link(href='/icon/icon.png',rel='shortcut icon')
         script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
         script(src="//cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js")
         script(src="//cdn.rawgit.com/namuol/cheet.js/master/cheet.min.js")
         script(src="/js/slick.min.js")
-        script(src='/js/ripple.min.js')
         script(src='/js/script.js')
         include _tags.pug
         if(tlhc)
@@ -50,10 +48,3 @@ mixin card(header,description,icon)
             .description= description
         .symbol
             i.icon(class=icon)
-mixin selectCard(title,link,icon) 
-    a.ts.card(href=link)
-        .secondary.very.padded.extra.content
-            .ts.icon.header
-                i.icon(class=icon)
-        .padded.content
-            .ts.center.aligned.header=title

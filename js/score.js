@@ -47,14 +47,14 @@ $(document).ready(function() {
             // 壞壞
             $(this).addClass('negative')
         }
-        if (text.match('成績輸入期間')) {
+        if (text.match(/成績輸入期間|成績處理期間/)) {
             var text = "";
         }
         return text
     })
     $('[data-table=\"rank\"] td,[data-table=\"total\"] td').html(function() {
         var text = $(this).text().trim();
-        if (text.match('成績輸入期間')) {
+        if (text.match(/成績輸入期間|成績處理期間/)) {
             var text = "";
         }
         return text

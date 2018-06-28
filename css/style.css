@@ -104,6 +104,33 @@ header .header {
 
 
 /*==========
+    系統選單
+==========*/
+
+#systemMenu {
+    width: 100vw;
+    height: 100%;
+    opacity: .7;
+    z-index: 6;
+    position: absolute;
+    transform: translateX(-100%);
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transition: opacity .25s, transform .2s;
+    visibility: hidden;
+    background-color: #FFF;
+    padding-top: 20px;
+}
+
+#systemMenu:target {
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/*==========
     item
 ==========*/
 

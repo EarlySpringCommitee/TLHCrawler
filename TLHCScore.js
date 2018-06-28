@@ -69,7 +69,7 @@ exports.getCookie = (req, res) => {
                 return
             } else {
                 //登入成功
-                res.redirect("/tlhc/system/")
+                res.redirect("/tlhc/score/")
             }
         });
         //一開始用帳密跟學校換餅乾

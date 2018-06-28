@@ -103,9 +103,6 @@ app.get('/tlhc/login/', (req, res) => {
 app.post('/tlhc/login/', (req, res) => {
     tlhcScore.getCookie(req, res)
 });
-app.get('/tlhc/system/', (req, res) => {
-    tlhcScore.getSystem(req.session.tlhc, res)
-});
 // 登出
 app.get('/tlhc/score/logout', (req, res) => {
     req.session.destroy()
