@@ -12,9 +12,11 @@ const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Base64 = require('js-base64').Base64; // Base64
 const helmet = require('helmet'); // 防範您的應用程式出現已知的 Web 漏洞
-const moment = require('moment'); // 時間處理
+const moment = require('moment-timezone'); // 時間處理
 const Box = require("cli-box"); // 可愛ㄉ console box
 moment.locale('zh-tw');
+moment.tz.setDefault("Asia/Taipei");
+
 const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')

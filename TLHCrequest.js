@@ -17,8 +17,23 @@ const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const excerpt = require("html-excerpt"); // 取摘要
 const Base64 = require('js-base64').Base64; // Base64
 const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0';
-const moment = require('moment'); // 時間處理
+const moment = require('moment-timezone'); // 時間處理
 moment.locale('zh-tw');
+moment.updateLocale('zh-tw', {
+    relativeTime: {
+        future: "in %s",
+        past: "%s",
+        h: "今天",
+        hh: "今天",
+        d: "今天",
+        dd: "%d天前",
+        M: "一個月前",
+        MM: "%d個月前",
+        y: "一年前",
+        yy: "%d年前"
+    }
+});
+moment.tz.setDefault("Asia/Taipei");
 
 // 獲取頁面
 exports.getPage = async function(url, pageID, res) {
@@ -72,7 +87,7 @@ exports.getPage = async function(url, pageID, res) {
     // 獲取文章
     var tlhcData = [];
     for (var i = 0; i < author.length; i++) {
-        let time = moment($(date[i]).text().trim(), 'YYYY/MM/DD').tz("Asia/Taipei").fromNow()
+        let time = moment($(date[i]).text().trim(), 'YYYY/MM/DD').fromNow()
         var preJoin = {
             'tags': [time, $(author[i]).text().trim(), $(date[i]).text().trim()],
             'title': $(title[i]).text().replace(/\n/g, ''),
