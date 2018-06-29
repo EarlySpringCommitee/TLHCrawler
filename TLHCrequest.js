@@ -72,7 +72,7 @@ exports.getPage = async function(url, pageID, res) {
     // 獲取文章
     var tlhcData = [];
     for (var i = 0; i < author.length; i++) {
-        let time = moment($(date[i]).text().trim(), 'YYYY/MM/DD').utcOffset("+08:00").fromNow()
+        let time = moment($(date[i]).text().trim(), 'YYYY/MM/DD').tz("Asia/Taipei").fromNow()
         var preJoin = {
             'tags': [time, $(author[i]).text().trim(), $(date[i]).text().trim()],
             'title': $(title[i]).text().replace(/\n/g, ''),

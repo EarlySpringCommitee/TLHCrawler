@@ -12,6 +12,9 @@ const session = require('express-session');
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Base64 = require('js-base64').Base64; // Base64
 const helmet = require('helmet'); // 防範您的應用程式出現已知的 Web 漏洞
+const moment = require('moment'); // 時間處理
+const Box = require("cli-box"); // 可愛ㄉ console box
+moment.locale('zh-tw');
 const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
@@ -32,15 +35,14 @@ app.use('/icon', express.static('icon'))
     //設定 /js /icon /css 目錄
 
 app.listen(3000, () => {
-    console.log("")
-    console.log("   ╭─────────────────────────────────────╮")
-    console.log("   │                                     │")
-    console.log("   │    TLHCrawler                       │")
-    console.log("   │    github.com/TWScore/TLHCrawler    │")
-    console.log("   │                                     │")
-    console.log("   ╰─────────────────────────────────────╯")
-    console.log('\n' + Date())
-    console.log("working on http://localhost:3000\n")
+    // Set custom marks
+    var welcome = Box("40x4", {
+        text: 'TLHCrawler\nTWScore/TLHCrawler',
+        stretch: true
+    });
+    console.log(welcome)
+    console.log("http://localhost:3000")
+    console.log(moment().format("YYYY/MM/DD HH:mm"))
 })
 app.get('/og/og.png', (req, res) => {
     var files = fs.readdirSync("./ogimage/").filter(function(i, n) {
