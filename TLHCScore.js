@@ -161,7 +161,7 @@ exports.getScorePage = async function(cookie, res) {
     // 取得學期總成績
     var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
     for (var i = 0; i < link.length; i++) {
-        let getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[i]).attr('href')
+        let getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[link.length - i - 1]).attr('href')
         let ScoreSemesterRequest = await doRequest({
             url: getURL,
             method: "GET",
