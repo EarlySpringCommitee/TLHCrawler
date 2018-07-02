@@ -359,10 +359,10 @@ exports.getGroupPage = async function (cookie, res) {
         system: true
     })
 }
-// ------------------- 檢視 CSV
+// ------------------- 瀏覽匯出資料
 exports.getCSV = function (cookie, res) {
     res.render('s-csvtohtml', {
-        title: 'ㄉㄌㄐㄕ - 瀏覽檔案',
+        title: 'ㄉㄌㄐㄕ - 瀏覽匯出資料',
         system: true, user: true
     })
 }

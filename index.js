@@ -144,8 +144,7 @@ app.get('/tlhc/group/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
-//------- 檢視 CSV
-
+//------- 瀏覽匯出資料
 app.get('/tlhc/csv/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getCSV(req.session.tlhc, res)

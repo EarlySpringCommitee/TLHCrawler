@@ -8,8 +8,8 @@ style #table.gs.scroll table tr:last-child,#table.gs.scroll table tr:nth-last-ch
     #uploader.ts.basic.dashed.clickable.slate.no.earlyspring
         input#upload(type='file')
         i.upload.symbol.icon
-        span.header 上傳檔案
-        span.description 將檔案拖拉至此處進行上傳。
+        span.header 瀏覽匯出資料
+        span.description 將檔案拖拉至此處或是點擊此處來選取檔案。
     br
     #table.gs.scroll
 
@@ -22,7 +22,6 @@ script.
         reader.onload = function(e){
             var csv = e.target.result
             csvToHtml(csv, $('#table'))
-            console.log(csv)
         }
 
         reader.readAsText(file);
