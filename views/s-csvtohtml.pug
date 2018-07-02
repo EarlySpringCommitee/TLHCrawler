@@ -1,0 +1,30 @@
+include _header.pug
+include _systemMenu.pug
+script(src='/js/csvToHtml.js')
+style #upload{z-index: 5;font-size: 30px;cursor: pointer;position: absolute;height:100%;width:100%;opacity: 0;}#uploader{padding: 0em;position: relative;height: 150px;}#uploader>.header{padding-top: 2em;padding-bottom: .5em;}
+//- hide ads
+style #table.gs.scroll table tr:last-child,#table.gs.scroll table tr:nth-last-child(2){display:none}
+.ts.container
+    #uploader.ts.basic.dashed.clickable.slate.no.earlyspring
+        input#upload(type='file')
+        i.upload.symbol.icon
+        span.header 上傳檔案
+        span.description 將檔案拖拉至此處進行上傳。
+    br
+    #table.gs.scroll
+
+script.
+    document.querySelector('#upload').addEventListener('change', handleFile,false)
+    function handleFile(e){
+        var reader = new FileReader;
+        var file   = e.target.files[0]
+
+        reader.onload = function(e){
+            var csv = e.target.result
+            csvToHtml(csv, $('#table'))
+            console.log(csv)
+        }
+
+        reader.readAsText(file);
+    }   
+include _footer.pug

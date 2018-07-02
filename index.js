@@ -1,8 +1,14 @@
-﻿// 載入
+﻿const TLHCrawlerLogo = `
+88888 8 8                               8            
+  8   8 8d8b. .d8b 8d8b .d88 Yb  db  dP 8 .d88b 8d8b 
+  8   8 8P Y8 8    8P   8  8  YbdPYbdP  8 8.dP' 8P   
+  8   8 8   8  Y8P 8     Y88   YP  YP   8  Y88P 8 
+`
+// 載入
 const fs = require('fs'); //檔案系統
-const tlhcRequest = require('./TLHCrequest.js'); //因為程式碼太長分出來的模塊
-const tlhcScore = require('./TLHCScore.js'); //因為程式碼太長分出來的模塊
-const config = require('./config.js'); //因為程式碼太長分出來的模塊
+const tlhcRequest = require('./TLHCrequest.js'); //請求模組
+const tlhcScore = require('./TLHCScore.js'); //成績系統模組
+const config = require('./config.js'); //設定檔
 const excerpt = require("html-excerpt"); // 取摘要
 const request = require("request"); // HTTP 客戶端輔助工具
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
@@ -13,41 +19,35 @@ const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Base64 = require('js-base64').Base64; // Base64
 const helmet = require('helmet'); // 防範您的應用程式出現已知的 Web 漏洞
 const moment = require('moment-timezone'); // 時間處理
-const Box = require("cli-box"); // 可愛ㄉ console box
 moment.locale('zh-tw');
 moment.tz.setDefault("Asia/Taipei");
 
 const app = express()
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
-app.use(bodyParser.urlencoded({
-    extended: true,
-}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(helmet.hidePoweredBy({ setTo: 'PHP/5.2.1' }));
 //拿餅乾
 app.use(session({
-    secret: 'ㄐㄐ讚',
+    secret: 'ㄐㄐ讚' + Math.random().toString(36).substr(2),
     resave: false,
     saveUninitialized: false,
 }));
 //發餅乾
+
+//設定 /js /icon /css 目錄
 app.use('/js', express.static('js'))
 app.use('/css', express.static('css'))
 app.use('/icon', express.static('icon'))
-    //設定 /js /icon /css 目錄
+
 
 app.listen(3000, () => {
-    // Set custom marks
-    var welcome = Box("40x4", {
-        text: 'TLHCrawler\nTWScore/TLHCrawler',
-        stretch: true
-    });
-    console.log(welcome)
-    console.log("http://localhost:3000")
-    console.log(moment().format("YYYY/MM/DD HH:mm"))
+    console.log(TLHCrawlerLogo)
+    console.log("🌏 http://localhost:3000")
+    console.log(moment().format("🕒 YYYY/MM/DD HH:mm"))
 })
 app.get('/og/og.png', (req, res) => {
-    var files = fs.readdirSync("./ogimage/").filter(function(i, n) {
+    var files = fs.readdirSync("./ogimage/").filter(function (i, n) {
         if (i.toString().indexOf('.png') > -1 && i.toString().indexOf('._') < 0)
             return i
     });
@@ -56,7 +56,7 @@ app.get('/og/og.png', (req, res) => {
     var img = __dirname + "/ogimage/" + files[imgnum]
     try {
         res.sendFile(img)
-    } catch (err) {}
+    } catch (err) { }
 });
 //------------可愛的首頁------------
 app.get('/', (req, res) => {
@@ -140,6 +140,15 @@ app.get('/tlhc/rewards/', (req, res) => {
 app.get('/tlhc/group/', (req, res) => {
     if (req.session.tlhc) {
         tlhcScore.getGroupPage(req.session.tlhc, res)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
+//------- 檢視 CSV
+
+app.get('/tlhc/csv/', (req, res) => {
+    if (req.session.tlhc) {
+        tlhcScore.getCSV(req.session.tlhc, res)
     } else {
         res.redirect("/tlhc/login/")
     }

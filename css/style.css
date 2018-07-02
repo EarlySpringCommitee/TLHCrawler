@@ -211,6 +211,9 @@ td.score {
 .gs.scroll .ts.buttons .button {
     white-space: nowrap;
 }
+.gs.scroll:empty{
+    border: none;
+}
 
 
 /*卷軸*/
