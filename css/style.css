@@ -74,7 +74,7 @@ header .header {
     margin-bottom: 30px;
     margin-top: -48px;
     background-color: rgba(0, 0, 0, .6);
-    overflow: scroll;
+    overflow: hidden;
     width: 100vw;
 }
 
