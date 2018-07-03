@@ -232,7 +232,7 @@ function getSemesterScore(data) {
 }
 
 // ------------------- 取得出勤
-exports.getDay = (cookie, res) => {
+exports.getAttendance = (cookie, res) => {
     request({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_DAY.asp",
         method: "GET",

@@ -121,9 +121,9 @@ app.get('/tlhc/score/', (req, res) => {
     }
 });
 //------- 出勤
-app.get('/tlhc/day/', (req, res) => {
+app.get('/tlhc/attendance/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getDay(req.session.tlhc, res)
+        tlhcScore.getAttendance(req.session.tlhc, res)
     } else {
         res.redirect("/tlhc/login/")
     }
