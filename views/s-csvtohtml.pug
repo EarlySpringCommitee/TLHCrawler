@@ -6,7 +6,7 @@ style #upload{z-index: 5;font-size: 30px;cursor: pointer;position: absolute;heig
 style #table.gs.scroll table tr:last-child,#table.gs.scroll table tr:nth-last-child(2){display:none}
 .ts.container
     #uploader.ts.basic.dashed.clickable.slate.no.earlyspring
-        input#upload(type='file')
+        input#upload(type='file',accept='.csv')
         i.upload.symbol.icon
         span.header 瀏覽匯出資料
         span.description 將檔案拖拉至此處或是點擊此處來選取檔案。
@@ -18,7 +18,7 @@ script.
     function handleFile(e){
         var reader = new FileReader;
         var file   = e.target.files[0]
-
+        $('#uploader span.description').text(e.target.files[0].name)
         reader.onload = function(e){
             var csv = e.target.result
             csvToHtml(csv, $('#table'))
