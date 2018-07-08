@@ -17,6 +17,7 @@ html
         script(src="//cdn.rawgit.com/namuol/cheet.js/master/cheet.min.js")
         script(src="/js/slick.min.js")
         script(src='/js/script.js')
+        include _gtag.pug
         include _tags.pug
         if(tlhc)
             +social_tags(tlhc.title,tlhc.content,'https://tlhc.gnehs.net/og/og.png?'+Math.floor(Math.random() * 1024),'https://tlhc.gnehs.net')

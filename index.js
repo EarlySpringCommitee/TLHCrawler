@@ -4,7 +4,7 @@
   8   8 8P Y8 8    8P   8  8  YbdPYbdP  8 8.dP' 8P   
   8   8 8   8  Y8P 8     Y88   YP  YP   8  Y88P 8 
 `
-// 載入
+    // 載入
 const fs = require('fs'); //檔案系統
 const tlhcRequest = require('./TLHCrequest.js'); //請求模組
 const tlhcScore = require('./TLHCScore.js'); //成績系統模組
@@ -46,8 +46,9 @@ app.listen(3000, () => {
     console.log("🌏 http://localhost:3000")
     console.log(moment().format("🕒 YYYY/MM/DD HH:mm"))
 })
+
 app.get('/og/og.png', (req, res) => {
-    var files = fs.readdirSync("./ogimage/").filter(function (i, n) {
+    var files = fs.readdirSync("./ogimage/").filter(function(i, n) {
         if (i.toString().indexOf('.png') > -1 && i.toString().indexOf('._') < 0)
             return i
     });
@@ -56,7 +57,7 @@ app.get('/og/og.png', (req, res) => {
     var img = __dirname + "/ogimage/" + files[imgnum]
     try {
         res.sendFile(img)
-    } catch (err) { }
+    } catch (err) {}
 });
 //------------可愛的首頁------------
 app.get('/', (req, res) => {
