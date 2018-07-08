@@ -5,6 +5,10 @@ mixin selectCard(title,link,icon)
                 i.icon(class=icon)
         .content
             .ts.center.aligned.header=title
+mixin menuItem(title,link,icon) 
+    a.item(href=link)
+        i.icon(class=icon)
+        =title
 #systemMenu
     .ts.container
         .ts.grid
@@ -20,4 +24,10 @@ mixin selectCard(title,link,icon)
             +selectCard('瀏覽匯出資料','/tlhc/csv/','archive') 
             +selectCard('登出','/tlhc/score/logout/','sign out') 
             //-+selectCard(name,link,icon) 
+#footerMenu.ts.labeled.icon.centered.tiny.menu.mobile.only
+    +menuItem('成績','/tlhc/score/','pie chart') 
+    +menuItem('出勤','/tlhc/attendance/','student') 
+    +menuItem('選單','#systemMenu','sidebar') 
+    +menuItem('獎懲','/tlhc/rewards/','legal') 
+    +menuItem('社團及幹部','/tlhc/group/','users') 
 

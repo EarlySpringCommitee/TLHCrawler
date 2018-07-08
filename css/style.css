@@ -133,6 +133,20 @@ header .header {
     opacity: 1;
 }
 
+#footerMenu {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    z-index: 5;
+    margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    footer {
+        margin-bottom: 50px;
+    }
+}
+
 
 /*==========
     item
@@ -211,7 +225,8 @@ td.score {
 .gs.scroll .ts.buttons .button {
     white-space: nowrap;
 }
-.gs.scroll:empty{
+
+.gs.scroll:empty {
     border: none;
 }
 
