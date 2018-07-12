@@ -1,10 +1,10 @@
 mixin selectCard(title,link,icon) 
     a.ts.card(href=link)
         .secondary.very.padded.extra.content
-            .ts.icon.header
+            .ts.icon.inverted.header
                 i.icon(class=icon)
         .content
-            .ts.center.aligned.header=title
+            .ts.inverted.center.aligned.header=title
 mixin menuItem(title,link,icon) 
     a.item(href=link)
         i.icon(class=icon)
@@ -13,7 +13,7 @@ mixin menuItem(title,link,icon)
     .ts.container
         .ts.grid
             .stretched.column
-                .ts.massive.header 選單
+                .ts.inverted.massive.header 選單
             .column
                 a.ts.close.massive.button(href='#') 
         .ts.doubling.four.cards
