@@ -110,18 +110,20 @@ header .header {
     top: 0;
     transition: all .25s ease-in-out, width 0s, height 0s;
     visibility: hidden;
-    background-color: rgba(0, 0, 0, 0.7);
     padding-top: 20px;
     width: 100vw;
     height: 100vh;
+    transform: translateY(40vh);
 }
 
 #systemMenu:target {
+    background-color: rgba(0, 0, 0, 0.7);
     transform: none;
     opacity: 1;
     visibility: visible;
     border-radius: 0;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #systemMenu .ts.container {
@@ -149,6 +151,16 @@ header .header {
 
 #systemMenu .ts.card .secondary.content {
     background-color: RGBA(0, 0, 0, 0.2);
+}
+
+#systemMenu .ts.card .secondary.content .ts.icon.header {
+    transition: all .2s ease;
+    color: #ffffffe6;
+}
+
+#systemMenu .ts.card:hover .secondary.content .ts.icon.header {
+    transform: scale(1.2);
+    color: #fff;
 }
 
 #footerMenu {
