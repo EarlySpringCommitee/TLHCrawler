@@ -1,3 +1,10 @@
+
+mixin menuItem(title,link,icon,notMobile,mobileOnly) 
+    -var a = notMobile ? "tablet or large device only":""
+    -var b = mobileOnly ? "mobile only":""
+    a.item(href=link,class=a+b)
+        i.icon(class=icon)
+        =title
 #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
     .ts.container
         if(!user)
@@ -5,9 +12,12 @@
             a.item(href='/about/') 關於
             a.item(href='/tlhc/search/') 搜尋
         else
-            a.item(href='#systemMenu') 
-                i.icon.sidebar
-                |選單
+            +menuItem('選單','#systemMenu','sidebar',false,true)
+            +menuItem('成績','/tlhc/score/','pie chart',true) 
+            +menuItem('出勤','/tlhc/attendance/','student',true)
+            +menuItem('獎懲','/tlhc/rewards/','legal',true)
+            +menuItem('社團及幹部','/tlhc/group/','users',true)
+            +menuItem('瀏覽匯出資料','/tlhc/csv/','archive',true) 
         .right.fitted.item
             if(!user)
                 a.item(href='/tlhc/login/') 登入
