@@ -1,33 +1,33 @@
-include _header.pug
-.ts.very.narrow.container
-    .ts.action.fluid.input(style='margin-bottom:10px')
-        input#search(type='text',placeholder='搜尋',value=search)
-        button.ts.button(onclick="search()") 搜尋
-.ts.container
-    -if(tlhc)
-        -if(tlhc.length>0)
-            .ts.divided.items
-                each item in tlhc
-                    a.item(href=item.link)
-                        .content
-                            .header=item.header
-                            .description=item.content
+extends _layout.pug
+block content
+    .ts.very.narrow.container
+        .ts.action.fluid.input(style='margin-bottom:10px')
+            input#search(type='text',placeholder='搜尋',value=search)
+            button.ts.button(onclick="search()") 搜尋
+    .ts.container
+        -if(tlhc)
+            -if(tlhc.length>0)
+                .ts.divided.items
+                    each item in tlhc
+                        a.item(href=item.link)
+                            .content
+                                .header=item.header
+                                .description=item.content
+            -else
+                br
+                h3.ts.center.aligned.icon.header 
+                    i.frown.icon
+                    |糟糕
+                    .sub.header 未找到符合條件的資料
         -else
             br
             h3.ts.center.aligned.icon.header 
-                i.frown.icon
-                |糟糕
-                .sub.header 未找到符合條件的資料
-    -else
+                i.search.icon
+                |尼好
+                .sub.header 將您想查詢的關鍵字輸入於上方輸入欄位開始搜尋
         br
-        h3.ts.center.aligned.icon.header 
-            i.search.icon
-            |尼好
-            .sub.header 將您想查詢的關鍵字輸入於上方輸入欄位開始搜尋
-    br
-    #navigator.gs.scroll.non-style
-        .ts.primary.buttons
-            if pages
-                each page in pages
-                    a.ts.button(href=page.link)=page.text
-include _footer.pug
+        #navigator.gs.scroll.non-style
+            .ts.primary.buttons
+                if pages
+                    each page in pages
+                        a.ts.button(href=page.link)=page.text

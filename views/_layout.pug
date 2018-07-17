@@ -1,3 +1,12 @@
+//- 一些常用的東西
+mixin card(header,description,icon)
+    .ts.card
+        .content
+            .header= header
+            .description(data-student=header)= description
+        .symbol
+            i.icon(class=icon)
+//- 網頁本體
 doctype html
 html
     head
@@ -19,16 +28,14 @@ html
         script(src='/js/script.js')
         include _gtag.pug
         include _tags.pug
+        block head
         if(tlhc)
             +social_tags(tlhc.title,tlhc.content,'https://tlhc.gnehs.net/og/og.png?'+Math.floor(Math.random() * 1024),'https://tlhc.gnehs.net')
         else
             +social_tags(title,'斗六家商的可愛爬蟲，可以替你查詢成績，也可以查看學校最新公告','https://tlhc.gnehs.net/og/og.png?'+Math.floor(Math.random() * 1024),'https://tlhc.gnehs.net')
     body
         if(originalURL)
-            script console.log('originalURL 
-                =originalURL
-                |')
-            //-iframe#read(style='display:none;',src=originalURL)
+            script=`console.log('originalURL ${originalURL}')`
         header.ts.heading.vertically.padded.fluid.slate
             .image
                 -if(system)
@@ -41,11 +48,14 @@ html
                 else
                     h1.ts.center.aligned.header!= title
         include _nav.pug
-//- 一些常用的東西
-mixin card(header,description,icon)
-    .ts.card
-        .content
-            .header= header
-            .description= description
-        .symbol
-            i.icon(class=icon)
+        block content
+        footer.ts.container(style="text-align:center")
+            .ts.section.divider
+            img.ts.centered.image(src="/icon/icon-nonbg.svg",width="60px")
+            p TLHCrawler
+                br
+                |Powered by gnehs
+            a.ts.mini.very.compact.labeled.icon.button(href='https://github.com/EarlySpringCommitee/TLHCrawler')
+                i.icon.github
+                |GitHub
+            br

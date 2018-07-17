@@ -1,29 +1,27 @@
-include _header.pug
-.ts.container
-	h2.ts.header TLHCrawler
-	
-	h3.ts.header 關於
-	p 這ㄍ可愛網站的所有一切
+extends _layout.pug
+block content
+	.ts.container
+		h2.ts.header TLHCrawler
+		
+		h3.ts.header 關於
+		p 這ㄍ可愛網站的所有一切
 
-	h3.ts.header 我在這網站登入的帳號有機會被駭客竊取嗎
-	p 偶們有加密啦，尼看有個綠色ㄉ鎖頭標著安全呢，反正尼們ㄉ資料也被垃圾廠商ㄉ漏洞曝光的差不多ㄌ，ㄏㄏ
+		h3.ts.header 我在這網站登入的帳號有機會被駭客竊取嗎
+		p 偶們有加密啦，尼看有個綠色ㄉ鎖頭標著安全呢，反正尼們ㄉ資料也被垃圾廠商ㄉ漏洞曝光的差不多ㄌ，ㄏㄏ
 
-	h3.ts.header 這個網站的成績查詢如何運作
-	p 偶們先用尼給的帳號去登入尼們學校ㄉ可愛伺服器，然後把尼的成績從尼們學校ㄉ可愛伺服器拿回來給尼看
+		h3.ts.header 這個網站的成績查詢如何運作
+		p 偶們先用尼給的帳號去登入尼們學校ㄉ可愛伺服器，然後把尼的成績從尼們學校ㄉ可愛伺服器拿回來給尼看
 
-	h3.ts.header 這網站架在哪裡
-	p 目前架設在 Synology NAS 上，使用 Docker 搭建
+		h3.ts.header 這網站架在哪裡
+		p 目前架設在 Synology NAS 上，使用 Docker 搭建
 
-	h3.ts.header 做這個幹嘛
-	p
-		s 學校網站夭壽醜
+		h3.ts.header 做這個幹嘛
+		p
+			s 學校網站夭壽醜
 
-	h3.ts.header 有開源嗎
-	p 有喔 
-		a(href='https://github.com/EarlySpringCommitee/TLHCrawler') github.com/EarlySpringCommitee/TLHCrawler
-	p 來戳⭐️星星，霸脫
-
-
-include _footer.pug
+		h3.ts.header 有開源嗎
+		p 有喔 
+			a(href='https://github.com/EarlySpringCommitee/TLHCrawler') github.com/EarlySpringCommitee/TLHCrawler
+		p 來戳⭐️星星，霸脫
 
 

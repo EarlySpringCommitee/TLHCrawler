@@ -1,30 +1,30 @@
-include _header.pug
-.ts.container
-    h3.ts.post.header=tlhc.title
-    if(tlhc.content)
-        #content.ts.basic.segment!=tlhc.content
-    else
-        #content.ts.basic.segment 
-            p 無內文
-            //-p 這可能是一個已被發現的錯誤，可至 
-                a(href='https://github.com/EarlySpringCommitee/TLHCrawler/issues/2') issues#2 
-                |  查看最新修復進度
+extends _layout.pug
+block content
+    .ts.container
+        h3.ts.post.header=tlhc.title
+        if(tlhc.content)
+            #content.ts.basic.segment!=tlhc.content
+        else
+            #content.ts.basic.segment 
+                p 無內文
+                //-p 這可能是一個已被發現的錯誤，可至 
+                    a(href='https://github.com/EarlySpringCommitee/TLHCrawler/issues/2') issues#2 
+                    |  查看最新修復進度
 
-    .ts.selection.items
-        each file in files
-            .item
-                i.large.icon
-                    i.file-icon(data-type=file.type)
-                .content(style="align-self: center;")
-                    .header=file.name
-                .actions
-                    .ts.buttons
-                        a.ts.button(href=file.file,download=file.name) 下載
-                        .or
-                        a.ts.primary.button(href='https://docs.google.com/viewer?url='+file.file,target="_blank") 預覽
+        .ts.selection.items
+            each file in files
+                .item
+                    i.large.icon
+                        i.file-icon(data-type=file.type)
+                    .content(style="align-self: center;")
+                        .header=file.name
+                    .actions
+                        .ts.buttons
+                            a.ts.button(href=file.file,download=file.name) 下載
+                            .or
+                            a.ts.primary.button(href='https://docs.google.com/viewer?url='+file.file,target="_blank") 預覽
 
 
-    button.ts.primary.labeled.icon.button(onclick='history.back()')
-        i.arrow.left.icon
-        | 回上頁
-include _footer.pug
+        button.ts.primary.labeled.icon.button(onclick='history.back()')
+            i.arrow.left.icon
+            | 回上頁

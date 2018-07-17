@@ -1,19 +1,20 @@
-include _header.pug
-script(src='/js/login.js')
-.ts.container
-	if(message)
-		h1.ts.center.aligned.negative.poyon.header 喔不
-			.sub.header=message
-	else
-		h1.ts.center.aligned.header 嗨！
-			.sub.header 輸入您的學號及身份證字號並開始使用
-	#login.ts.centered.secondary.segment.narrow
-		form.ts.form(method='post',role='form',action=post,onsubmit='return check()')
-			.field
-				label 學號
-				input(type='text', placeholder='', id='userID', name='userID',required)
-			.field
-				label 身份證字號
-				input(type='password', placeholder='', id='userPASS', name='userPASS',style='text-transform:uppercase',required)
-			button.ts.primary.fluid.button(type='submit') 登入
-include _footer.pug
+extends _layout.pug
+append head
+	script(src='/js/login.js')
+block content
+	.ts.container
+		if(message)
+			h1.ts.center.aligned.negative.poyon.header 喔不
+				.sub.header=message
+		else
+			h1.ts.center.aligned.header 嗨！
+				.sub.header 輸入您的學號及身份證字號並開始使用
+		#login.ts.centered.secondary.segment.narrow
+			form.ts.form(method='post',role='form',action=post,onsubmit='return check()')
+				.field
+					label 學號
+					input(type='text', placeholder='', id='userID', name='userID',required)
+				.field
+					label 身份證字號
+					input(type='password', placeholder='', id='userPASS', name='userPASS',style='text-transform:uppercase',required)
+				button.ts.primary.fluid.button(type='submit') 登入

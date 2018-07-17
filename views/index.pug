@@ -1,28 +1,28 @@
-include _header.pug
-.ts.container
-    .slick
-        each item in slide
-            a(href=item.link)
-                .ts.embed(class='21:9')
-                    img(src=item.img)
-                    h3.ts.header.center.aligned=item.header
-                        .sub.header=item.description
-    
-    each linkList in links
-        h3.ts.header=linkList.name
-        .ts.doubling.four.cards
-            each item in linkList.table
-                a.ts.card(href=item.link)
-                    .content
-                        .header=item.header
-                        .description=item.description
-    
+extends _layout.pug
+append head
     link(href='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css',rel='stylesheet')
     script(src='//cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.min.js')
     script(src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js')
     script(src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/locale/zh-tw.js')
     script(src='//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/gcal.min.js')
     script(src='/js/index.js')
-    h3.ts.header 行事曆
-    #calendar
-include _footer.pug
+block content
+    .ts.container
+        .slick
+            each item in slide
+                a(href=item.link)
+                    .ts.embed(class='21:9')
+                        img(src=item.img)
+                        h3.ts.header.center.aligned=item.header
+                            .sub.header=item.description
+        
+        each linkList in links
+            h3.ts.header=linkList.name
+            .ts.doubling.four.cards
+                each item in linkList.table
+                    a.ts.card(href=item.link)
+                        .content
+                            .header=item.header
+                            .description=item.description
+        h3.ts.header 行事曆
+        #calendar

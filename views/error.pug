@@ -1,11 +1,12 @@
-include _header.pug
-.ts.container
-    .ts.vertically.padded.slate
-        .ts.massive.header!= title
-            .sub.header!= message
-        if(buttonLink)
-            a.ts.primary.button(href=buttonLink)=button
-
-include _footer.pug
+extends _layout.pug
+block content
+    .ts.container
+        .ts.vertically.padded.slate
+            .ts.massive.header!= title
+                .sub.header!= message
+            if(buttonLink)
+                a.ts.primary.button(href=buttonLink)=button
+            else
+                a.ts.primary.button(href='/') 回首頁
 
 
