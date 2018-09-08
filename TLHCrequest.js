@@ -35,6 +35,31 @@ moment.updateLocale('zh-tw', {
 });
 moment.tz.setDefault("Asia/Taipei");
 
+function numberToChinses(chnStr) {
+    var chnNumChar = {
+        0: "零",
+        1: "一",
+        2: "兩",
+        3: "三",
+        4: "四",
+        5: "五",
+        6: "六",
+        7: "七",
+        8: "八",
+        9: "九"
+    };
+    var str = chnStr.split('');
+    let m = ''
+    for (var i = 0; i < str.length; i++) {
+        var num = chnNumChar[str[i]];
+        if (typeof num !== 'undefined')
+            m += num
+        else
+            m += str[i]
+    }
+    m = m.replace(/一零/g, '十')
+    return m
+}
 // 獲取頁面
 exports.getPage = async function(url, pageID, res) {
     //請求
@@ -87,7 +112,7 @@ exports.getPage = async function(url, pageID, res) {
     // 獲取文章
     var tlhcData = [];
     for (var i = 0; i < author.length; i++) {
-        let time = moment($(date[i]).text().trim(), 'YYYY/MM/DD').fromNow()
+        let time = numberToChinses(moment($(date[i]).text().trim(), 'YYYY/MM/DD').fromNow())
         var preJoin = {
             'tags': [time, $(author[i]).text().trim(), $(date[i]).text().trim()],
             'title': $(title[i]).text().replace(/\n/g, ''),
@@ -231,7 +256,7 @@ exports.search = async function(search, res, page) {
     }
     for (var i = 0; i < header.length; i++) {
         let timePrecision = $(content[i]).text().split(/[\.\.\.]+/).pop()
-        let timeSimple = moment(timePrecision, 'YYYY/MM/DD').fromNow()
+        let timeSimple = numberToChinses(moment(timePrecision, 'YYYY/MM/DD').fromNow())
         var preJoin = {
             'header': $(header[i]).text(),
             'content': $(content[i]).text().split(/[\.\.\.]+/)[0],
