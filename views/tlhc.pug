@@ -1,8 +1,15 @@
 extends _layout.pug
 block content
     .ts.container
-        .ts.divided.items
+        .ts.items
+            -let nowDate=''
             each item in tlhc
+                -if(nowDate!=item.tags[0]){
+                    -nowDate=item.tags[0]
+                    .sticky.item
+                        .content
+                            .header=item.tags[0]
+                -}
                 a.item(href=item.link)
                     .content
                         .header=item.title

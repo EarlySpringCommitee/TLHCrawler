@@ -139,9 +139,7 @@ header .header {
 }
 
 #systemMenu .ts.card {
-    background-image: url("https://i.imgur.com/a3cHBwj.jpg");
-    background-size: cover;
-    background-color: RGBA(0, 0, 0, 0.5);
+    background-color: RGBA(0, 0, 0, 0.2);
     box-shadow: none !important;
 }
 
@@ -197,6 +195,18 @@ header .header {
 
 .ts.items a.item:hover .content .header {
     color: #5755d9 !important;
+}
+
+.ts.items .sticky.item {
+    background-color: #f6f6f6;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1.2em 1em;
+}
+
+.ts.items .item {
+    padding: .4em 1em;
 }
 
 
