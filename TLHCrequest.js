@@ -230,9 +230,12 @@ exports.search = async function(search, res, page) {
         return
     }
     for (var i = 0; i < header.length; i++) {
+        let timePrecision = $(content[i]).text().split(/[\.\.\.]+/).pop()
+        let timeSimple = moment(timePrecision, 'YYYY/MM/DD').fromNow()
         var preJoin = {
             'header': $(header[i]).text(),
-            'content': $(content[i]).text(),
+            'content': $(content[i]).text().split(/[\.\.\.]+/)[0],
+            'tags': [timeSimple, timePrecision],
             'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
         }
         tlhcData.push(preJoin);

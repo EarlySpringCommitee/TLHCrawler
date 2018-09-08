@@ -13,6 +13,9 @@ block content
                             .content
                                 .header=item.header
                                 .description=item.content
+                                .middoted.meta
+                                    each tag in item.tags
+                                        span=tag
             -else
                 br
                 h3.ts.center.aligned.icon.header 
