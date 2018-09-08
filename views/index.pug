@@ -24,5 +24,8 @@ block content
                         .content
                             .header=item.header
                             .description=item.description
+                        -if(item.icon)
+                            .symbol
+                                i.icon(class=item.icon)
         h3.ts.header 行事曆
         #calendar

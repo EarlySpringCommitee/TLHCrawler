@@ -5,9 +5,6 @@ $(document).ready(function() {
             search()
         }
     });
-    $('a.ts.card[href^="/tlhc/"').click(function() {
-        $(this).find("i.icon").attr('class', 'notched circle loading icon')
-    });
     // 幻燈片
     $('.slick').slick({
         dots: true,
