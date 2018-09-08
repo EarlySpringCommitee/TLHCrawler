@@ -16,10 +16,6 @@ function doRequest(url) {
     });
 }
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
-const express = require('express'); // Node.js Web 架構
-const bodyParser = require('body-parser'); // 讀入 post 請求
-const session = require('express-session');
-const Base64 = require('js-base64').Base64; // Base64
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0';
 
@@ -30,8 +26,9 @@ exports.getCookie = async function(req, res) {
     var userPASS = req.body['userPASS']
     req.session.userID = userID
     req.session.userPASS = userPASS
-        //-- 登入選課系統
-    let getFormData = async(userID, userPASS) => {
+
+    //-- 登入選課系統
+    /*let getFormData = async(userID, userPASS) => {
         let loginPage = await doRequest({
             url: "http://register.tlhc.ylc.edu.tw/stdcourse3/Login.aspx",
             method: "GET",
@@ -58,8 +55,9 @@ exports.getCookie = async function(req, res) {
         }
     });
     if (login[`set-cookie`])
-        req.session.course = login[`set-cookie`]
-        //- 登入成績系統
+        req.session.course = login[`set-cookie`]*/
+
+    //- 登入成績系統
     request.post({
         url: "http://register.tlhc.ylc.edu.tw/hcode/login.asp",
         form: {

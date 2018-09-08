@@ -147,7 +147,7 @@ app.get('/tlhc/group/', (req, res) => {
     }
 });
 //------- 選課
-app
+/*app
     .get('/tlhc/course/', (req, res) => {
         if (req.session.course) {
             tlhcScore.getCoursePage(req.session.course, res)
@@ -157,7 +157,7 @@ app
     })
     .post('/tlhc/course/', (req, res) => {
         tlhcScore.saveCoursePage(req, res)
-    });
+    });*/
 //------- 瀏覽匯出資料
 app.get('/tlhc/csv/', (req, res) => {
     if (req.session.tlhc) {
