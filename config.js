@@ -33,7 +33,7 @@ exports.links = [{
         "icon": "announcement"
     }]
 }, {
-    "name": "一些你可能用到的相關連結",
+    "name": "校內相關連結",
     "table": [{
         "header": "Web 學生選課系統",
         "description": "庫",
