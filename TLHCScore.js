@@ -3,13 +3,15 @@
 //
 const request = require("request"); // HTTP 客戶端輔助工具
 function doRequest(url) {
-    return new Promise(function (resolve, reject) {
-        request(url, function (error, res, body) {
-            if (!error && res.statusCode == 200) {
+    return new Promise(function(resolve, reject) {
+        request(url, function(error, res, body) {
+            if (!error && res.statusCode == 200)
                 resolve(body);
-            } else {
+            else if (!error && res.statusCode == 302)
+                resolve(res.headers);
+            else
                 resolve(error);
-            }
+
         });
     });
 }
@@ -23,9 +25,41 @@ const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/
 
 // ------------------- 登入
 // 登入帳號並取得 Cookie
-exports.getCookie = (req, res) => {
+exports.getCookie = async function(req, res) {
     var userID = req.body['userID']
     var userPASS = req.body['userPASS']
+    req.session.userID = userID
+    req.session.userPASS = userPASS
+        //-- 登入選課系統
+    let getFormData = async(userID, userPASS) => {
+        let loginPage = await doRequest({
+            url: "http://register.tlhc.ylc.edu.tw/stdcourse3/Login.aspx",
+            method: "GET",
+            encoding: null
+        });
+        let $ = cheerio.load(loginPage.toString())
+        let h = {}
+        let inputs = $("input[type=\"hidden\"]")
+        for (var i = 0; i < inputs.length; i++)
+            h[$(inputs[i]).attr('name')] = $(inputs[i]).val()
+        h[`user_code`] = userID
+        h[`user_pswd`] = userPASS
+        h[`ImageButton1.x`] = 33
+        h[`ImageButton1.y`] = 20
+        return h
+    }
+    let login = await doRequest({
+        url: "http://register.tlhc.ylc.edu.tw/stdcourse3/Login.aspx",
+        method: "POST",
+        encoding: null,
+        form: await getFormData(userID, userPASS),
+        headers: {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+        }
+    });
+    if (login[`set-cookie`])
+        req.session.course = login[`set-cookie`]
+        //- 登入成績系統
     request.post({
         url: "http://register.tlhc.ylc.edu.tw/hcode/login.asp",
         form: {
@@ -38,7 +72,7 @@ exports.getCookie = (req, res) => {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
         }
-    }, function (e, r, b) {
+    }, function(e, r, b) {
         // 錯誤代碼 
         // 傳回的資料內容 
         if (e || !b) { return }
@@ -77,7 +111,7 @@ exports.getCookie = (req, res) => {
     });
 
 }
-exports.getSystem = async function (cookie, res) {
+exports.getSystem = async function(cookie, res) {
     let StudentInfoRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
         method: "GET",
@@ -126,7 +160,7 @@ exports.getSystem = async function (cookie, res) {
 
 // ------------------- 成績
 // 取得總成績選擇頁面
-exports.getScorePage = async function (cookie, res) {
+exports.getScorePage = async function(cookie, res) {
 
     let ScoreSelectRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCO.asp",
@@ -197,15 +231,15 @@ function getLatestScore(data) {
     var score = $("body>center>table:nth-child(3) td>table>tbody")
     var total = $("body>center>table:nth-child(4) td>table>tbody")
     var tables = [{
-        'title': '本學期段考成績',
-        'table': score.html().replace(/\n/g, ''),
-        'tableID': 'score'
-    },
-    {
-        'title': '本學期段考排名',
-        'table': total.html().replace(/\n/g, ''),
-        'tableID': 'total'
-    }
+            'title': '本學期段考成績',
+            'table': score.html().replace(/\n/g, ''),
+            'tableID': 'score'
+        },
+        {
+            'title': '本學期段考排名',
+            'table': total.html().replace(/\n/g, ''),
+            'tableID': 'total'
+        }
     ]
     return tables
 }
@@ -217,15 +251,15 @@ function getSemesterScore(data) {
     var scoreTitle = $(".FormHeaderFONT")
     var rankTable = $("body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)")
     var tables = [{
-        'title': scoreTitle.text() + '總成績',
-        'table': scoreTable.html().replace(/\n/g, ''),
-        'tableID': 'score'
-    },
-    {
-        'title': scoreTitle.text() + '排名',
-        'table': rankTable.html().replace(/\n/g, ''),
-        'tableID': 'rank'
-    }
+            'title': scoreTitle.text() + '總成績',
+            'table': scoreTable.html().replace(/\n/g, ''),
+            'tableID': 'score'
+        },
+        {
+            'title': scoreTitle.text() + '排名',
+            'table': rankTable.html().replace(/\n/g, ''),
+            'tableID': 'rank'
+        }
     ]
     return tables
 
@@ -271,7 +305,7 @@ exports.getAttendance = (cookie, res) => {
 
 // ------------------- 取得獎懲
 // 取得獎懲選擇頁面
-exports.getRewardsPage = async function (cookie, res) {
+exports.getRewardsPage = async function(cookie, res) {
     let RewardsSelectRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHK.asp",
         method: "GET",
@@ -328,41 +362,156 @@ function getRewards(data) {
 }
 
 // ------------------- 取得社團
-exports.getGroupPage = async function (cookie, res) {
-    let GroupPageRequest = await doRequest({
-        url: "http://register.tlhc.ylc.edu.tw/hcode/STDClgQry.asp",
+exports.getGroupPage = async function(cookie, res) {
+        let GroupPageRequest = await doRequest({
+            url: "http://register.tlhc.ylc.edu.tw/hcode/STDClgQry.asp",
+            method: "GET",
+            encoding: null,
+            headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        });
+        var GroupPage = iconv.decode(GroupPageRequest, 'Big5')
+        if (GroupPage == '無權使用 請登入') {
+            res.redirect("/tlhc/login/")
+            return
+        }
+        var $ = cheerio.load(GroupPage)
+        var user = {
+            name: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(6) > font:nth-child(1)").text(),
+            num: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text()
+        }
+
+        var tables = [{
+            'title': '社團及幹部紀錄',
+            'table': $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody").html().replace(/\n/g, ''),
+            'tableID': 'group'
+        }]
+
+        res.render('s-multi-table', {
+            title: 'ㄉㄌㄐㄕ - 社團及幹部',
+            user: user,
+            tables: tables.reduce((a, b) => a.concat(b), []),
+            system: true
+        })
+    }
+    // ------------------- 瀏覽匯出資料
+exports.getCSV = function(cookie, res) {
+        res.render('s-csvtohtml', {
+            title: 'ㄉㄌㄐㄕ - 瀏覽匯出資料',
+            system: true,
+            user: true
+        })
+    }
+    // - 選課
+exports.getCoursePage = async function(cookie, res) {
+    let getInfo = await doRequest({
+        url: "http://register.tlhc.ylc.edu.tw/stdcourse3/STD04.aspx",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     });
-    var GroupPage = iconv.decode(GroupPageRequest, 'Big5')
-    if (GroupPage == '無權使用 請登入') {
-        res.redirect("/tlhc/login/")
-        return
+    let $ = cheerio.load(getInfo.toString())
+    let user = {
+            id: $("#TITLE_sastd_schcode").text(),
+            name: $("#TITLE_sastd_name").text(),
+            num: $("#TITLE_sastd_seatno").text()
+        }
+        // 回傳資料時從 2 開始算
+    let subjects = [],
+        subjectDatas;
+    // 已選填的志願
+    subjectDatas = $("#BAThas_Content_td>table>tbody>tr.ContectTdX0001,#BAThas_Content_td>table>tbody>tr.ContectTd0001")
+    for (var i = 0; i < subjectDatas.length; i++) {
+        let h = {}
+            //h[`want_id`]=wantId
+        h[`cour_group`] = $(subjectDatas[i]).find(`input[name$="BAThas_PK_Lbl_cour_group"]`).val()
+        h[`course_sn`] = $(subjectDatas[i]).find(`input[name$="BAThas_PK_Lbl_course_sn"]`).val()
+        h[`zcor_code`] = $(subjectDatas[i]).find(`input[name$="BAThas_PK_Lbl_zcor_code"]`).val()
+        h[`sbcor_cortimestr`] = $(subjectDatas[i]).find(`input[name$="BAThas_Lbl_sbcor_cortimestr"]`).val()
+        h[`zcor_code`] = $(subjectDatas[i]).find(`input[name$="BAThas_Lbl_zcor_code"]`).val()
+        h[`csclst_rtstage`] = $(subjectDatas[i]).find(`input[name$="BAThas_Lbl_csclst_rtstage"]`).val()
+        let zclsNames = $(subjectDatas[i]).find(`[id$="zcls_names"]`).text() //班級
+        let zcorNames = $(subjectDatas[i]).find(`[id$="zcor_names"]`).text() //科目
+        let ztchName = $(subjectDatas[i]).find(`[id$="ztch_name"]`).text() //教師
+        let sbcorCortimestrA = $(subjectDatas[i]).find(`[id$="sbcor_cortimestrA"]`).text() //上課時間
+        subjects.push({
+            "hiddenInputs": h,
+            "class": zclsNames,
+            "name": zcorNames,
+            "teacher": ztchName,
+            "time": sbcorCortimestrA
+        })
     }
-    var $ = cheerio.load(GroupPage)
-    var user = {
-        name: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(6) > font:nth-child(1)").text(),
-        num: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text()
+    // 未選填的
+    subjectDatas = $("#BAT_Content_td>table>tbody>tr.ContectTdX0001,#BAT_Content_td>table>tbody>tr.ContectTd0001")
+    for (var i = 0; i < subjectDatas.length; i++) {
+        let h = {}
+        h[`cour_group`] = $(subjectDatas[i]).find(`input[name$="BAT_cour_group"]`).val()
+        h[`course_sn`] = $(subjectDatas[i]).find(`input[name$="BAT_PK_course_sn"]`).val()
+        h[`zcor_code`] = $(subjectDatas[i]).find(`input[name$="BAT_PK_zcor_code"]`).val()
+        h[`sbcor_cortimestr`] = $(subjectDatas[i]).find(`input[name$="BAT_sbcor_cortimestr"]`).val()
+        h[`zcor_code`] = $(subjectDatas[i]).find(`input[name$="BAT_zcor_code"]`).val()
+        h[`csclst_rtstage`] = $(subjectDatas[i]).find(`input[name$="_BAT_csclst_rtstage"]`).val()
+        let zclsNames = $(subjectDatas[i]).find(`[id$="zcls_names"]`).text() //班級
+        let zcorNames = $(subjectDatas[i]).find(`[id$="zcor_names"]`).text() //科目
+        let ztchName = $(subjectDatas[i]).find(`[id$="ztch_name"]`).text() //教師
+        let sbcorCortimestrA = $(subjectDatas[i]).find(`[id$="sbcor_cortimestrA"]`).text() //上課時間
+        subjects.push({
+            "hiddenInputs": h,
+            "class": zclsNames,
+            "name": zcorNames,
+            "teacher": ztchName,
+            "time": sbcorCortimestrA
+        })
     }
-
-    var tables = [{
-        'title': '社團及幹部紀錄',
-        'table': $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody").html().replace(/\n/g, ''),
-        'tableID': 'group'
-    }]
-
-    res.render('s-multi-table', {
-        title: 'ㄉㄌㄐㄕ - 社團及幹部',
+    res.render('s-course', {
+        title: 'ㄉㄌㄐㄕ - 選課',
         user: user,
-        tables: tables.reduce((a, b) => a.concat(b), []),
+        subjects: subjects,
         system: true
     })
+
 }
-// ------------------- 瀏覽匯出資料
-exports.getCSV = function (cookie, res) {
-    res.render('s-csvtohtml', {
-        title: 'ㄉㄌㄐㄕ - 瀏覽匯出資料',
-        system: true, user: true
+exports.saveCoursePage = async(req, res) => {
+    /*
+    ＝
+    已
+    棄
+    坑
+    ＝
+    */
+    let requestForm = {}
+    requestForm[`__EVENTARGUMENT`] = ''
+    requestForm[`__EVENTTARGET`] = `BAT_Submit`
+    requestForm[`TITLE_PK_sastd_id`] = req.session.userPASS
+    requestForm[`TITLE_sastd_id`] = req.session.userPASS
+    for (var i = 0; i < req.body.data.length; i++) {
+        let item = req.body.data[i]
+        if (i > 0) {
+            // wantId 從 2 開始
+            let wantId = i + 1 > 9 ? i + 1 : '0' + (i + 1)
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_Lbl_csclst_rtmark`] = ''
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_Lbl_csclst_rtstage`] = item.csclst_rtstage
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_Lbl_sbcor_cortimestr`] = item.sbcor_cortimestr
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_Lbl_zcor_code`] = item.zcor_code
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_PK_Lbl_cour_group`] = item.cour_group
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_PK_Lbl_zcor_code`] = item.zcor_code
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_PK_Lbl_course_sn`] = item.course_sn
+            requestForm[`BAT_DataGrid$ctl${wantId}$BAT_PK_Lbl_want_id`] = i
+        }
+    }
+    let pushData = await doRequest({
+        url: "http://register.tlhc.ylc.edu.tw/stdcourse3/STD04.aspx",
+        method: "POST",
+        encoding: null,
+        form: requestForm,
+        headers: {
+            'Cookie': req.session.course,
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+        }
     })
+    if (pushData && pushData.toString().match("您尚未登入或已逾登入有效時限")) {
+        res.json(false)
+    } else {
+        res.json(true)
+    }
 }

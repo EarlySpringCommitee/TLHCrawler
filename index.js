@@ -98,16 +98,17 @@ app.get('/tlhc/search/:id/:page', (req, res) => {
 });
 //------------成績系統------------
 // 登入
-app.get('/tlhc/login/', (req, res) => {
-    res.render('s-login', {
-        title: 'ㄉㄌㄐㄕ - 登入',
-        post: '/tlhc/login/',
-        system: true
+app
+    .get('/tlhc/login/', (req, res) => {
+        res.render('s-login', {
+            title: 'ㄉㄌㄐㄕ - 登入',
+            post: '/tlhc/login/',
+            system: true
+        });
+    })
+    .post('/tlhc/login/', (req, res) => {
+        tlhcScore.getCookie(req, res)
     });
-});
-app.post('/tlhc/login/', (req, res) => {
-    tlhcScore.getCookie(req, res)
-});
 // 登出
 app.get('/tlhc/score/logout', (req, res) => {
     req.session.destroy()
@@ -145,6 +146,18 @@ app.get('/tlhc/group/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
+//------- 選課
+app
+    .get('/tlhc/course/', (req, res) => {
+        if (req.session.course) {
+            tlhcScore.getCoursePage(req.session.course, res)
+        } else {
+            res.redirect("/tlhc/login/")
+        }
+    })
+    .post('/tlhc/course/', (req, res) => {
+        tlhcScore.saveCoursePage(req, res)
+    });
 //------- 瀏覽匯出資料
 app.get('/tlhc/csv/', (req, res) => {
     if (req.session.tlhc) {

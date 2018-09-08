@@ -209,11 +209,20 @@ header .header {
 }
 
 .ts.cards a.ts.card:hover {
+    transition: all .5s;
     transform: scale(1.02) !important;
 }
 
 .ts.cards a.ts.card:active {
     transform: scale(.98) !important;
+}
+
+#items .ts.card.sortable-ghost {
+    opacity: .5;
+}
+
+#items .ts.card.sortable-chosen {
+    box-shadow: 0 5px 10px 1px rgba(167, 167, 167, 0.4);
 }
 
 

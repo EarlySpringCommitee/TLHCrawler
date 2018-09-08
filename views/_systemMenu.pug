@@ -18,11 +18,5 @@ mixin selectCard(title,link,icon)
             +selectCard('獎懲','/tlhc/rewards/','legal') 
             +selectCard('社團及幹部','/tlhc/group/','users') 
             +selectCard('瀏覽匯出資料','/tlhc/csv/','archive') 
-            +selectCard('登出','/tlhc/score/logout/','sign out') 
-#footerMenu.ts.labeled.icon.centered.tiny.menu.mobile.only
-    +menuItem('成績','/tlhc/score/','pie chart') 
-    +menuItem('出勤','/tlhc/attendance/','student') 
-    +menuItem('選單','#systemMenu','sidebar') 
-    +menuItem('獎懲','/tlhc/rewards/','legal') 
-    +menuItem('社團及幹部','/tlhc/group/','users') 
-
+            //-+selectCard('選課','/tlhc/course/','keyboard') 
+            +selectCard('登出','/tlhc/score/logout/','sign out')
