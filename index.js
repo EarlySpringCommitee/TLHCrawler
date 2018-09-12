@@ -82,7 +82,7 @@ app.get('/tlhc/pages/:id', (req, res) => {
 
 app.get('/tlhc/post/:id', (req, res) => {
     let url = Base64.decode(req.params.id)
-    if (url.match(/[0-9]*-[0-9]*-[0-9]*,r[0-9]*-[0-9]*\.php/)) {
+    if (url.match(/[0-9]*-[0-9]*-[0-9]*.+\.php/)) {
         var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
         tlhcRequest.getPost(originalURL, Base64.decode(req.params.id), res)
     } else {
