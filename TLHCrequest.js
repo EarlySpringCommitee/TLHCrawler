@@ -36,7 +36,7 @@ moment.updateLocale('zh-tw', {
 moment.tz.setDefault("Asia/Taipei");
 
 function numberToChinses(chnStr) {
-    //數字轉中文
+    // 數字轉中文
     // 123 -> 一百二十三
     return chnStr.replace(/[0-9]+/g, match => require('number-to-chinese-words').toWords(match))
 }
