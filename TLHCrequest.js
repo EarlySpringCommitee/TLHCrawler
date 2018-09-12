@@ -36,29 +36,9 @@ moment.updateLocale('zh-tw', {
 moment.tz.setDefault("Asia/Taipei");
 
 function numberToChinses(chnStr) {
-    var chnNumChar = {
-        0: "零",
-        1: "一",
-        2: "兩",
-        3: "三",
-        4: "四",
-        5: "五",
-        6: "六",
-        7: "七",
-        8: "八",
-        9: "九"
-    };
-    var str = chnStr.split('');
-    let m = ''
-    for (var i = 0; i < str.length; i++) {
-        var num = chnNumChar[str[i]];
-        if (typeof num !== 'undefined')
-            m += num
-        else
-            m += str[i]
-    }
-    m = m.replace(/一零/g, '十')
-    return m
+    //數字轉中文
+    // 123 -> 一百二十三
+    return chnStr.replace(/[0-9]+/g, match => require('number-to-chinese-words').toWords(match))
 }
 // 獲取頁面
 exports.getPage = async function(url, pageID, res) {
