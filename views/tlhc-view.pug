@@ -20,9 +20,9 @@ block content
                         .header=file.name
                     .actions
                         .ts.buttons
-                            a.ts.button(href=file.file,download=file.name) 下載
+                            a.ts.button(href=file.link,download=file.name) 下載
                             .or
-                            a.ts.primary.button(href='https://docs.google.com/viewer?url='+file.file,target="_blank") 預覽
+                            a.ts.primary.button(href='https://docs.google.com/viewer?url='+encodeURIComponent(file.link),target="_blank") 預覽
 
 
         button.ts.primary.labeled.icon.button(onclick='history.back()')

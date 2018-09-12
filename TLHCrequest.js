@@ -42,66 +42,63 @@ function numberToChinses(chnStr) {
 }
 // 獲取頁面
 exports.getPage = async function(url, pageID, res) {
-    //請求
+    let data = await getPage(url)
+    if (data == 404) return res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+    if (data == 'May be an article') return res.render('error', {
+        title: '錯誤 - 這不是一個目錄頁面',
+        message: '也許你該試試下面的連結',
+        button: '嘗試使用文章模板',
+        buttonLink: '/tlhc/post/' + Base64.encodeURI(pageID)
+    })
+    res.render('tlhc', { title: data.pageTitle, tlhc: data.posts, pages: data.pagination, originalURL: url })
+
+};
+
+async function getPage(url) { //請求
     let PageData = await doRequest({
         url: url,
         method: "GET",
         headers: { 'User-Agent': userAgent }
     });
     //沒拿到資料
-    if (!PageData) {
-        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
-        return;
-    }
+    if (!PageData) return '404';
     //可能是文章模板
-    if (PageData.indexOf('資料群組') == -1 && PageData.indexOf('標題') == -1 && PageData.indexOf('日期') == -1) {
-        res.render('error', {
-            title: '錯誤 - 這不是一個目錄頁面',
-            message: '也許你該試試下面的連結',
-            button: '嘗試使用文章模板',
-            buttonLink: '/tlhc/post/' + Base64.encodeURI(pageID)
-        })
-        return;
-    }
-    var $ = cheerio.load(PageData);
+    if (!PageData.match(/資料群組|標題|日期/)) return 'May be an article';
 
-    var author = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
-    var title = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2)");
-    var link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
-    var date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
-    var pages = $(".navigator-inner a.pagenum");
+    let $ = cheerio.load(PageData);
 
-    var pgTitle = 'ㄉㄌㄐㄕ - ' + $('#Dyn_2_1 .md_middle .mm_01 a.path:nth-child(2)').html()
+    let pageTitle = 'ㄉㄌㄐㄕ - ' + $('#Dyn_2_1 .md_middle .mm_01 a.path:nth-child(2)').text()
+    let author = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
+    let title = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2)");
+    let link = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(2) a");
+    let date = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(3)");
+    let pages = $(".navigator-inner a.pagenum");
 
-    var pgid = pageID.split("-")[2]
-    if (pgid == 246) {
-        // 這頁不知道為啥一直出錯 Orz
-        // http://web.tlhc.ylc.edu.tw/files/11-1004-246-2.php
-        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
-        return
-    }
     // 獲取頁碼
-    var pageData = [];
+    let pagination = [];
     for (var i = 0; i < pages.length; i++) {
-        var preJoin = {
+        pagination.push({
             'text': $(pages[i]).text(),
+            'title': $(pages[i]).text(),
             'link': Base64.encodeURI($(pages[i]).attr('href').split("/")[4]),
-        }
-        pageData.push(preJoin);
+            'url': $(pages[i]).attr('href'),
+        });
     }
     // 獲取文章
-    var tlhcData = [];
+    let posts = [];
     for (var i = 0; i < author.length; i++) {
         let time = numberToChinses(moment($(date[i]).text().trim(), 'YYYY/MM/DD').fromNow())
-        var preJoin = {
+        posts.push({
+            'author': $(author[i]).text().trim(),
+            'datefromnow': time,
+            'date': $(date[i]).text().trim(),
+            'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
             'tags': [time, $(author[i]).text().trim(), $(date[i]).text().trim()],
             'title': $(title[i]).text().replace(/\n/g, ''),
-            'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
-        }
-        tlhcData.push(preJoin);
+            'url': $(link[i]).attr('href'),
+        });
     }
-    res.render('tlhc', { title: pgTitle, tlhc: tlhcData, pages: pageData, originalURL: url })
-        /*var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
+    /*var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
         if (ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
             //這是需要 post 請求的頁面
             ajaxcode = ajaxcode.split("'")[1]
@@ -120,10 +117,38 @@ exports.getPage = async function(url, pageID, res) {
                 if (e || !b) { return }
             })
         }*/
-};
+    return {
+        "pagination": pagination,
+        "posts": posts,
+        "pageTitle": pageTitle
+    }
+}
 // 獲取文章
 exports.getPost = async function(url, pageID, res) {
 
+    let data = await getPost(url)
+    if (data == 404)
+        return res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+    if (data == 'May be a directory')
+        return res.render('error', {
+            title: '錯誤 - 這不是一個文章頁面',
+            message: '也許你該試試下面的連結',
+            button: '嘗試使用目錄模板',
+            buttonLink: '/tlhc/pages/' + pageID
+        })
+    res.render('tlhc-view', {
+        title: 'ㄉㄌㄐㄕ - ' + data.title,
+        tlhc: {
+            'title': data.title,
+            'content': data.content
+        },
+        files: data.files,
+        originalURL: url,
+        headerTitle: excerpt.text(data.title, 25, '...')
+    })
+};
+
+async function getPost(url) { //請求
     //請求
     let PostData = await doRequest({
         url: url,
@@ -131,23 +156,15 @@ exports.getPost = async function(url, pageID, res) {
         headers: { 'User-Agent': userAgent }
     });
     //沒資料
-    if (!PostData) {
-        res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
-        return;
-    }
+    if (!PostData)
+        return 404
+
     //可能是目錄
-    if (PostData.indexOf('資料群組') != -1 && PostData.indexOf('標題') != -1 && PostData.indexOf('日期') != -1) {
-        res.render('error', {
-            title: '錯誤 - 這不是一個文章頁面',
-            message: '也許你該試試下面的連結',
-            button: '嘗試使用目錄模板',
-            buttonLink: '/tlhc/pages/' + pageID
-        })
-        return;
-    }
+    if (PostData.match(/資料群組|標題|日期/))
+        return 'May be a directory'
+
     var $ = cheerio.load(PostData);
     var title = $('title').text().replace(/- 國立斗六高級家事商業職業學校/, '')
-    var headerTitle = excerpt.text(title, 25, '...')
         //設定內容範圍
     var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
     if (ajaxcode && ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
@@ -176,71 +193,75 @@ exports.getPost = async function(url, pageID, res) {
         else
             var content = $("#Dyn_2_2 .ptcontent").html().trim();
     }
-    var files = $('.baseTB a');
-    var fileData = [];
+    let files = $('.baseTB a');
+    let filesData = [];
     for (var i = 0; i < files.length; i++) {
         if ($(files[i]).text() != "下載附件") {
-            var file = $(files[i]).attr('href')
-            if ($(files[i]).attr('href') == 'javascript:void(0)') {
-                var file = $(files[i]).attr('onclick').split("'")[3]
-            }
-            var preJoin = {
+            let fileLink = $(files[i]).attr('href') == 'javascript:void(0)' ? $(files[i]).attr('onclick').split("'")[3] : $(files[i]).attr('href')
+            filesData.push({
                 'name': $(files[i]).text(),
-                'file': 'http://web.tlhc.ylc.edu.tw' + file,
-                'type': file.split(".")[1],
-            }
-            fileData.push(preJoin);
+                'link': 'http://web.tlhc.ylc.edu.tw' + fileLink,
+                'type': fileLink.split(".")[1],
+            });
         }
     }
 
-    var tlhcData = {
-        'title': title,
-        'content': content
+    return {
+        "title": title,
+        "content": content,
+        "files": filesData
     }
-    res.render('tlhc-view', {
-        title: 'ㄉㄌㄐㄕ - ' + title,
-        tlhc: tlhcData,
-        files: fileData,
-        originalURL: url,
-        headerTitle: headerTitle
+}
+
+// 搜尋
+exports.search = async function(keyword, res, page) {
+    let data = await searchPosts(keyword, page)
+    if (data == 'no result') return res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
+    res.render('tlhc-search', {
+        title: 'ㄉㄌㄐㄕ - 搜尋：' + keyword,
+        tlhc: data.posts,
+        pages: data.pageData,
+        search: keyword
     })
 };
-// 搜尋
-exports.search = async function(search, res, page) {
+async function searchPosts(keyword, page) {
+    let SearchData;
     if (page == "1") {
-        var SearchData = await doRequest({
+        SearchData = await doRequest({
             url: "http://web.tlhc.ylc.edu.tw/bin/ptsearch.php",
             method: "POST",
             form: {
-                SchKey: search,
+                SchKey: keyword,
                 search: "search"
             },
             headers: { 'User-Agent': userAgent }
         });
     } else {
-        var SearchData = await doRequest({
-            url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(search) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
+        SearchData = await doRequest({
+            url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(keyword) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
             method: "GET",
             headers: { 'User-Agent': userAgent }
         });
     }
     var $ = cheerio.load(SearchData);
-    //var table = $(".baseTB.list_TIDY");
     //文章內容
     var tlhcData = [];
     var header = $(".baseTB.list_TIDY tr>td.mc .h5 a");
     var content = $(".baseTB.list_TIDY tr>td.mc .message");
     if (content == undefined) {
-        res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
-        return
+        return 'no result'
     }
     for (var i = 0; i < header.length; i++) {
         let timePrecision = $(content[i]).text().match(/[0-9]{4}\/[0-9]{2}\/[0-9]*/).pop()
         let timeSimple = numberToChinses(moment(timePrecision, 'YYYY/MM/DD').fromNow())
         var preJoin = {
             'header': $(header[i]).text(),
+            'title': $(header[i]).text(),
             'content': $(content[i]).text().split(/[0-9]{4}\/[0-9]{2}\/[0-9]*/)[0],
             'tags': [timeSimple, timePrecision],
+            'url': $(header[i]).attr('href'),
+            'date': timePrecision,
+            'datefromnow': timeSimple,
             'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
         }
         tlhcData.push(preJoin);
@@ -255,10 +276,8 @@ exports.search = async function(search, res, page) {
         }
         pageData.push(preJoin);
     }
-    res.render('tlhc-search', {
-        title: 'ㄉㄌㄐㄕ - 搜尋：' + search,
-        tlhc: tlhcData,
-        pages: pageData,
-        search: search
-    })
-};
+    return {
+        "pagination": pageData,
+        "posts": tlhcData
+    }
+}
