@@ -235,11 +235,11 @@ exports.search = async function(search, res, page) {
         return
     }
     for (var i = 0; i < header.length; i++) {
-        let timePrecision = $(content[i]).text().split(/[\.\.\.]+/).pop()
+        let timePrecision = $(content[i]).text().match(/[0-9]{4}\/[0-9]{2}\/[0-9]*/).pop()
         let timeSimple = numberToChinses(moment(timePrecision, 'YYYY/MM/DD').fromNow())
         var preJoin = {
             'header': $(header[i]).text(),
-            'content': $(content[i]).text().split(/[\.\.\.]+/)[0],
+            'content': $(content[i]).text().split(/[0-9]{4}\/[0-9]{2}\/[0-9]*/)[0],
             'tags': [timeSimple, timePrecision],
             'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
         }
