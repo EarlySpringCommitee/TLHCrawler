@@ -17,14 +17,9 @@ const helmet = require('helmet'); // 防範您的應用程式出現已知的 Web
 const moment = require('moment-timezone'); // 時間處理
 const schedule = require('node-schedule'); //計時器
 const fs = require('fs');
-const excerpt = require("html-excerpt"); // 取摘要
-const Promise = require('bluebird');
-Promise.config({
-    cancellation: true
-});
 const jsonfile = require('jsonfile')
 const breakdance = require('breakdance'); //html 2 md
-const bot = config.botToken ? new(require('node-telegram-bot-api'))(config.botToken, { polling: true }) : false; //Telegram bot
+const bot = process.env.TOKEN ? new(require('node-telegram-bot-api'))(process.env.TOKEN, { polling: true }) : false; //Telegram bot
 const botData = jsonfile.readFileSync('./botData.json')
 moment.locale('zh-tw');
 moment.tz.setDefault("Asia/Taipei");
@@ -51,9 +46,9 @@ async function updateTgCh() {
                         breakdance(postData.content).replace(/<br>|\\n\\n/g, '') : ''
                     let msgText = `//學校公告//\n${title}\n${ content}`
                     if (postData.title)
-                        bot.sendMessage(config.botChannelId, msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
+                        bot.sendMessage(process.env.botChannelId, msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
                             for (j = 0; j < postData.files.length; j++)
-                                bot.sendDocument(config.botChannelId,
+                                bot.sendDocument(process.env.botChannelId,
                                     postData.files[j].link, {
                                         parse_mode: "markdown",
                                         reply_to_message_id: msg.message_id,
