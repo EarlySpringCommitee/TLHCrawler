@@ -1,4 +1,6 @@
 const Base64 = require('js-base64').Base64; // Base64
+exports.botToken = "634306109:AAE3ALJftZEwDigw8jU6qvF8peCWSSPICPA"
+exports.botChannelId = -1001396191218
 exports.links = [{
     "name": "學校佈告欄",
     "table": [{

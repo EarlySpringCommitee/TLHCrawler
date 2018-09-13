@@ -5,24 +5,70 @@
   8   8 8   8  Y8P 8     Y88   YP  YP   8  Y88P 8 
 `
     // 載入
-const fs = require('fs'); //檔案系統
 const tlhcRequest = require('./TLHCrequest.js'); //請求模組
 const tlhcScore = require('./TLHCScore.js'); //成績系統模組
 const config = require('./config.js'); //設定檔
-const excerpt = require("html-excerpt"); // 取摘要
-const request = require("request"); // HTTP 客戶端輔助工具
-const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const express = require('express'); // Node.js Web 架構
+const app = express();
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
-const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
 const Base64 = require('js-base64').Base64; // Base64
 const helmet = require('helmet'); // 防範您的應用程式出現已知的 Web 漏洞
 const moment = require('moment-timezone'); // 時間處理
+const schedule = require('node-schedule'); //計時器
+const fs = require('fs');
+const excerpt = require("html-excerpt"); // 取摘要
+const Promise = require('bluebird');
+Promise.config({
+    cancellation: true
+});
+const jsonfile = require('jsonfile')
+const breakdance = require('breakdance'); //html 2 md
+const bot = config.botToken ? new(require('node-telegram-bot-api'))(config.botToken, { polling: true }) : false; //Telegram bot
+const botData = jsonfile.readFileSync('./botData.json')
 moment.locale('zh-tw');
 moment.tz.setDefault("Asia/Taipei");
+schedule.scheduleJob('30 * * * *', updateTgCh());
+// 實現一個等待函數
+const delay = (interval) => {
+    return new Promise((resolve) => {
+        setTimeout(resolve, interval);
+    });
+};
 
-const app = express()
+async function updateTgCh() {
+    if (bot) {
+        let pageData = (await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php"))
+        pageData.posts = pageData.posts.sort(function(a, b) { return b - a });
+        for (i = 0; i < pageData.posts.length; i++) {
+            if (!botData.sentposts[pageData.posts[i].link]) {
+                botData.sentposts[pageData.posts[i].link] = true
+                let postData = await tlhcRequest.getPost(pageData.posts[i].url)
+                if (postData != 404 && postData != "May be a directory") {
+                    let link = pageData.posts[i].link ? `https://tlhc.gnehs.net${pageData.posts[i].link}` : ''
+                    let title = `[${postData.title.trim()}](${link})`
+                    let content = postData.content && postData.content != postData.title ?
+                        breakdance(postData.content).replace(/<br>|\\n\\n/g, '') : ''
+                    let msgText = `//學校公告//\n${title}\n${ content}`
+                    if (postData.title)
+                        bot.sendMessage(config.botChannelId, msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
+                            for (j = 0; j < postData.files.length; j++)
+                                bot.sendDocument(config.botChannelId,
+                                    postData.files[j].link, {
+                                        parse_mode: "markdown",
+                                        reply_to_message_id: msg.message_id,
+                                        caption: `📎${postData.files[j].name}\n🌎 [線上預覽](https://docs.google.com/viewer?url=${encodeURIComponent(postData.files[j].link)})`
+                                    })
+                        })
+                }
+                await delay(10000); //wait 10s
+                jsonfile.writeFileSync('./botData.json', botData)
+            }
+        }
+    }
+}
+updateTgCh()
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug')
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -74,7 +120,7 @@ app.get('/tlhc/pages/:id', (req, res) => {
     let url = Base64.decode(req.params.id)
     if (url.match(/[0-9]*-[0-9]*-[0-9]*-[0-9]*\.php/)) {
         var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
-        tlhcRequest.getPage(originalURL, Base64.decode(req.params.id), res)
+        tlhcRequest.sendPage(originalURL, Base64.decode(req.params.id), res)
     } else {
         res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
     }
@@ -84,7 +130,7 @@ app.get('/tlhc/post/:id', (req, res) => {
     let url = Base64.decode(req.params.id)
     if (url.match(/[0-9]*-[0-9]*-[0-9]*.+\.php/)) {
         var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
-        tlhcRequest.getPost(originalURL, Base64.decode(req.params.id), res)
+        tlhcRequest.sendPost(originalURL, Base64.decode(req.params.id), res)
     } else {
         res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
     }
@@ -94,7 +140,7 @@ app.get('/tlhc/search/', (req, res) => {
     res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
 });
 app.get('/tlhc/search/:id/:page', (req, res) => {
-    tlhcRequest.search(req.params.id, res, req.params.page)
+    tlhcRequest.sendSearch(req.params.id, res, req.params.page)
 });
 //------------成績系統------------
 // 登入

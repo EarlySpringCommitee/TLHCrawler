@@ -41,7 +41,7 @@ function numberToChinses(chnStr) {
     return chnStr.replace(/[0-9]+/g, match => require('number-to-chinese-words').toWords(match))
 }
 // 獲取頁面
-exports.getPage = async function(url, pageID, res) {
+async function sendPage(url, pageID, res) {
     let data = await getPage(url)
     if (data == 404) return res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
     if (data == 'May be an article') return res.render('error', {
@@ -124,7 +124,7 @@ async function getPage(url) { //請求
     }
 }
 // 獲取文章
-exports.getPost = async function(url, pageID, res) {
+async function sendPost(url, pageID, res) {
 
     let data = await getPost(url)
     if (data == 404)
@@ -214,7 +214,7 @@ async function getPost(url) { //請求
 }
 
 // 搜尋
-exports.search = async function(keyword, res, page) {
+async function sendSearch(keyword, res, page) {
     let data = await searchPosts(keyword, page)
     if (data == 'no result') return res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
     res.render('tlhc-search', {
@@ -281,3 +281,13 @@ async function searchPosts(keyword, page) {
         "posts": tlhcData
     }
 }
+
+
+module.exports = {
+    searchPosts,
+    getPost,
+    getPage,
+    sendSearch,
+    sendPost,
+    sendPage
+};
