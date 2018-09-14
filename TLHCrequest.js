@@ -62,10 +62,10 @@ async function getPage(url) { //請求
     });
     //沒拿到資料
     if (!PageData) return '404';
-    //可能是文章模板
-    if (!PageData.match(/資料群組|標題|日期/)) return 'May be an article';
 
     let $ = cheerio.load(PageData);
+    //可能是文章模板
+    if (isaPost($)) return 'May be an article';
 
     let pageTitle = 'ㄉㄌㄐㄕ - ' + $('#Dyn_2_1 .md_middle .mm_01 a.path:nth-child(2)').text()
     let author = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)");
@@ -87,7 +87,7 @@ async function getPage(url) { //請求
     // 獲取文章
     let posts = [];
     for (var i = 0; i < author.length; i++) {
-        let time = numberToChinses(moment($(date[i]).text().trim(), 'YYYY/MM/DD').fromNow())
+        let time = numberToChinses(moment($(date[i]).text().trim() + ' 8', 'YYYY/MM/DD H').fromNow())
         posts.push({
             'author': $(author[i]).text().trim(),
             'datefromnow': time,
@@ -123,6 +123,15 @@ async function getPage(url) { //請求
         "pageTitle": pageTitle
     }
 }
+
+function isaPost($) {
+    let table = $("#Dyn_2_2 .md_middle table tbody tr td:nth-child(1)").length > 0
+    let table2 = $(".baseTB.listTB.list_TABLE.hasBD.hasTH").length > 0
+    if (table && table2)
+        return false
+    else
+        return true
+}
 // 獲取文章
 async function sendPost(url, pageID, res) {
 
@@ -134,7 +143,7 @@ async function sendPost(url, pageID, res) {
             title: '錯誤 - 這不是一個文章頁面',
             message: '也許你該試試下面的連結',
             button: '嘗試使用目錄模板',
-            buttonLink: '/tlhc/pages/' + pageID
+            buttonLink: '/tlhc/pages/' + Base64.encodeURI(pageID)
         })
     res.render('tlhc-view', {
         title: 'ㄉㄌㄐㄕ - ' + data.title,
@@ -156,16 +165,15 @@ async function getPost(url) { //請求
         headers: { 'User-Agent': userAgent }
     });
     //沒資料
-    if (!PostData)
-        return 404
-
-    //可能是目錄
-    if (PostData.match(/資料群組|標題|日期/))
-        return 'May be a directory'
+    if (!PostData) return 404
 
     var $ = cheerio.load(PostData);
+    //可能是目錄
+    if (!isaPost($)) return 'May be a directory'
+
     var title = $('title').text().replace(/- 國立斗六高級家事商業職業學校/, '')
-        //設定內容範圍
+    let content;
+    //設定內容範圍
     var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
     if (ajaxcode && ajaxcode.indexOf('divOs.openSajaxUrl("Dyn_2_2"') > -1) {
         ajaxcode = ajaxcode.split("'")[1];
@@ -181,17 +189,15 @@ async function getPost(url) { //請求
                 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
             }
         });
-
-        var $ = cheerio.load(ajaxData);
-        var content = $("Content").html();
+        content = cheerio.load(ajaxData)("Content").html();
 
     } else {
         if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:empty+td:nth-child(2)").html())
-            var content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:nth-child(2)").html().trim();
+            content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:nth-child(2)").html().trim();
         else if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html())
-            var content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html().trim();
+            content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html().trim();
         else
-            var content = $("#Dyn_2_2 .ptcontent").html().trim();
+            content = $("#Dyn_2_2 .ptcontent").html().trim();
     }
     let files = $('.baseTB a');
     let filesData = [];
@@ -253,7 +259,7 @@ async function searchPosts(keyword, page) {
     }
     for (var i = 0; i < header.length; i++) {
         let timePrecision = $(content[i]).text().match(/[0-9]{4}\/[0-9]{2}\/[0-9]*/).pop()
-        let timeSimple = numberToChinses(moment(timePrecision, 'YYYY/MM/DD').fromNow())
+        let timeSimple = numberToChinses(moment(timePrecision + ' 8', 'YYYY/MM/DD H').fromNow())
         var preJoin = {
             'header': $(header[i]).text(),
             'title': $(header[i]).text(),

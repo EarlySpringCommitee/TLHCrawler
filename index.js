@@ -19,11 +19,11 @@ const schedule = require('node-schedule'); //計時器
 const fs = require('fs');
 const jsonfile = require('jsonfile')
 const breakdance = require('breakdance'); //html 2 md
-const bot = process.env.TOKEN ? new(require('node-telegram-bot-api'))(process.env.TOKEN, { polling: true }) : false; //Telegram bot
-const botData = jsonfile.readFileSync('./botData.json')
+const bot = process.env.TOKEN || process.argv[2] ? new(require('node-telegram-bot-api'))(process.env.TOKEN || process.argv[2], { polling: true }) : false; //Telegram bot
+const botData = jsonfile.readFileSync('./botData.json') || { "sentposts": {} }
 moment.locale('zh-tw');
 moment.tz.setDefault("Asia/Taipei");
-schedule.scheduleJob('30 * * * *', updateTgCh());
+schedule.scheduleJob('30 * * * *', () => updateTgCh());
 // 實現一個等待函數
 const delay = (interval) => {
     return new Promise((resolve) => {
@@ -37,7 +37,6 @@ async function updateTgCh() {
         pageData.posts = pageData.posts.sort(function(a, b) { return b - a });
         for (i = 0; i < pageData.posts.length; i++) {
             if (!botData.sentposts[pageData.posts[i].link]) {
-                botData.sentposts[pageData.posts[i].link] = true
                 let postData = await tlhcRequest.getPost(pageData.posts[i].url)
                 if (postData != 404 && postData != "May be a directory") {
                     let link = pageData.posts[i].link ? `https://tlhc.gnehs.net${pageData.posts[i].link}` : ''
@@ -46,9 +45,10 @@ async function updateTgCh() {
                         breakdance(postData.content).replace(/<br>|\\n\\n/g, '') : ''
                     let msgText = `//學校公告//\n${title}\n${ content}`
                     if (postData.title)
-                        bot.sendMessage(process.env.botChannelId, msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
+                        bot.sendMessage(process.env.botChannelId || process.argv[3], msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
+                            botData.sentposts[pageData.posts[i].link] = msg.message_id
                             for (j = 0; j < postData.files.length; j++)
-                                bot.sendDocument(process.env.botChannelId,
+                                bot.sendDocument(process.env.botChannelId || process.argv[3],
                                     postData.files[j].link, {
                                         parse_mode: "markdown",
                                         reply_to_message_id: msg.message_id,
