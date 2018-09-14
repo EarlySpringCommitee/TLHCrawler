@@ -23,7 +23,7 @@ const bot = process.env.TOKEN || process.argv[2] ? new(require('node-telegram-bo
 const botData = jsonfile.readFileSync('./botData.json') || { "sentposts": {} }
 moment.locale('zh-tw');
 moment.tz.setDefault("Asia/Taipei");
-schedule.scheduleJob('30 * * * *', () => updateTgCh());
+schedule.scheduleJob('0 * * * *', updateTgCh);
 // 實現一個等待函數
 const delay = (interval) => {
     return new Promise((resolve) => {
