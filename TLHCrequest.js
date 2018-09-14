@@ -87,7 +87,7 @@ async function getPage(url) { //請求
     // 獲取文章
     let posts = [];
     for (var i = 0; i < author.length; i++) {
-        let time = numberToChinses(moment($(date[i]).text().trim() + ' 8', 'YYYY/MM/DD H').fromNow())
+        let time = numberToChinses(moment($(date[i]).text().trim(), 'YYYY/MM/DD').fromNow())
         posts.push({
             'author': $(author[i]).text().trim(),
             'datefromnow': time,
@@ -259,7 +259,7 @@ async function searchPosts(keyword, page) {
     }
     for (var i = 0; i < header.length; i++) {
         let timePrecision = $(content[i]).text().match(/[0-9]{4}\/[0-9]{2}\/[0-9]*/).pop()
-        let timeSimple = numberToChinses(moment(timePrecision + ' 8', 'YYYY/MM/DD H').fromNow())
+        let timeSimple = numberToChinses(moment(timePrecision, 'YYYY/MM/DD').fromNow())
         var preJoin = {
             'header': $(header[i]).text(),
             'title': $(header[i]).text(),
