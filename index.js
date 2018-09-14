@@ -43,7 +43,7 @@ async function updateTgCh() {
                     let title = `[${postData.title.trim()}](${link})`
                     let content = postData.content && postData.content != postData.title ?
                         breakdance(postData.content).replace(/<br>|\\n\\n/g, '') : ''
-                    let msgText = `//學校公告//\n${title}\n${ content}`
+                    let msgText = `//學校公告//\n${title}\n\`\`\`${content}\`\`\``
                     if (postData.title)
                         bot.sendMessage(process.env.botChannelId || process.argv[3], msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
                             botData.sentposts[pageData.posts[i].link] = msg.message_id
