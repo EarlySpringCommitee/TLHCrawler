@@ -9,8 +9,9 @@ mixin card(header,description,icon)
 //- 網頁本體
 doctype html
 html
+    -let header = headerTitle ? headerTitle : title
     head
-        title!= title
+        title=header
         meta(charset='utf-8')
         meta(name='viewport', content='width=device-width, initial-scale=1.0')
         link(href='//fonts.googleapis.com/css?family=Roboto+Mono',rel='stylesheet')
@@ -43,10 +44,7 @@ html
                 -else
                     img(src='https://area.sinaapp.com/bingImg/')
             .ts.container
-                if(headerTitle)
-                    h1.ts.center.aligned.header!= headerTitle
-                else
-                    h1.ts.center.aligned.header!= title
+                h1.ts.center.aligned.header(title=header)=header
         include _nav.pug
         block content
         footer.ts.container(style="text-align:center")

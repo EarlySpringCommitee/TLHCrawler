@@ -47,6 +47,11 @@ header {
 
 header .header {
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4) !important;
+    font-size: 3vw !important;
+    display: block !important;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 
@@ -73,18 +78,25 @@ header .header {
 #nav {
     margin-bottom: 30px;
     margin-top: -48px;
-    background-color: rgba(0, 0, 0, .6);
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, .6) 100%);
     overflow: hidden;
     width: 100vw;
 }
 
 #nav a.item {
-    border-radius: 4px;
+    border-radius: 0;
     min-width: 4.29652em;
+    border-bottom: 2px solid transparent;
+    transition: all .2s;
 }
 
 #nav a.item:hover {
-    background: rgba(0, 0, 0, 0.07);
+    background: transparent;
+    border-bottom: 2px solid #FFFFFFB3;
+}
+
+#nav a.item:active {
+    border-bottom: 2px solid #FFF;
 }
 
 #nav .ts.container {
@@ -222,6 +234,20 @@ header .header {
 .ts.cards a.ts.card:hover {
     transition: all .5s;
     transform: scale(1.02) !important;
+}
+
+.ts.cards a.ts.card i {
+    transition: all .2s;
+    overflow: inherit;
+    transform: scale(.8) !important;
+}
+
+.ts.cards a.ts.card:hover i {
+    transform: scale(.9) !important;
+}
+
+.ts.cards a.ts.card:active i {
+    transform: scale(.8) !important;
 }
 
 .ts.cards a.ts.card:active {
@@ -375,10 +401,8 @@ td.score {
 =============*/
 
 .slick-slide .ts.embed {
-    border-radius: 5px;
     overflow: hidden;
-    margin: 10px;
-    box-shadow: 0 5px 10px 1px rgba(167, 167, 167, 0.2)!important;
+    border-radius: 10px;
 }
 
 .slick-slide .ts.header {

@@ -153,7 +153,7 @@ async function sendPost(url, pageID, res) {
         },
         files: data.files,
         originalURL: url,
-        headerTitle: excerpt.text(data.title, 25, '...')
+        headerTitle: data.title
     })
 };
 
