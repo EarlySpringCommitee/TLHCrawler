@@ -157,7 +157,7 @@ app.get('/tlhc/score/logout', (req, res) => {
 //------- 成績
 app.get('/tlhc/score/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getScorePage(req.session.tlhc, res)
+        tlhcScore.getScorePage(req.session.tlhc, res, req)
     } else {
         res.redirect("/tlhc/login/")
     }
@@ -165,7 +165,7 @@ app.get('/tlhc/score/', (req, res) => {
 //------- 出勤
 app.get('/tlhc/attendance/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getAttendance(req.session.tlhc, res)
+        tlhcScore.getAttendance(req.session.tlhc, res, req)
     } else {
         res.redirect("/tlhc/login/")
     }
@@ -173,7 +173,7 @@ app.get('/tlhc/attendance/', (req, res) => {
 //------- 獎懲
 app.get('/tlhc/rewards/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getRewardsPage(req.session.tlhc, res)
+        tlhcScore.getRewardsPage(req.session.tlhc, res, req)
     } else {
         res.redirect("/tlhc/login/")
     }
@@ -181,7 +181,7 @@ app.get('/tlhc/rewards/', (req, res) => {
 //------- 社團及幹部
 app.get('/tlhc/group/', (req, res) => {
     if (req.session.tlhc) {
-        tlhcScore.getGroupPage(req.session.tlhc, res)
+        tlhcScore.getGroupPage(req.session.tlhc, res, req)
     } else {
         res.redirect("/tlhc/login/")
     }
