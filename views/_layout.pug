@@ -37,7 +37,7 @@ html
     body
         if(originalURL)
             script=`console.log('originalURL ${originalURL}')`
-        header.ts.heading.vertically.padded.fluid.slate
+        header.ts.heading.vertically.padded.fluid.slate(class=user?'':'withnav')
             .image
                 -if(system)
                     img(src='https://i.imgur.com/a3cHBwj.jpg')
@@ -45,7 +45,14 @@ html
                     img(src='https://area.sinaapp.com/bingImg/')
             .ts.container
                 h1.ts.center.aligned.header(title=header)=header
-        include _nav.pug
+        if(!user)
+            #nav.ts.basic.fluid.borderless.menu.horizontally.inverted.scrollable
+                .ts.container
+                    a.item(href='/') 首頁
+                    a.item(href='/about/') 關於
+                    a.item(href='/tlhc/search/') 搜尋
+                    .right.fitted.item
+                            a.item(href='/tlhc/login/') 登入
         block content
         footer.ts.container(style="text-align:center")
             .ts.section.divider

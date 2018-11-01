@@ -58,7 +58,7 @@ $(document).ready(function() {
             })
             downloadDiv.append(downloadLink)
         })
-        $('#systemMenu+.ts.container>*:last-child').before(downloadDiv)
+        $('#tlhcMenu+.ts.container>*:last-child').before(downloadDiv)
         downloadDiv.before('<h3 class="ts header">匯出資料<div class="sub header">將表格轉換成 .csv 檔案</div></h3>')
     }
 });

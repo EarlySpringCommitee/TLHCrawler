@@ -39,7 +39,7 @@ kbd {
     Header
 ===========*/
 
-header {
+header.withnav {
     padding: 5em 2em !important;
     padding-bottom: calc(4em + 48px) !important;
     background: #838282 !important;
@@ -47,7 +47,7 @@ header {
 
 header .header {
     text-shadow: 0 2px 20px rgba(0, 0, 0, 0.4) !important;
-    font-size: calc(2vw + 12px) !important;
+    font-size: 2.5em !important;
     display: block !important;
     overflow: hidden;
     white-space: nowrap;
@@ -61,7 +61,7 @@ header .header {
     body {
         font-size: 12px;
     }
-    header {
+    header.withnav {
         padding: 5em .2em !important;
         padding-bottom: calc(4em + 48px) !important;
     }
@@ -108,6 +108,61 @@ header .header {
 
 #nav .input .icon {
     color: white;
+}
+
+
+/*==========
+    #tlhcMenu
+==========*/
+
+#tlhcMenu>.ts.container {
+    text-align: center;
+    border-bottom: 1px solid #E1E1E1;
+    margin-bottom: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#tlhcMenu .item {
+    color: #000;
+    text-align: center;
+    margin: 10px;
+    width: calc(16.66% - 20px);
+    padding-top: 3px;
+    max-width: 100px;
+}
+
+@media (max-width: 768px) {
+    #tlhcMenu .item {
+        width: calc(33.33% - 20px);
+        max-width: 100%;
+    }
+}
+
+#tlhcMenu .item i {
+    background: #5755d9;
+    color: #FFF;
+    margin: 0;
+    font-size: 32px;
+    text-align: center;
+    width: 64px;
+    height: 64px;
+    line-height: 64px;
+    border-radius: 200em;
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.1);
+}
+
+#tlhcMenu .item:hover i {
+    background: #5f5cef;
+}
+
+#tlhcMenu .item:active i {
+    background: #4b49b9;
+}
+
+#tlhcMenu .item .title {
+    text-align: center;
+    padding-top: 5px;
 }
 
 

@@ -5,18 +5,15 @@ mixin selectCard(title,link,icon)
                 i.icon(class=icon)
         .content
             .ts.inverted.center.aligned.header=title
-#systemMenu
+mixin tlhcMenuItem(title,link,icon) 
+    a.item(href=link)
+        i.icon(class=icon)
+        .title=title
+#tlhcMenu
     .ts.container
-        .ts.grid
-            .stretched.column
-                .ts.inverted.massive.header 選單
-            .column
-                a.ts.close.massive.button(href='#') 
-        .ts.doubling.four.cards
-            +selectCard('成績','/tlhc/score/','pie chart') 
-            +selectCard('出勤','/tlhc/attendance/','student') 
-            +selectCard('獎懲','/tlhc/rewards/','legal') 
-            +selectCard('社團及幹部','/tlhc/group/','users') 
-            +selectCard('瀏覽匯出資料','/tlhc/csv/','archive') 
-            //-+selectCard('選課','/tlhc/course/','keyboard') 
-            +selectCard('登出','/tlhc/score/logout/','sign out')
+        +tlhcMenuItem('成績','/tlhc/score/','pie chart') 
+        +tlhcMenuItem('出勤','/tlhc/attendance/','student') 
+        +tlhcMenuItem('獎懲','/tlhc/rewards/','legal') 
+        +tlhcMenuItem('社團及幹部','/tlhc/group/','users') 
+        +tlhcMenuItem('瀏覽匯出資料','/tlhc/csv/','file') 
+        +tlhcMenuItem('登出','/tlhc/score/logout/','sign out')
