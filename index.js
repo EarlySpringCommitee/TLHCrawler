@@ -40,12 +40,11 @@ async function updateTgCh() {
                 let postData = await tlhcRequest.getPost(pageData.posts[i].url)
                 if (postData != 404 && postData != "May be a directory") {
                     let link = pageData.posts[i].link ? `https://tlhc.gnehs.net${pageData.posts[i].link}` : ''
-                    let title = `[${postData.title.trim()}](${link})`
-                    let content = postData.content && postData.content != postData.title ?
-                        breakdance(postData.content).replace(/<br>|\\n\\n/g, '') : ''
-                    let msgText = `//學校公告//\n${title}\n\`\`\`${content}\`\`\``
+                    let title = `<a href="${link}">${postData.title.trim()}</a>`
+                    let content = (postData.content && postData.content != postData.title) ? postData.content.replace(/<br>/g, '').replace(/\\n\\n/g, '\n') : ''
+                    let msgText = `//學校公告//\n${title}\n<code>${content}</code>`
                     if (postData.title)
-                        bot.sendMessage(process.env.botChannelId || process.argv[3], msgText, { parse_mode: "markdown", disable_web_page_preview: true }).then(msg => {
+                        bot.sendMessage(process.env.botChannelId || process.argv[3], msgText, { parse_mode: "HTML", disable_web_page_preview: true }).then(msg => {
                             botData.sentposts[pageData.posts[i].link] = msg.message_id
                             for (j = 0; j < postData.files.length; j++)
                                 bot.sendDocument(process.env.botChannelId || process.argv[3],
