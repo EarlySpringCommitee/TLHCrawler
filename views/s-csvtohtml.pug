@@ -1,22 +1,33 @@
 extends _layout.pug
 append head
     script(src='/js/csvToHtml.js')
+    script(src='https://d3js.org/d3.v3.min.js')
     style #upload{z-index: 5;font-size: 30px;cursor: pointer;position: absolute;height:100%;width:100%;opacity: 0;}#uploader{padding: 0em;position: relative;height: 150px;}#uploader>.header{padding-top: 2em;padding-bottom: .5em;}
     //- hide ads
     style #table.gs.scroll table tr:last-child,#table.gs.scroll table tr:nth-last-child(2){display:none}
     script.
-        document.querySelector('#upload').addEventListener('change',handleFile,false)
+        $(document).ready(function() {document.querySelector('#upload').addEventListener('change',handleFile,false)
         function handleFile(e){
             var reader = new FileReader;
             var file   = e.target.files[0];
             $('#uploader span.description').text(e.target.files[0].name);
             reader.onload = function(e){
+                $("#table>table").html('')
                 var csv = e.target.result;
-                csvToHtml(csv, $('#table'));
+                var parsedCSV = d3.csv.parseRows(csv);
+                var container = d3.select("#table>table")
+                    .append("tbody")
+                        .selectAll("tr")
+                            .data(parsedCSV).enter()
+                            .append("tr")
+                        .selectAll("td")
+                            .data(function(d) { return d; }).enter()
+                            .append("td")
+                            .text(function(d) { return d; });
             }
 
             reader.readAsText(file);
-        }   
+        }})
 block content
     include _systemMenu.pug
     .ts.container
@@ -27,3 +38,4 @@ block content
             span.description 將檔案拖拉至此處或是點擊此處來選取檔案。
         br
         #table.gs.scroll
+            table.ts.definition.compact.striped.celled.table.color.first.line

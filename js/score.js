@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function() {
     $("table").removeAttr('style')
     $("[data-table] tr:last-child").remove()
     $("[data-table=\"rank\"]").removeClass("first line")
@@ -9,7 +9,7 @@ $(document).ready(function () {
     $('td').removeAttr('class')
     $("[data-table=\"total\"] tr:nth-child(1n+2) td:nth-child(1n+2)").addClass("score")
     $("[data-table=\"rank\"] tr td:nth-child(1n+2)").addClass("score")
-    $('[data-table=\"score\"] td,[data-table=\"day\"] td,[data-table=\"rewards\"] td').html(function () {
+    $('[data-table=\"score\"] td,[data-table=\"day\"] td,[data-table=\"rewards\"] td').html(function() {
         var text = $(this).text().trim();
         if (text < 60 && text > 0 || text == '0') {
             // 不及格
@@ -36,27 +36,29 @@ $(document).ready(function () {
         }
         return text
     })
-    $('[data-table=\"rank\"] td,[data-table=\"total\"] td').html(function () {
-        var text = $(this).text().trim();
-        if (text.match(/成績輸入期間|成績處理期間/)) {
-            var text = "";
-        }
-        return text
-    })
-    // 匯出資料
+    $('[data-table=\"rank\"] td,[data-table=\"total\"] td').html(function() {
+            var text = $(this).text().trim();
+            if (text.match(/成績輸入期間|成績處理期間/)) {
+                var text = "";
+            }
+            return text
+        })
+        // 匯出資料
     if ($("table")) {
         var downloadDiv = $("<div />");
-        $("table").each(function (i) {
+        let date = new Date().toLocaleString('zh-TW').replace(/ /, "_")
+        $("table").each(function(i) {
+
             var downloadLink = $("<a />", {
                 href: exportReportTableToCSV($(this), '匯出.csv'),
                 html: "<i class='download icon'></i>匯出" + $(this).attr('data-name'),
-                download: $(this).attr('data-name') + "_ㄉㄌㄐㄕ匯出.csv",
+                download: `${date}_${$(this).attr('data-name')}_ㄉㄌㄐㄕ匯出.csv`,
                 class: "ts primary labeled icon button",
                 style: "margin:0 4px 4px 0"
             })
             downloadDiv.append(downloadLink)
         })
-        $('.ts.stackable.three.cards+br').after(downloadDiv)
+        $('#systemMenu+.ts.container>*:last-child').before(downloadDiv)
         downloadDiv.before('<h3 class="ts header">匯出資料<div class="sub header">將表格轉換成 .csv 檔案</div></h3>')
     }
 });
@@ -65,22 +67,21 @@ $(document).ready(function () {
 function exportReportTableToCSV($table, filename) {
     var dumpd = '';
     var csvData = '';
-
-    $table.each(function () {
+    $table.each(function() {
         var $rows = $(this).find('tr:has(td)');
         var $header = $(this).find('tr:has(th)');
 
         tmpColDelim = String.fromCharCode(11), // vertical tab character
             tmpRowDelim = String.fromCharCode(0), // null character
 
-            colDelim = ';',
-            rowDelim = '\r\n',
+            colDelim = '","',
+            rowDelim = '"\r\n"',
 
-            csv = $header.map(function (i, head) {
+            csv = '"' + $header.map(function(i, head) {
                 var $head = $(head),
                     $cols = $head.find('th');
 
-                return $cols.map(function (j, col) {
+                return $cols.map(function(j, col) {
                     var $col = $(col),
                         text = $col.text();
 
@@ -88,45 +89,42 @@ function exportReportTableToCSV($table, filename) {
                         text = "";
                     if (text == "PROGRAMS")
                         text = "";
-                    console.log(text);
                     return text.replace('"', '""');
 
                 }).get().join(tmpColDelim);
 
             }).get().join(tmpRowDelim)
-                .split(tmpRowDelim).join(rowDelim)
-                .split(tmpColDelim).join(colDelim);
-
-        //csv += '\r\n';
-
-        csv += $rows.map(function (i, row) {
-            var $row = $(row),
-                $cols = $row.find('td');
-
-            return $cols.map(function (j, col) {
-                var $col = $(col);
-                var text;
-                if ($($(col)).find("input:checkbox").length > 0)
-                    text = $($(col)).find("input:checkbox").prop('checked') ? 'Yes' : 'No';
-                else
-                    text = $col.text();
-
-                if (text === "") {
-                    text = "";
-                }
-
-                return text.replace('"', '""');
-
-            }).get().join(tmpColDelim);
-
-        }).get().join(tmpRowDelim)
             .split(tmpRowDelim).join(rowDelim)
-            .split(tmpColDelim).join(colDelim);
-        // 塞廣告
-        csv += '\r\n' + '⭐️ 使用 TLHCrawler 匯出 ⭐️;\r\n網址：tlhc.gnehs.net;'
-        dumpd += csv;
-    });
+            .split(tmpColDelim).join(colDelim) + '"';
 
+        csv += '\r\n';
+
+        csv += '"' + $rows.map(function(i, row) {
+                var $row = $(row),
+                    $cols = $row.find('td');
+
+                return $cols.map(function(j, col) {
+                    var $col = $(col);
+                    var text;
+                    if ($($(col)).find("input:checkbox").length > 0)
+                        text = $($(col)).find("input:checkbox").prop('checked') ? 'Yes' : 'No';
+                    else
+                        text = $col.text();
+
+                    if (text === "") {
+                        text = "";
+                    }
+
+                    return text.replace('"', '""');
+
+                }).get().join(tmpColDelim);
+
+            }).get().join(tmpRowDelim)
+            .split(tmpRowDelim).join(rowDelim)
+            .split(tmpColDelim).join(colDelim) + '"';
+        dumpd += csv + "\n\n";
+        dumpd = dumpd.replace(/""\r\n/, '')
+    })
     var csvData = new Blob(["\uFEFF" + dumpd], { type: 'text/csv;charset=utf-8;' });
     var csvUrl = URL.createObjectURL(csvData);
     return csvUrl
