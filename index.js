@@ -154,6 +154,14 @@ app.get('/tlhc/score/logout', (req, res) => {
     req.session.destroy()
     res.redirect("/tlhc/login/")
 });
+//------- 基本資料
+app.get('/tlhc/info/', (req, res) => {
+    if (req.session.tlhc) {
+        tlhcScore.getInfoPage(req.session.tlhc, res, req)
+    } else {
+        res.redirect("/tlhc/login/")
+    }
+});
 //------- 成績
 app.get('/tlhc/score/', (req, res) => {
     if (req.session.tlhc) {
@@ -186,18 +194,6 @@ app.get('/tlhc/group/', (req, res) => {
         res.redirect("/tlhc/login/")
     }
 });
-//------- 選課
-/*app
-    .get('/tlhc/course/', (req, res) => {
-        if (req.session.course) {
-            tlhcScore.getCoursePage(req.session.course, res)
-        } else {
-            res.redirect("/tlhc/login/")
-        }
-    })
-    .post('/tlhc/course/', (req, res) => {
-        tlhcScore.saveCoursePage(req, res)
-    });*/
 //------- 瀏覽匯出資料
 app.get('/tlhc/csv/', (req, res) => {
     if (req.session.tlhc) {

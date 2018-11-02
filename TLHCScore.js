@@ -71,6 +71,13 @@ exports.getCookie = async function(req, res) {
                 return
             } else {
                 //登入成功
+                let user = {
+                    id: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)").text(),
+                    name: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text(),
+                    class: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2) > font:nth-child(1)").text(),
+                    num: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)").text(),
+                }
+                req.session.user = JSON.stringify(user)
                 res.redirect("/tlhc/score/")
             }
         });
@@ -80,28 +87,87 @@ exports.getCookie = async function(req, res) {
 
 }
 
+// ------------------- 基本資料
+exports.getInfoPage = async function(cookie, res, req) {
+    let data = await doRequest({
+        url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
+        method: "GET",
+        encoding: null,
+        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+    });
+    data = iconv.decode(data, 'Big5')
+    let $ = cheerio.load(data)
+    let listData = [{
+        header: '學號',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '姓名',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '英文名',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(6) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '性別',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '出生年月',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(4) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '身份',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(6) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '家長姓名 / 稱謂',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(2) > font:nth-child(1)`).text().trim() +
+            ' / ' + $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(4) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '聯絡電話',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(6) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '戶籍地址',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(5) > td:nth-child(2) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '通訊地址',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(6) > td:nth-child(2) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '入學年度',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(7) > td:nth-child(2) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '畢業國中',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(7) > td:nth-child(4) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '在學班級',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '在學座號',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)`).text().trim()
+    }, {
+        header: '在學狀態',
+        text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(6) > font:nth-child(1)`).text().trim() || '無資料'
+    }]
+    res.render('s-list', {
+        title: 'ㄉㄌㄐㄕ - 基本資料',
+        user: JSON.parse(req.session.user),
+        list: listData,
+        system: true
+    })
+}
+
 // ------------------- 成績
 // 取得總成績選擇頁面
 exports.getScorePage = async function(cookie, res, req) {
 
-    let ScoreSelectRequest = await doRequest({
+    let ScoreSelect = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCO.asp",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     });
-    var ScoreSelectPage = iconv.decode(ScoreSelectRequest, 'Big5')
-    if (ScoreSelectPage == '無權使用 請登入') {
+    ScoreSelect = iconv.decode(ScoreSelect, 'Big5')
+    if (ScoreSelect == '無權使用 請登入') {
         res.redirect("/tlhc/login/")
         return
     }
-    var $ = cheerio.load(ScoreSelectPage)
-    var user = {
-        id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-        name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-        class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-        num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-    }
+    var $ = cheerio.load(ScoreSelect)
     let tables = [];
 
     //取得本學期成績
@@ -135,7 +201,7 @@ exports.getScorePage = async function(cookie, res, req) {
     */
     res.render('s-multi-table', {
         title: 'ㄉㄌㄐㄕ - 成績',
-        user: user,
+        user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
         system: true
     })
@@ -198,12 +264,6 @@ exports.getAttendance = (cookie, res, req) => {
             return
         }
         var $ = cheerio.load(b)
-        var user = {
-            id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-            name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-            class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-            num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-        }
         var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
         var tables = [{
             'title': '出勤紀錄',
@@ -212,7 +272,7 @@ exports.getAttendance = (cookie, res, req) => {
         }]
         res.render('s-multi-table', {
             title: 'ㄉㄌㄐㄕ - 出勤',
-            user: user,
+            user: JSON.parse(req.session.user),
             tables: tables,
             system: true
         })
@@ -222,30 +282,24 @@ exports.getAttendance = (cookie, res, req) => {
 // ------------------- 取得獎懲
 // 取得獎懲選擇頁面
 exports.getRewardsPage = async function(cookie, res, req) {
-    let RewardsSelectRequest = await doRequest({
+    let RewardsSelect = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHK.asp",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     });
-    var RewardsSelectPage = iconv.decode(RewardsSelectRequest, 'Big5')
-    if (RewardsSelectPage == '無權使用 請登入') {
+    RewardsSelect = iconv.decode(RewardsSelect, 'Big5')
+    if (RewardsSelect == '無權使用 請登入') {
         res.redirect("/tlhc/login/")
         return
     }
-    var $ = cheerio.load(RewardsSelectPage)
-    var user = {
-        id: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(2)>font:nth-child(1)").text(),
-        name: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(4)>font:nth-child(1)").text(),
-        class: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(6)>font:nth-child(1)").text(),
-        num: $("body>center:nth-child(1)>table:nth-child(2) form:nth-child(1) table:nth-child(1) td:nth-child(8)>font:nth-child(1)").text(),
-    }
+    var $ = cheerio.load(RewardsSelect)
 
     // 拿資料囉
     let tables = [];
     var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
     for (var i = 0; i < link.length; i++) {
-        var getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[i]).attr('href')
+        let getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[i]).attr('href')
         let RewardsRequest = await doRequest({
             url: getURL,
             method: "GET",
@@ -253,19 +307,19 @@ exports.getRewardsPage = async function(cookie, res, req) {
             headers: { 'Cookie': cookie, 'User-Agent': userAgent }
         });
         let data = iconv.decode(RewardsRequest, 'Big5')
-        let table = getRewards(data)
+        let table = parseRewards(data)
         tables.push(table);
     }
 
     res.render('s-multi-table', {
         title: 'ㄉㄌㄐㄕ - 獎懲紀錄',
-        user: user,
+        user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
         system: true
     })
 }
 
-function getRewards(data) {
+function parseRewards(data) {
     var $ = cheerio.load(data)
     var rewardsTable = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
     var rewardsTitle = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody a font").text()
@@ -291,10 +345,6 @@ exports.getGroupPage = async function(cookie, res, req) {
         return
     }
     var $ = cheerio.load(GroupPage)
-    var user = {
-        name: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(6) > font:nth-child(1)").text(),
-        num: $("body > center:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text()
-    }
 
     var tables = [{
         'title': '社團及幹部紀錄',
@@ -304,7 +354,7 @@ exports.getGroupPage = async function(cookie, res, req) {
 
     res.render('s-multi-table', {
         title: 'ㄉㄌㄐㄕ - 社團及幹部',
-        user: user,
+        user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
         system: true
     })

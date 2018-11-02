@@ -1,0 +1,12 @@
+extends _layout.pug
+block content
+    include _systemMenu.pug
+    .ts.container
+        .ts.list
+            each item in list
+                .item
+                    .header=item.header
+                    .text=item.text
+            else
+                .item 未找到符合條件的資料
+        br

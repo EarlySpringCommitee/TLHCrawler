@@ -1,16 +1,10 @@
-mixin selectCard(title,link,icon) 
-    a.ts.card(href=link)
-        .secondary.very.padded.extra.content
-            .ts.icon.inverted.header
-                i.icon(class=icon)
-        .content
-            .ts.inverted.center.aligned.header=title
 mixin tlhcMenuItem(title,link,icon) 
     a.item(href=link)
         i.icon(class=icon)
         .title=title
 #tlhcMenu
     .ts.container
+        +tlhcMenuItem('基本資料','/tlhc/info/','user') 
         +tlhcMenuItem('成績','/tlhc/score/','pie chart') 
         +tlhcMenuItem('出勤','/tlhc/attendance/','calendar outline') 
         +tlhcMenuItem('獎懲','/tlhc/rewards/','legal') 
