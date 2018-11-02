@@ -62,13 +62,8 @@ exports.getCookie = async function(req, res) {
             if (e || !b) { return }
             var $ = cheerio.load(b);
             if (b.match('抱歉,您無權限使用本程式!')) {
-                res.render('s-login', {
-                    title: 'ㄉㄌㄐㄕ - 登入',
-                    post: '/tlhc/login/',
-                    message: '請檢查輸入的學號及身份證字號是否正確',
-                    system: true
-                })
-                return
+                return res.json(false)
+
             } else {
                 //登入成功
                 let user = {
@@ -78,7 +73,7 @@ exports.getCookie = async function(req, res) {
                     num: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)").text(),
                 }
                 req.session.user = JSON.stringify(user)
-                res.redirect("/tlhc/score/")
+                return res.json(true)
             }
         });
         //一開始用帳密跟學校換餅乾
@@ -171,15 +166,17 @@ exports.getScorePage = async function(cookie, res, req) {
     let tables = [];
 
     //取得本學期成績
-    let LatestScoreRequest = await doRequest({
+    let LatestScore = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
         method: "GET",
         encoding: null,
         headers: { 'Cookie': cookie, 'User-Agent': userAgent }
     });
-    let LatestScore = iconv.decode(LatestScoreRequest, 'Big5')
-    let LatestScoreData = getLatestScore(LatestScore)
-    tables.push(LatestScoreData);
+    tables.push(
+        getLatestScore(
+            iconv.decode(LatestScore, 'Big5')
+        )
+    );
     // 取得學期總成績
     var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
     for (var i = 0; i < link.length; i++) {
@@ -191,9 +188,11 @@ exports.getScorePage = async function(cookie, res, req) {
             encoding: null,
             headers: { 'Cookie': cookie, 'User-Agent': userAgent }
         });
-        let data = iconv.decode(ScoreSemesterRequest, 'Big5')
-        let table = getSemesterScore(data)
-        tables.push(table);
+        tables.push(
+            getSemesterScore(
+                iconv.decode(ScoreSemesterRequest, 'Big5')
+            )
+        );
     }
     /*
         tables.reduce((a, b) => a.concat(b), [])

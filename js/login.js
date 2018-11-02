@@ -4,11 +4,35 @@ function check() {
     //獲取 form 表單輸入:使用者名稱,密碼,是否保存密碼
     var username = document.getElementById("userID").value.trim();
     var password = document.getElementById("userPASS").value.trim();
-    var isRmbPwd = document.getElementById("isRmbPwd").checked;
 
     //判斷使用者名稱,密碼是否為空(全空格也算空)
     if (username.length != 0 && password.length == 10) {
-        return true;
+        $.ajax({
+                type: "POST",
+                url: '.',
+                data: { userID: username, userPASS: password }
+            })
+            .done(function(data) {
+                if (data) {
+                    $("#nav").remove()
+                    $("header").removeClass('withnav').attr('style', 'margin-bottom: 30px')
+                    setTimeout(() => location.href = '../score/', 250)
+                } else
+                    swal({
+                        title: "喔不",
+                        text: "發生了未知的錯誤",
+                        icon: "error",
+                    });
+            })
+            .fail(function() {
+                swal({
+                    title: "喔不",
+                    text: "發生了未知的錯誤",
+                    icon: "error",
+                });
+            })
+
+        return false;
     }
     //非法輸入提示
     else {
