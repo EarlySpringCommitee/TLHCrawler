@@ -2,9 +2,10 @@
 //  基本設定
 //
 const request = require("request"); // HTTP 客戶端輔助工具
+const htmlDecode = require('js-htmlencode').htmlDecode; //解碼
 function doRequest(url) {
-    return new Promise(function(resolve, reject) {
-        request(url, function(error, res, body) {
+    return new Promise(function (resolve, reject) {
+        request(url, function (error, res, body) {
             if (!error && res.statusCode == 200) {
                 resolve(body);
             } else {
@@ -43,14 +44,22 @@ function numberToChinses(chnStr) {
 // 獲取頁面
 async function sendPage(url, pageID, res) {
     let data = await getPage(url)
-    if (data == 404) return res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+    if (data == 404) return res.status(404).render('error', {
+        title: '錯誤 - 404',
+        message: '看來我們找不到您要的東西'
+    })
     if (data == 'May be an article') return res.render('error', {
         title: '錯誤 - 這不是一個目錄頁面',
         message: '也許你該試試下面的連結',
         button: '嘗試使用文章模板',
         buttonLink: '/tlhc/post/' + Base64.encodeURI(pageID)
     })
-    res.render('tlhc', { title: data.pageTitle, tlhc: data.posts, pages: data.pagination, originalURL: url })
+    res.render('tlhc', {
+        title: data.pageTitle,
+        tlhc: data.posts,
+        pages: data.pagination,
+        originalURL: url
+    })
 
 };
 
@@ -58,7 +67,9 @@ async function getPage(url) { //請求
     let PageData = await doRequest({
         url: url,
         method: "GET",
-        headers: { 'User-Agent': userAgent }
+        headers: {
+            'User-Agent': userAgent
+        }
     });
     //沒拿到資料
     if (!PageData) return '404';
@@ -81,6 +92,7 @@ async function getPage(url) { //請求
             'text': $(pages[i]).text(),
             'title': $(pages[i]).text(),
             'link': Base64.encodeURI($(pages[i]).attr('href').split("/")[4]),
+            'id': Base64.encodeURI($(pages[i]).attr('href').split("/")[4]),
             'url': $(pages[i]).attr('href'),
         });
     }
@@ -93,8 +105,9 @@ async function getPage(url) { //請求
             'datefromnow': time,
             'date': $(date[i]).text().trim(),
             'link': '/tlhc/post/' + Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
+            'id': Base64.encodeURI($(link[i]).attr('href').split("/files/")[1]),
             'tags': [time, $(author[i]).text().trim(), $(date[i]).text().trim()],
-            'title': $(title[i]).text().replace(/\n/g, ''),
+            'title': $(title[i]).text().replace(/\n|\t/g, ''),
             'url': $(link[i]).attr('href'),
         });
     }
@@ -137,7 +150,10 @@ async function sendPost(url, pageID, res) {
 
     let data = await getPost(url)
     if (data == 404)
-        return res.status(404).render('error', { title: '錯誤 - 404', message: '看來我們找不到您要的東西' })
+        return res.status(404).render('error', {
+            title: '錯誤 - 404',
+            message: '看來我們找不到您要的東西'
+        })
     if (data == 'May be a directory')
         return res.render('error', {
             title: '錯誤 - 這不是一個文章頁面',
@@ -162,7 +178,9 @@ async function getPost(url) { //請求
     let PostData = await doRequest({
         url: url,
         method: "GET",
-        headers: { 'User-Agent': userAgent }
+        headers: {
+            'User-Agent': userAgent
+        }
     });
     //沒資料
     if (!PostData) return 404
@@ -171,7 +189,7 @@ async function getPost(url) { //請求
     //可能是目錄
     if (!isaPost($)) return 'May be a directory'
 
-    var title = $('title').text().replace(/- 國立斗六高級家事商業職業學校/, '')
+    var title = $('title').text().replace(/- 國立斗六高級家事商業職業學校/, '').trim()
     let content;
     //設定內容範圍
     var ajaxcode = $('#Dyn_2_2 script[language="javascript"]').html()
@@ -199,6 +217,7 @@ async function getPost(url) { //請求
         else
             content = $("#Dyn_2_2 .ptcontent").html().trim();
     }
+    content = parseHTML(content)
     let files = $('.baseTB a');
     let filesData = [];
     for (var i = 0; i < files.length; i++) {
@@ -219,10 +238,22 @@ async function getPost(url) { //請求
     }
 }
 
+function parseHTML(content) {
+    content = cheerio.load(content)('*')
+        .removeAttr('dir')
+        .removeAttr('style')
+        .removeAttr('id')
+        .html()
+        .replace("<head></head><body>", '')
+        .replace("</body>", '')
+    return htmlDecode(content)
+}
 // 搜尋
 async function sendSearch(keyword, res, page) {
     let data = await searchPosts(keyword, page)
-    if (data == 'no result') return res.render('tlhc-search', { title: 'ㄉㄌㄐㄕ - 搜尋' })
+    if (data == 'no result') return res.render('tlhc-search', {
+        title: 'ㄉㄌㄐㄕ - 搜尋'
+    })
     res.render('tlhc-search', {
         title: 'ㄉㄌㄐㄕ - 搜尋：' + keyword,
         tlhc: data.posts,
@@ -240,13 +271,17 @@ async function searchPosts(keyword, page) {
                 SchKey: keyword,
                 search: "search"
             },
-            headers: { 'User-Agent': userAgent }
+            headers: {
+                'User-Agent': userAgent
+            }
         });
     } else {
         SearchData = await doRequest({
             url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(keyword) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
             method: "GET",
-            headers: { 'User-Agent': userAgent }
+            headers: {
+                'User-Agent': userAgent
+            }
         });
     }
     var $ = cheerio.load(SearchData);
@@ -261,14 +296,15 @@ async function searchPosts(keyword, page) {
         let timePrecision = $(content[i]).text().match(/[0-9]{4}\/[0-9]{2}\/[0-9]*/).pop()
         let timeSimple = numberToChinses(moment(timePrecision, 'YYYY/MM/DD').fromNow())
         var preJoin = {
-            'header': $(header[i]).text(),
-            'title': $(header[i]).text(),
+            'header': $(header[i]).text().trim(),
+            'title': $(header[i]).text().trim(),
             'content': $(content[i]).text().split(/[0-9]{4}\/[0-9]{2}\/[0-9]*/)[0],
             'tags': [timeSimple, timePrecision],
             'url': $(header[i]).attr('href'),
             'date': timePrecision,
             'datefromnow': timeSimple,
-            'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4])
+            'link': '/tlhc/post/' + Base64.encodeURI($(header[i]).attr('href').split("/")[4]),
+            'id': Base64.encodeURI($(header[i]).attr('href').split("/")[4])
         }
         tlhcData.push(preJoin);
     }

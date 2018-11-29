@@ -61,10 +61,12 @@ header .header {
     body {
         font-size: 12px;
     }
+
     header.withnav {
         padding: 5em .2em !important;
         padding-bottom: calc(4em + 48px) !important;
     }
+
     header .header {
         font-size: 2em !important;
     }
@@ -270,8 +272,7 @@ header .header {
     top: 0;
     z-index: 1000;
     padding: 1.2em 1em;
-    border-bottom: 1px solid #F0F0F0;
-    box-shadow: 0px 9px 10px -6px #eaeaea;
+    border-bottom: 2px solid #F0F0F0;
 }
 
 .ts.items .item {

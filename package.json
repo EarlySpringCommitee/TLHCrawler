@@ -29,6 +29,7 @@
         "html-excerpt": "^0.1.0",
         "iconv-lite": "^0.4.24",
         "js-base64": "^2.4.9",
+        "js-htmlencode": "^0.3.0",
         "jsonfile": "^4.0.0",
         "moment": "^2.22.2",
         "moment-timezone": "^0.5.21",

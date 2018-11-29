@@ -49,7 +49,7 @@ async function updateTgCh() {
                     let link = pageData.posts[i].link ? `https://tlhc.gnehs.net${pageData.posts[i].link}` : ''
                     let title = `<a href="${link}">${postData.title.trim()}</a>`
                     let content = (postData.content && postData.content != postData.title) ? postData.content.replace(/<br>/g, '').replace(/\\n\\n/g, '\n') : ''
-                    let msgText = `//學校公告//\n${title}\n<code>${content}</code>`
+                    let msgText = `${title}\n<code>${content}</code>`
                     if (postData.title) {
                         let msg;
                         try {
@@ -58,7 +58,7 @@ async function updateTgCh() {
                                 disable_web_page_preview: true
                             })
                         } catch (e) {
-                            msg = await bot.sendMessage(process.env.botChannelId || process.argv[3], `//學校公告//\n${title}\n本公告含有無法解析內容，請點擊上方連結預覽`, {
+                            msg = await bot.sendMessage(process.env.botChannelId || process.argv[3], `${title}\n本公告含有無法解析內容，請點擊上方連結預覽`, {
                                 parse_mode: "HTML",
                                 disable_web_page_preview: true
                             })
@@ -172,6 +172,37 @@ app.get('/tlhc/search/', (req, res) => {
 });
 app.get('/tlhc/search/:id/:page', (req, res) => {
     tlhcRequest.sendSearch(req.params.id, res, req.params.page)
+});
+//------------API-------------
+
+app.get('/api', (req, res) => {
+    res.render('api', {
+        title: 'ㄉㄌㄐㄕ - API'
+    })
+});
+app.get('/api/page', async (req, res) => {
+    res.json(await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php"))
+});
+app.get('/api/page/:id', async (req, res) => {
+    let url = Base64.decode(req.params.id)
+    if (url.match(/[0-9]*-[0-9]*-[0-9]*-[0-9]*\.php/)) {
+        res.json(await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/" + url))
+    } else {
+        res.status(404).send('error')
+    }
+});
+
+app.get('/api/post/:id', async (req, res) => {
+    let url = Base64.decode(req.params.id)
+    if (url.match(/[0-9]*-[0-9]*-[0-9]*.+\.php/)) {
+        res.json(await tlhcRequest.getPost("http://web.tlhc.ylc.edu.tw/files/" + url))
+    } else {
+        res.status(404).send('error')
+    }
+});
+app.get('/api/search/', async (req, res) => {
+    let page = req.query.page ? req.query.page : 1
+    res.json(await tlhcRequest.searchPosts(req.query.keyword, page))
 });
 //------------成績系統------------
 // 登入
