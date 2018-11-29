@@ -72,6 +72,11 @@ exports.slide = [{
     "img": "https://i.imgur.com/8NPV00a.png",
     "link": "#"
 }, {
+    "header": "API",
+    "description": "歡迎使用",
+    "img": "https://i.imgur.com/pJnIOpJ.jpg",
+    "link": "/api"
+}, {
     "header": "成績系統",
     "description": "可於同一頁面查看所有學期成績",
     "img": "https://i.imgur.com/F9mdIVH.png",
@@ -81,11 +86,6 @@ exports.slide = [{
     "description": "現在已可查詢社團及幹部紀錄",
     "img": "https://i.imgur.com/sUNpC7q.png",
     "link": "/tlhc/group/"
-}, {
-    "header": "手機版",
-    "description": "使用任何裝置皆可瀏覽",
-    "img": "https://i.imgur.com/c4NQVRm.png",
-    "link": "#"
 }, {
     "header": "加入橫幅",
     "description": "免費在此加入您的橫幅",

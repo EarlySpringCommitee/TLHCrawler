@@ -9,6 +9,7 @@ const tlhcRequest = require('./TLHCrequest.js'); //請求模組
 const tlhcScore = require('./TLHCScore.js'); //成績系統模組
 const config = require('./config.js'); //設定檔
 const express = require('express'); // Node.js Web 架構
+const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
@@ -180,10 +181,10 @@ app.get('/api', (req, res) => {
         title: 'ㄉㄌㄐㄕ - API'
     })
 });
-app.get('/api/page', async (req, res) => {
+app.get('/api/page', cors(), async (req, res) => {
     res.json(await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php"))
 });
-app.get('/api/page/:id', async (req, res) => {
+app.get('/api/page/:id', cors(), async (req, res) => {
     let url = Base64.decode(req.params.id)
     if (url.match(/[0-9]*-[0-9]*-[0-9]*-[0-9]*\.php/)) {
         res.json(await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/" + url))
@@ -192,7 +193,7 @@ app.get('/api/page/:id', async (req, res) => {
     }
 });
 
-app.get('/api/post/:id', async (req, res) => {
+app.get('/api/post/:id', cors(), async (req, res) => {
     let url = Base64.decode(req.params.id)
     if (url.match(/[0-9]*-[0-9]*-[0-9]*.+\.php/)) {
         res.json(await tlhcRequest.getPost("http://web.tlhc.ylc.edu.tw/files/" + url))
@@ -200,7 +201,7 @@ app.get('/api/post/:id', async (req, res) => {
         res.status(404).send('error')
     }
 });
-app.get('/api/search/', async (req, res) => {
+app.get('/api/search/', cors(), async (req, res) => {
     let page = req.query.page ? req.query.page : 1
     res.json(await tlhcRequest.searchPosts(req.query.keyword, page))
 });
