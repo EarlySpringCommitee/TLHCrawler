@@ -48,7 +48,7 @@ html
                 .info=`${user.id} (${user.class})`
             .mdui-list
                 mixin link(name,link,icon,active)
-                    a.mdui-list-item.mdui-ripple(class=active?"mdui-color-theme-50 mdui-list-item-active":"",href=active?'#':link,data-navigo)&attributes(attributes)
+                    a.mdui-list-item(class=active?"mdui-color-theme-50 mdui-list-item-active":"",href=active?'#':link,data-navigo)&attributes(attributes)
                         i.mdui-list-item-icon.mdui-icon.material-icons=icon
                         .mdui-list-item-content=name
                 +link("成績","/tlhc/score/","format_list_numbered",page=="score")
@@ -57,7 +57,7 @@ html
                 +link("獎懲","/tlhc/rewards/","school",page=="rewards")
                 +link("社團及幹部","/tlhc/group/","group",page=="group")
                 +link("瀏覽匯出資料","/tlhc/csv/","insert_drive_file",page=="csv")
-                +link("登出","/tlhc/score/logout/","person")
+                +link("登出","/tlhc/score/logout/","arrow_forward")
         #app.mdui-container
             block content
         footer.ts.container(style="text-align:center")

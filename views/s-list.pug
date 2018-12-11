@@ -2,9 +2,9 @@ extends _s-layout.pug
 block content
     ul.mdui-list
         each item in list
-            li.mdui-list-item.mdui-ripple
+            li.mdui-list-item
                 .mdui-list-item-content
                     .mdui-list-item-title.mdui-list-item-one-line=item.header
                     .mdui-list-item-text=item.text
         else
-            li.mdui-list-item.mdui-ripple 未找到符合條件的資料
+            li.mdui-list-item 未找到符合條件的資料
