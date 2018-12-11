@@ -17,7 +17,7 @@ function doRequest(url) {
 }
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const iconv = require('iconv-lite'); // ㄐㄅ的編碼處理
-const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0';
+const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36';
 
 // ------------------- 登入
 // 登入帳號並取得 Cookie
@@ -26,7 +26,6 @@ exports.getCookie = async function (req, res) {
     var userPASS = req.body['userPASS']
     req.session.userID = userID
     req.session.userPASS = userPASS
-
     //- 登入成績系統
     request.post({
         url: "http://register.tlhc.ylc.edu.tw/hcode/login.asp",
@@ -38,7 +37,7 @@ exports.getCookie = async function (req, res) {
             Chk: 'Y'
         },
         headers: {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
+            'User-Agent': userAgent
         }
     }, function (e, r, b) {
         // 錯誤代碼 
@@ -52,38 +51,34 @@ exports.getCookie = async function (req, res) {
             method: "GET",
             encoding: null,
             headers: {
-                //some header
                 'Cookie': r.headers['set-cookie'],
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
-                //some header
+                'User-Agent': userAgent
             }
         }, (e, r, b) => {
             /* e: 錯誤代碼 */
             /* b: 傳回的資料內容 */
             var b = iconv.decode(b, 'Big5')
-            if (e || !b) {
-                return
+            if (e || !b || b.match('抱歉,您無權限使用本程式!')) {
+                return res.json(false)
             }
             var $ = cheerio.load(b);
-            if (b.match('抱歉,您無權限使用本程式!')) {
-                return res.json(false)
-
-            } else {
-                //登入成功
-                let user = {
-                    id: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)").text().trim(),
-                    name: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text().trim(),
-                    class: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2) > font:nth-child(1)").text().trim(),
-                    num: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)").text().trim(),
-                }
-                req.session.user = JSON.stringify(user)
-                return res.json(true)
+            //登入成功
+            let user = {
+                /* 學號 */
+                id: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)").text().trim(),
+                /* 姓名 */
+                name: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text().trim(),
+                /* 班級 */
+                class: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2) > font:nth-child(1)").text().trim(),
+                /* 座號 */
+                num: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)").text().trim(),
             }
+            req.session.user = JSON.stringify(user)
+            return res.json(true)
         });
         //一開始用帳密跟學校換餅乾
         //然後餅乾存在 session 裡面
     });
-
 }
 
 // ------------------- 基本資料

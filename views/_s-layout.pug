@@ -39,7 +39,8 @@ html
             .mdui-toolbar.mdui-color-theme
                 a.mdui-btn.mdui-btn-icon(mdui-drawer="{target: '#drawer', swipe: true}")
                     i.mdui-icon.material-icons menu
-                .mdui-typo-title=header
+                //-.mdui-typo-headline=header.split(" - ")[0]
+                .mdui-typo-title=header.split(" - ")[1]
                 .mdui-toolbar-spacer
         #drawer.mdui-drawer.mdui-appbar-with-toolbar
             .std-info
