@@ -10,13 +10,14 @@ function check() {
         $.ajax({
                 type: "POST",
                 url: '.',
-                data: { userID: username, userPASS: password }
+                data: {
+                    userID: username,
+                    userPASS: password
+                }
             })
-            .done(function(data) {
+            .done(function (data) {
                 if (data) {
-                    $("#nav").remove()
-                    $("header").removeClass('withnav').attr('style', 'margin-bottom: 30px')
-                    setTimeout(() => location.href = '../score/', 250)
+                    location.href = '../score/'
                 } else
                     swal({
                         title: "喔不",
@@ -24,7 +25,7 @@ function check() {
                         icon: "error",
                     });
             })
-            .fail(function() {
+            .fail(function () {
                 swal({
                     title: "喔不",
                     text: "發生了未知的錯誤",

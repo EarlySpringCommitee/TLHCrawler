@@ -1,0 +1,41 @@
+#drawer+#app {
+    margin-top: 88px;
+}
+
+#drawer>.std-info {
+    background-color: #485a63;
+    background-image: url(https://i.imgur.com/a3cHBwj.jpg);
+    background-size: cover;
+    padding: 64px 16px 16px 16px;
+    color: #FFF;
+}
+
+#drawer>.std-info>.name {
+    font-size: 1.2em;
+}
+
+.mdui-btn:not(.mdui-btn-icon) {
+    border-radius: 8px;
+}
+
+.mdui-list-item {
+    border-radius: 10px
+}
+
+.mdui-list-item:active {
+    background-color: rgba(0, 0, 0, 0.2)
+}
+
+/* 側邊欄 */
+@media screen and (min-width: 1024px) {
+
+    #drawer .mdui-list-item {
+        border-radius: 0 500em 500em 0
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    #drawer .mdui-list-item {
+        border-radius: 0
+    }
+}

@@ -1,22 +1,12 @@
-extends _layout.pug
+extends _s-layout.pug
 append head
     script(src='/js/score.js')
 block content
-    include _systemMenu.pug
     .ts.container
-        -if(user)
-            .ts.stackable.three.cards
-                -if(user.id)
-                    +card('學號',user.id,'qrcode')
-                -if(user.name)
-                    +card('姓名',user.name,'user')
-                -if(user.class)
-                    +card('班級',user.class,'student')
-        .ts.message
-            .header 小提示
-            p 若無法看見完整內容可利用 
-                kbd Shift+滾輪
-                |  或是手指來移動
+        .mdui-chip
+            .mdui-chip-icon 
+                i.mdui-icon.material-icons info
+            .mdui-chip-title 表格是可以左右捲動的！
         br
         each item in tables
             h3.ts.header=item.title
@@ -25,4 +15,6 @@ block content
                     !=item.table
         else
             .ts.header 未找到符合條件的資料
+        //-匯出按鈕
+        #export 
         br

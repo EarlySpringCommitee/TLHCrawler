@@ -1,4 +1,4 @@
-extends _layout.pug
+extends _s-layout.pug
 append head
     script(src='/js/csvToHtml.js')
     script(src='https://d3js.org/d3.v3.min.js')
@@ -29,7 +29,6 @@ append head
             reader.readAsText(file);
         }})
 block content
-    include _systemMenu.pug
     .ts.container
         #uploader.ts.basic.dashed.clickable.slate.no.earlyspring
             input#upload(type='file',accept='.csv')

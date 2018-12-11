@@ -3,8 +3,8 @@
 //
 const request = require("request"); // HTTP 客戶端輔助工具
 function doRequest(url) {
-    return new Promise(function(resolve, reject) {
-        request(url, function(error, res, body) {
+    return new Promise(function (resolve, reject) {
+        request(url, function (error, res, body) {
             if (!error && res.statusCode == 200)
                 resolve(body);
             else if (!error && res.statusCode == 302)
@@ -21,7 +21,7 @@ const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/
 
 // ------------------- 登入
 // 登入帳號並取得 Cookie
-exports.getCookie = async function(req, res) {
+exports.getCookie = async function (req, res) {
     var userID = req.body['userID']
     var userPASS = req.body['userPASS']
     req.session.userID = userID
@@ -40,10 +40,12 @@ exports.getCookie = async function(req, res) {
         headers: {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:60.0) Gecko/20100101 CuteDick/60.0',
         }
-    }, function(e, r, b) {
+    }, function (e, r, b) {
         // 錯誤代碼 
         // 傳回的資料內容 
-        if (e || !b) { return }
+        if (e || !b) {
+            return
+        }
         req.session.tlhc = r.headers['set-cookie'];
         request({
             url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
@@ -59,7 +61,9 @@ exports.getCookie = async function(req, res) {
             /* e: 錯誤代碼 */
             /* b: 傳回的資料內容 */
             var b = iconv.decode(b, 'Big5')
-            if (e || !b) { return }
+            if (e || !b) {
+                return
+            }
             var $ = cheerio.load(b);
             if (b.match('抱歉,您無權限使用本程式!')) {
                 return res.json(false)
@@ -67,10 +71,10 @@ exports.getCookie = async function(req, res) {
             } else {
                 //登入成功
                 let user = {
-                    id: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)").text(),
-                    name: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text(),
-                    class: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2) > font:nth-child(1)").text(),
-                    num: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)").text(),
+                    id: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)").text().trim(),
+                    name: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)").text().trim(),
+                    class: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(2) > font:nth-child(1)").text().trim(),
+                    num: $(".FormStyle > tbody:nth-child(1) > tr:nth-child(8) > td:nth-child(4) > font:nth-child(1)").text().trim(),
                 }
                 req.session.user = JSON.stringify(user)
                 return res.json(true)
@@ -83,12 +87,15 @@ exports.getCookie = async function(req, res) {
 }
 
 // ------------------- 基本資料
-exports.getInfoPage = async function(cookie, res, req) {
+exports.getInfoPage = async function (cookie, res, req) {
     let data = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
         method: "GET",
         encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': userAgent
+        }
     });
     data = iconv.decode(data, 'Big5')
     let $ = cheerio.load(data)
@@ -111,9 +118,9 @@ exports.getInfoPage = async function(cookie, res, req) {
         header: '身份',
         text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(6) > font:nth-child(1)`).text().trim()
     }, {
-        header: '家長姓名 / 稱謂',
+        header: '家長姓名',
         text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(2) > font:nth-child(1)`).text().trim() +
-            ' / ' + $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(4) > font:nth-child(1)`).text().trim()
+            ' (' + $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(4) > font:nth-child(1)`).text().trim() + ")"
     }, {
         header: '聯絡電話',
         text: $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(4) > td:nth-child(6) > font:nth-child(1)`).text().trim()
@@ -143,19 +150,22 @@ exports.getInfoPage = async function(cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 基本資料',
         user: JSON.parse(req.session.user),
         list: listData,
-        system: true
+        system: true,
+        page: "info"
     })
 }
 
 // ------------------- 成績
 // 取得總成績選擇頁面
-exports.getScorePage = async function(cookie, res, req) {
-
+exports.getScorePage = async function (cookie, res, req) {
     let ScoreSelect = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARSCO.asp",
         method: "GET",
         encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': userAgent
+        }
     });
     ScoreSelect = iconv.decode(ScoreSelect, 'Big5')
     if (ScoreSelect == '無權使用 請登入') {
@@ -170,7 +180,10 @@ exports.getScorePage = async function(cookie, res, req) {
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_SCORE.asp",
         method: "GET",
         encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': userAgent
+        }
     });
     tables.push(
         getLatestScore(
@@ -186,7 +199,10 @@ exports.getScorePage = async function(cookie, res, req) {
             url: getURL,
             method: "GET",
             encoding: null,
-            headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+            headers: {
+                'Cookie': cookie,
+                'User-Agent': userAgent
+            }
         });
         tables.push(
             getSemesterScore(
@@ -202,7 +218,8 @@ exports.getScorePage = async function(cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 成績',
         user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
-        system: true
+        system: true,
+        page: "score"
     })
 }
 
@@ -252,12 +269,17 @@ exports.getAttendance = (cookie, res, req) => {
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_DAY.asp",
         method: "GET",
         encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': userAgent
+        }
     }, (e, r, b) => {
         /* e: 錯誤代碼 */
         /* b: 傳回的資料內容 */
         var b = iconv.decode(b, 'Big5')
-        if (e || !b) { return }
+        if (e || !b) {
+            return
+        }
         if (b == '無權使用 請登入') {
             res.redirect("/tlhc/login/")
             return
@@ -273,19 +295,23 @@ exports.getAttendance = (cookie, res, req) => {
             title: 'ㄉㄌㄐㄕ - 出勤',
             user: JSON.parse(req.session.user),
             tables: tables,
-            system: true
+            system: true,
+            page: "attendance"
         })
     });
 }
 
 // ------------------- 取得獎懲
 // 取得獎懲選擇頁面
-exports.getRewardsPage = async function(cookie, res, req) {
+exports.getRewardsPage = async function (cookie, res, req) {
     let RewardsSelect = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STD_YEARCHK.asp",
         method: "GET",
         encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': userAgent
+        }
     });
     RewardsSelect = iconv.decode(RewardsSelect, 'Big5')
     if (RewardsSelect == '無權使用 請登入') {
@@ -303,7 +329,10 @@ exports.getRewardsPage = async function(cookie, res, req) {
             url: getURL,
             method: "GET",
             encoding: null,
-            headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+            headers: {
+                'Cookie': cookie,
+                'User-Agent': userAgent
+            }
         });
         let data = iconv.decode(RewardsRequest, 'Big5')
         let table = parseRewards(data)
@@ -314,7 +343,8 @@ exports.getRewardsPage = async function(cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 獎懲紀錄',
         user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
-        system: true
+        system: true,
+        page: "rewards"
     })
 }
 
@@ -331,12 +361,15 @@ function parseRewards(data) {
 }
 
 // ------------------- 取得社團
-exports.getGroupPage = async function(cookie, res, req) {
+exports.getGroupPage = async function (cookie, res, req) {
     let GroupPageRequest = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STDClgQry.asp",
         method: "GET",
         encoding: null,
-        headers: { 'Cookie': cookie, 'User-Agent': userAgent }
+        headers: {
+            'Cookie': cookie,
+            'User-Agent': userAgent
+        }
     });
     var GroupPage = iconv.decode(GroupPageRequest, 'Big5')
     if (GroupPage == '無權使用 請登入') {
@@ -355,15 +388,17 @@ exports.getGroupPage = async function(cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 社團及幹部',
         user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
-        system: true
+        system: true,
+        page: "group"
     })
 }
 
 // ------------------- 瀏覽匯出資料
-exports.getCSV = function(cookie, res) {
+exports.getCSV = function (cookie, res, req) {
     res.render('s-csvtohtml', {
         title: 'ㄉㄌㄐㄕ - 瀏覽匯出資料',
         system: true,
-        user: true
+        user: JSON.parse(req.session.user),
+        page: "csv"
     })
 }

@@ -1,0 +1,76 @@
+//- 一些常用的東西
+mixin card(header,description,icon)
+    .ts.card
+        .content
+            .header= header
+            .description(data-student=header)= description
+        .symbol
+            i.icon(class=icon)
+//- 網頁本體
+doctype html
+html
+    -let header = headerTitle ? headerTitle : title
+    head
+        title=header
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1.0')
+        link(href='//fonts.googleapis.com/css?family=Roboto+Mono',rel='stylesheet')
+        link(href='/css/tocas.css',rel='stylesheet')
+        link(href='/css/UIKit.css',rel='stylesheet')
+        link(href='/css/slick.css',rel='stylesheet')
+        link(href='//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.2/css/mdui.min.css',rel='stylesheet')
+        link(href='/css/style.css',rel='stylesheet')
+        link(href='/css/slick-theme.css',rel='stylesheet')
+        link(href='/css/fileicon.css',rel='stylesheet')
+        link(href='/css/s-layout.css',rel='stylesheet')
+        link(href='/icon/icon.png',rel='shortcut icon')
+        script(src='//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+        script(src="//cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js")
+        script(src="//cdnjs.cloudflare.com/ajax/libs/cheet.js/0.3.3/cheet.min.js")
+        script(src="//cdnjs.cloudflare.com/ajax/libs/mdui/0.4.2/js/mdui.min.js")
+        script(src="/js/slick.min.js")
+        script(src='/js/script.js')
+        include _gtag.pug
+        include _tags.pug
+        block head
+        +social_tags(title,'斗六家商的可愛爬蟲，可以替你查詢成績，也可以查看學校最新公告','https://tlhc.gnehs.net/og/og.png?'+Math.floor(Math.random() * 1024),'https://tlhc.gnehs.net')
+    body.mdui-drawer-body-left.mdui-theme-primary-purple.mdui-theme-accent-red
+        header.mdui-appbar.mdui-appbar-fixed(style="z-index: 5001;")
+            .mdui-toolbar.mdui-color-theme
+                a.mdui-btn.mdui-btn-icon(mdui-drawer="{target: '#drawer', swipe: true}")
+                    i.mdui-icon.material-icons menu
+                .mdui-typo-title=header
+                .mdui-toolbar-spacer
+        #drawer.mdui-drawer.mdui-appbar-with-toolbar
+            .std-info
+                .name=user.name
+                .info=`${user.id} (${user.class})`
+            .mdui-list
+                mixin link(name,link,icon,active)
+                    a.mdui-list-item.mdui-ripple(class=active?"mdui-color-theme-50 mdui-list-item-active":"",href=active?'#':link,data-navigo)&attributes(attributes)
+                        i.mdui-list-item-icon.mdui-icon.material-icons=icon
+                        .mdui-list-item-content=name
+                +link("成績","/tlhc/score/","format_list_numbered",page=="score")
+                +link("基本資料","/tlhc/info/","info",page=="info")
+                +link("出勤","/tlhc/attendance/","directions_bike",page=="attendance")
+                +link("獎懲","/tlhc/rewards/","school",page=="rewards")
+                +link("社團及幹部","/tlhc/group/","group",page=="group")
+                +link("瀏覽匯出資料","/tlhc/csv/","insert_drive_file",page=="csv")
+                +link("登出","/tlhc/score/logout/","person")
+        #app.mdui-container
+            block content
+        footer.ts.container(style="text-align:center")
+            .ts.section.divider
+            img.ts.centered.image(src="/icon/icon-nonbg.svg",width="60px")
+            p TLHCrawler
+                br
+                |Powered by gnehs
+            a.ts.mini.very.compact.labeled.icon.button(href='https://github.com/EarlySpringCommitee/TLHCrawler')
+                i.icon.github
+                |GitHub
+            a.ts.mini.very.compact.labeled.icon.button(href='/api')
+                i.icon.linkify
+                |API
+            br
+            br
+        block footer
