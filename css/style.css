@@ -172,7 +172,7 @@ header .header {
 */
 
 footer {
-    z-index: -1;
+    z-index: 0;
 }
 
 
