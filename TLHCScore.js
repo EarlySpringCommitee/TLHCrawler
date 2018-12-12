@@ -209,7 +209,6 @@ exports.getScorePage = async function (cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 成績',
         user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
-        system: true,
         page: "score"
     })
 }
@@ -286,7 +285,6 @@ exports.getAttendance = (cookie, res, req) => {
             title: 'ㄉㄌㄐㄕ - 出勤',
             user: JSON.parse(req.session.user),
             tables: tables,
-            system: true,
             page: "attendance"
         })
     });
@@ -334,7 +332,6 @@ exports.getRewardsPage = async function (cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 獎懲紀錄',
         user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
-        system: true,
         page: "rewards"
     })
 }
@@ -379,7 +376,6 @@ exports.getGroupPage = async function (cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 社團及幹部',
         user: JSON.parse(req.session.user),
         tables: tables.reduce((a, b) => a.concat(b), []),
-        system: true,
         page: "group"
     })
 }
@@ -388,7 +384,6 @@ exports.getGroupPage = async function (cookie, res, req) {
 exports.getCSV = function (cookie, res, req) {
     res.render('s-csvtohtml', {
         title: 'ㄉㄌㄐㄕ - 瀏覽匯出資料',
-        system: true,
         user: JSON.parse(req.session.user),
         page: "csv"
     })

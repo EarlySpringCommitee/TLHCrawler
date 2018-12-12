@@ -45,21 +45,22 @@ $(document).ready(function () {
     })
     // 匯出資料
     if ($("table")) {
-        var downloadDiv = $("<div />");
+        let downloadDiv = `<div class="mdui-row-xs-2">`
         let date = new Date().toLocaleString('zh-TW').replace(/ /, "_")
         $("table").each(function (i) {
-
-            var downloadLink = $("<a />", {
-                href: exportReportTableToCSV($(this), '匯出.csv'),
-                html: "<i class='download icon'></i>匯出" + $(this).attr('data-name'),
-                download: `${date}_${$(this).attr('data-name')}_ㄉㄌㄐㄕ匯出.csv`,
-                class: "ts primary labeled icon button",
-                style: "margin:0 4px 4px 0"
-            })
-            downloadDiv.append(downloadLink)
+            downloadDiv += `
+             <div class="mdui-col">
+                <a href="${exportReportTableToCSV($(this), '匯出.csv')}"
+                    download="${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv"
+                    class="mdui-btn mdui-color-theme mdui-btn-block mdui-ripple"
+                    style="margin:0 4px 4px 0">
+                    ${$(this).attr('data-name')}
+                </a>
+             </div>
+             `
         })
+        downloadDiv += `</div>`
         $('#export').html(downloadDiv)
-        downloadDiv.before('<h3 class="ts header">匯出資料<div class="sub header">將表格轉換成 .csv 檔案</div></h3>')
     }
 });
 

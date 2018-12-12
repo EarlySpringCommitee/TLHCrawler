@@ -20,8 +20,8 @@ function check() {
                     location.href = '../score/'
                 } else
                     swal({
-                        title: "喔不",
-                        text: "發生了未知的錯誤",
+                        title: "錯誤！",
+                        text: "請確認學號及身分證是否填寫正確",
                         icon: "error",
                     });
             })

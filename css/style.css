@@ -171,13 +171,16 @@ header .header {
     Base
 */
 
+footer {
+    z-index: -1;
+}
+
 
 @media (max-width: 768px) {
     footer {
         margin-bottom: 50px;
     }
 }
-
 
 /*==========
     item
