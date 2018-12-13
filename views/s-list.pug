@@ -1,10 +1,10 @@
 extends _s-layout.pug
 block content
     ul.mdui-list
-        each item in list
+        each item in Object.keys(list)
             li.mdui-list-item
                 .mdui-list-item-content
-                    .mdui-list-item-title.mdui-list-item-one-line=item.header
-                    .mdui-list-item-text=item.text
+                    .mdui-list-item-title.mdui-list-item-one-line=item
+                    .mdui-list-item-text=list[item]
         else
             li.mdui-list-item 未找到符合條件的資料
