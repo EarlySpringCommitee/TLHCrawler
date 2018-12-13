@@ -74,7 +74,7 @@ exports.slide = [{
 }, {
     "header": "大改版！",
     "description": "新版成績系統上線啦",
-    "img": "https://i.imgur.com/5X7rJkV.jpg",
+    "img": "https://i.imgur.com/dcZ1yN8.png",
     "link": "/tlhc/login/"
 }, {
     "header": "API",
