@@ -263,27 +263,13 @@ async function sendSearch(keyword, res, page) {
 };
 async function searchPosts(keyword, page) {
     let SearchData;
-    if (page == "1") {
-        SearchData = await doRequest({
-            url: "http://web.tlhc.ylc.edu.tw/bin/ptsearch.php",
-            method: "POST",
-            form: {
-                SchKey: keyword,
-                search: "search"
-            },
-            headers: {
-                'User-Agent': userAgent
-            }
-        });
-    } else {
-        SearchData = await doRequest({
-            url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(keyword) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
-            method: "GET",
-            headers: {
-                'User-Agent': userAgent
-            }
-        });
-    }
+    SearchData = await doRequest({
+        url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(keyword) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
+        method: "GET",
+        headers: {
+            'User-Agent': userAgent
+        }
+    });
     var $ = cheerio.load(SearchData);
     //文章內容
     var tlhcData = [];
