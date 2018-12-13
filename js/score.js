@@ -2,13 +2,9 @@ $(document).ready(function () {
     $("table").removeAttr('style')
     $("[data-table] tr:last-child").remove()
     $("[data-table=\"rank\"]").removeClass("first line")
-    $("[data-table=\"score\"] tr:first-child,[data-table=\"score\"] td:nth-child(4),[data-table=\"score\"] td:nth-child(7)").remove()
-    $("[data-table=\"total\"] td:nth-child(4),[data-table=\"total\"] td:nth-child(7)").remove()
-    $("[data-table=\"rewards\"] tr:first-child").remove()
-    $("[data-table=\"group\"] tr td:last-child").remove()
     $('td').removeAttr('class')
-    $("[data-table=\"total\"] tr:nth-child(1n+2) td:nth-child(1n+2)").addClass("score")
-    $("[data-table=\"rank\"] tr td:nth-child(1n+2)").addClass("score")
+    $(`[data-table="rank"] tr td:nth-child(1n+2)`).addClass("score")
+    $(`[data-table="total"] tr td:nth-child(1n+2)`).addClass("score")
     $('[data-table=\"score\"] td,[data-table=\"day\"] td,[data-table=\"rewards\"] td').html(function () {
         var text = $(this).text().trim();
         if (text < 60 && text > 0 || text == '0') {
@@ -36,10 +32,11 @@ $(document).ready(function () {
         }
         return text
     })
-    $('[data-table=\"rank\"] td,[data-table=\"total\"] td').html(function () {
+    $(`[data-table="score"] td:last-child`).removeClass('negative positive') //移除學分上的正負面 class
+    $('[data-table="rank"] td,[data-table="total"] td').html(function () {
         var text = $(this).text().trim();
         if (text.match(/成績輸入期間|成績處理期間/)) {
-            var text = "";
+            return ""
         }
         return text
     })
