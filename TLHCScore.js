@@ -85,7 +85,7 @@ exports.getCookie = async function (req, res) {
 
 // ------------------- 基本資料
 exports.getInfoPage = async function (cookie, res, req) {
-    let data = await doRequest({
+    let info = await doRequest({
         url: "http://register.tlhc.ylc.edu.tw/hcode/STDINFO.asp",
         method: "GET",
         encoding: null,
@@ -94,8 +94,13 @@ exports.getInfoPage = async function (cookie, res, req) {
             'User-Agent': userAgent
         }
     });
-    data = decodeBig5(data)
-    let $ = cheerio.load(data)
+    info = decodeBig5(info)
+    if (info == '無權使用 請登入') {
+        req.session.destroy()
+        res.redirect("/system/login/")
+        return
+    }
+    let $ = cheerio.load(info)
     let listData = {
         '學號': $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > font:nth-child(1)`).text().trim(),
         '姓名': $(`.FormStyle > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(4) > font:nth-child(1)`).text().trim() +
@@ -118,7 +123,6 @@ exports.getInfoPage = async function (cookie, res, req) {
         title: 'ㄉㄌㄐㄕ - 基本資料',
         user: JSON.parse(req.session.user),
         list: listData,
-        system: true,
         page: "info"
     })
 }
@@ -137,7 +141,8 @@ exports.getScorePage = async function (cookie, res, req) {
     });
     ScoreSelect = decodeBig5(ScoreSelect)
     if (ScoreSelect == '無權使用 請登入') {
-        res.redirect("/tlhc/login/")
+        req.session.destroy()
+        res.redirect("/system/login/")
         return
     }
     var $ = cheerio.load(ScoreSelect)
@@ -270,7 +275,8 @@ exports.getAttendance = (cookie, res, req) => {
             return
         }
         if (b == '無權使用 請登入') {
-            res.redirect("/tlhc/login/")
+            req.session.destroy()
+            res.redirect("/system/login/")
             return
         }
         var $ = cheerio.load(b)
@@ -304,7 +310,8 @@ exports.getRewardsPage = async function (cookie, res, req) {
 
     RewardsSelect = decodeBig5(RewardsSelect)
     if (RewardsSelect == '無權使用 請登入') {
-        res.redirect("/tlhc/login/")
+        req.session.destroy()
+        res.redirect("/system/login/")
         return
     }
     var $ = cheerio.load(RewardsSelect)
@@ -362,7 +369,8 @@ exports.getGroupPage = async function (cookie, res, req) {
     });
     GroupPage = decodeBig5(GroupPage)
     if (GroupPage == '無權使用 請登入') {
-        res.redirect("/tlhc/login/")
+        req.session.destroy()
+        res.redirect("/system/login/")
         return
     }
     var $ = cheerio.load(GroupPage)

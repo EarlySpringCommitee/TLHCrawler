@@ -210,12 +210,17 @@ async function getPost(url) { //請求
         content = cheerio.load(ajaxData)("Content").html();
 
     } else {
-        if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:empty+td:nth-child(2)").html())
-            content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:nth-child(2)").html().trim();
-        else if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html())
-            content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html().trim();
-        else
-            content = $("#Dyn_2_2 .ptcontent").html().trim();
+        try {
+            if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:empty+td:nth-child(2)").html())
+                content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"] tr td:nth-child(2)").html().trim();
+            else if ($("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html())
+                content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html().trim();
+            else
+                content = $("#Dyn_2_2 .ptcontent").html().trim();
+            if (!content) return 404
+        } catch (e) {
+            return 404
+        }
     }
     content = parseHTML(content)
     let files = $('.baseTB a');

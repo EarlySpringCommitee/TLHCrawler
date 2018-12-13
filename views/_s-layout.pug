@@ -51,13 +51,13 @@ html
                     a.mdui-list-item(class=active?"mdui-color-theme-50 mdui-list-item-active":"",href=active?'#':link,data-navigo)&attributes(attributes)
                         i.mdui-list-item-icon.mdui-icon.material-icons=icon
                         .mdui-list-item-content=name
-                +link("成績","/tlhc/score/","format_list_numbered",page=="score")
-                +link("基本資料","/tlhc/info/","info",page=="info")
-                +link("出勤","/tlhc/attendance/","directions_bike",page=="attendance")
-                +link("獎懲","/tlhc/rewards/","school",page=="rewards")
-                +link("社團及幹部","/tlhc/group/","group",page=="group")
-                +link("瀏覽匯出資料","/tlhc/csv/","insert_drive_file",page=="csv")
-                +link("登出","/tlhc/score/logout/","exit_to_app")
+                +link("成績","/system/score/","format_list_numbered",page=="score")
+                +link("基本資料","/system/info/","info",page=="info")
+                +link("出勤","/system/attendance/","directions_bike",page=="attendance")
+                +link("獎懲","/system/rewards/","school",page=="rewards")
+                +link("社團及幹部","/system/group/","group",page=="group")
+                +link("瀏覽匯出資料","/system/csv/","insert_drive_file",page=="csv")
+                +link("登出","/system/logout/","exit_to_app")
         #app.mdui-container
             block content
         footer.ts.container(style="text-align:center")

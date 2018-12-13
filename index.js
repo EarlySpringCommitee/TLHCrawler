@@ -208,69 +208,39 @@ app.get('/api/search/', cors(), async (req, res) => {
 //------------成績系統------------
 // 登入
 app
-    .get('/tlhc/login/', (req, res) => {
-        res.render('s-login', {
-            title: 'ㄉㄌㄐㄕ - 登入',
-            post: '/tlhc/login/',
-            system: true
-        });
+    .get('/system/login/', (req, res) => {
+        req.session.tlhc ?
+            res.redirect("/system/score/") :
+            res.render('s-login', {
+                title: 'ㄉㄌㄐㄕ - 登入',
+                post: '/tlhc/login/',
+                system: true
+            })
     })
-    .post('/tlhc/login/', (req, res) => {
+    .post('/system/login/', (req, res) => {
         tlhcScore.getCookie(req, res)
     });
 // 登出
-app.get('/tlhc/score/logout', (req, res) => {
+app.get('/system/logout', (req, res) => {
     req.session.destroy()
-    res.redirect("/tlhc/login/")
+    res.redirect("/system/login/")
+});
+// 有登入嗎
+app.use((req, res, next) => {
+    req.session.tlhc || req.path.split("/")[1] != "system" ? next() : res.redirect("/system/login/")
 });
 //------- 基本資料
-app.get('/tlhc/info/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getInfoPage(req.session.tlhc, res, req)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
+app.get('/system/info/', (req, res) => tlhcScore.getInfoPage(req.session.tlhc, res, req));
 //------- 成績
-app.get('/tlhc/score/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getScorePage(req.session.tlhc, res, req)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
+app.get('/system/score/', (req, res) => tlhcScore.getScorePage(req.session.tlhc, res, req));
 //------- 出勤
-app.get('/tlhc/attendance/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getAttendance(req.session.tlhc, res, req)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
+app.get('/system/attendance/', (req, res) => tlhcScore.getAttendance(req.session.tlhc, res, req));
 //------- 獎懲
-app.get('/tlhc/rewards/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getRewardsPage(req.session.tlhc, res, req)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
+app.get('/system/rewards/', (req, res) => tlhcScore.getRewardsPage(req.session.tlhc, res, req));
 //------- 社團及幹部
-app.get('/tlhc/group/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getGroupPage(req.session.tlhc, res, req)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
+app.get('/system/group/', (req, res) => tlhcScore.getGroupPage(req.session.tlhc, res, req));
 //------- 瀏覽匯出資料
-app.get('/tlhc/csv/', (req, res) => {
-    if (req.session.tlhc) {
-        tlhcScore.getCSV(req.session.tlhc, res, req)
-    } else {
-        res.redirect("/tlhc/login/")
-    }
-});
+app.get('/system/csv/', (req, res) => tlhcScore.getCSV(req.session.tlhc, res, req));
 //------------錯誤頁------------
 app.use((req, res, next) => {
     res.status(404).render('error', {
