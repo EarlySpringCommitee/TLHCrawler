@@ -274,14 +274,13 @@ app.get('/tlhc/csv/', (req, res) => {
 //------------錯誤頁------------
 app.use((req, res, next) => {
     res.status(404).render('error', {
-        title: '錯誤 - 404',
-        message: '看來我們找不到您要的東西'
+        title: 'ㄉㄌㄐㄕ - 錯誤',
+        error: 404
     })
 });
 app.use((err, req, res, next) => {
-    console.error(err.stack);
     res.status(500).render('error', {
-        title: '錯誤 - 500',
-        message: '看來工程師不小心打翻了香菇雞湯'
+        title: 'ㄉㄌㄐㄕ - 錯誤',
+        error: 500
     })
-}); // error
+});

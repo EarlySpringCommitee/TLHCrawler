@@ -1,9 +1,25 @@
 extends _layout.pug
+block head
+    script(src="https://gnehs.github.io/Sealed/negi/negi.js")
 block content
     .ts.container
         .ts.vertically.padded.slate
-            .ts.massive.header!= title
-                .sub.header!= message
+            if(error)
+                .ts.massive.header 哈囉，歡迎光臨
+                    .sub.header 看來您發現了錯誤頁面
+                p 您會在這裡可能有以下原因
+                .ts.bulleted.list
+                    .item 你進入了壞掉的連結
+                    .item 這個頁面被吃掉了
+                    .item 有人亂戳伺服器
+                    .item 有人想看蔥花
+                    .item 尼好壞壞
+                    .item 討厭尼
+                    .item 壞壞
+                    .item :(
+            else
+                .ts.massive.header!= title
+                    .sub.header!= message
             if(buttonLink)
                 a.ts.primary.button(href=buttonLink)=button
             else
