@@ -1,6 +1,6 @@
 {
-    "name": "TLHCrawler",
-    "version": "2.2.0",
+    "name": "tlhcrawler",
+    "version": "3.0.0",
     "description": "TLHCrawler",
     "main": "index.js",
     "scripts": {
