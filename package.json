@@ -1,7 +1,7 @@
 {
-    "name": "node-web-crawler",
+    "name": "TLHCrawler",
     "version": "2.2.0",
-    "description": "網頁爬蟲",
+    "description": "TLHCrawler",
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
