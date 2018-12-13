@@ -399,3 +399,27 @@ exports.getCSV = function (cookie, res, req) {
         page: "csv"
     })
 }
+// ------------------- 測試頁面
+exports.getTestPage = async function (cookie, res, req) {
+    res.render('s-multi-table', {
+        "title": "ㄉㄌㄐㄕ - 成績",
+        "user": {
+            "id": "106969",
+            "name": "小熊貓",
+            "class": "正音班",
+            "num": "69"
+        },
+        "tables": [{
+                "title": "本學期段考成績",
+                "table": "<tbody><tr>\n  <td>科目</td>\n  <td>期中考一</td>\n  <td>期中考二</td>\n  <td>平時成績</td>\n  <td>期末考</td>\n  <td>補考成績</td>\n  <td>重修成績</td>\n  <td>學期</td>\n  <td>調整後成績</td>\n </tr>\n <tr>\n  <td>基礎注音</td>\n  <td align=\"right\">73</td>\n  <td align=\"right\">75</td>\n  <td align=\"right\">72</td>\n  <td align=\"right\">78</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">74.4</td>\n  <td></td>\n </tr>\n <tr>\n  <td>基礎幹話</td>\n  <td align=\"right\">99</td>\n  <td align=\"right\">95</td>\n  <td align=\"right\">98</td>\n  <td align=\"right\">100</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">98.3</td>\n  <td></td>\n </tr>\n <tr>\n  <td>現代微積分</td>\n  <td align=\"right\">78</td>\n  <td align=\"right\">56</td>\n  <td align=\"right\">78</td>\n  <td align=\"right\">63</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">70.2</td>\n  <td></td>\n </tr>\n <tr>\n  <td>進階話術</td>\n  <td align=\"right\">68</td>\n  <td align=\"right\">61</td>\n  <td align=\"right\">58</td>\n  <td align=\"right\">33</td>\n  <td align=\"right\">69</td>\n  <td></td>\n  <td align=\"right\">52.45</td>\n  <td align=\"right\">69</td>\n </tr>\n <tr>\n  <td>現代詐騙學</td>\n  <td align=\"right\">63</td>\n  <td align=\"right\">78</td>\n  <td align=\"right\">66</td>\n  <td align=\"right\">66</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">67.35</td>\n  <td></td>\n </tr>\n <tr>\n  <td>可愛小熊貓</td>\n  <td align=\"right\">89</td>\n  <td align=\"right\">98</td>\n  <td align=\"right\">95</td>\n  <td align=\"right\">98</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">95.45</td>\n  <td></td>\n </tr>\n <tr>\n  <td>哲學小貓貓</td>\n  <td align=\"right\">63</td>\n  <td align=\"right\">69</td>\n  <td align=\"right\">59</td>\n  <td align=\"right\">68</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">63.8</td>\n  <td></td>\n </tr>\n <tr>\n  <td>簡易現代魔法</td>\n  <td align=\"right\">92</td>\n  <td align=\"right\">63</td>\n  <td align=\"right\">63</td>\n  <td align=\"right\">23</td>\n  <td align=\"right\">76</td>\n  <td align=\"right\">64</td>\n  <td align=\"right\">55.35</td>\n  <td align=\"right\">76</td>\n </tr>\n <tr>\n  <td>基礎咒語</td>\n  <td align=\"right\">67</td>\n  <td align=\"right\">65</td>\n  <td align=\"right\">56</td>\n  <td align=\"right\">63</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">61.1</td>\n  <td></td>\n </tr>\n <tr>\n  <td>現代癿科學</td>\n  <td align=\"right\">76</td>\n  <td align=\"right\">98</td>\n  <td align=\"right\">99</td>\n  <td align=\"right\">100</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">95.7</td>\n  <td></td>\n </tr>\n <tr>\n  <td>蟹堡王實習</td>\n  <td align=\"right\">78</td>\n  <td align=\"right\">48</td>\n  <td align=\"right\">56</td>\n  <td align=\"right\">78</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">64.7</td>\n  <td></td>\n </tr>\n <tr>\n  <td>現代詐騙學</td>\n  <td align=\"right\">92</td>\n  <td align=\"right\">98</td>\n  <td align=\"right\">95</td>\n  <td align=\"right\">93</td>\n  <td></td>\n  <td></td>\n  <td align=\"right\">94.4</td>\n  <td></td>\n </tr>\n</tbody>",
+                "tableID": "score"
+            },
+            {
+                "title": "本學期段考排名",
+                "table": "<tr> <td>項目</td> <td class=\"score\">期中考一</td> <td class=\"score\">期中考二</td>  <td class=\"score\">平時成績</td> <td class=\"score\">期末考</td>  <td class=\"score\">學期</td> </tr>  <tr><td>學業平均</td><td class=\"score\">78.17</td><td class=\"score\">75.33</td><td class=\"score\">74.58</td><td class=\"score\">71.92</td><td class=\"score\">74.43</td> </tr> <tr><td>班排</td><td class=\"score\">12/69</td><td class=\"score\">68/69</td><td class=\"score\">42/69</td><td class=\"score\">25/69</td><td class=\"score\">10/69</td> </tr> ",
+                "tableID": "total"
+            }
+        ],
+        "page": "score"
+    })
+}

@@ -225,6 +225,8 @@ app.get('/system/logout', (req, res) => {
     req.session.destroy()
     res.redirect("/system/login/")
 });
+//------- 測試頁面
+app.get('/system/test/', (req, res) => tlhcScore.getTestPage(req.session.tlhc, res, req));
 // 有登入嗎
 app.use((req, res, next) => {
     req.session.tlhc || req.path.split("/")[1] != "system" ? next() : res.redirect("/system/login/")
