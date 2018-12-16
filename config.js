@@ -35,6 +35,11 @@ exports.links = [{
 }, {
     "name": "校內相關連結",
     "table": [{
+        "header": "查成績",
+        "description": "美觀且易於檢視的成績頁面",
+        "link": "/system/login/",
+        "icon": "bar chart"
+    }, {
         "header": "Web 學生選課系統",
         "description": "庫",
         "link": "http://register.tlhc.ylc.edu.tw/stdcourse3/",

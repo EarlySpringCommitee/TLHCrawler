@@ -16,6 +16,24 @@ block content
                         h3.ts.header.center.aligned=item.header
                             .sub.header=item.description
     .ts.container
+        h3.ts.header 最新校園公告
+        .ts.stackable.three.cards
+            -for(i=0;i<3;i++)
+                -let item=posts[i]
+                a.ts.card(href=item.link)
+                    .content
+                        .header=item.title
+                    .extra.content
+                        .middoted.meta
+                            each tag in item.tags
+                                span=tag
+        br
+        .ts.right.floated.right.labeled.icon.button 
+            i.icon.arrow.right
+            |查看更多
+        br
+        br
+    .ts.container
         each linkList in links
             h3.ts.header=linkList.name
             .ts.doubling.four.cards

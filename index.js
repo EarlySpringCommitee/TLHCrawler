@@ -124,13 +124,15 @@ app.get('/og/og.png', (req, res) => {
     } catch (err) {}
 });
 //------------可愛的首頁------------
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     let links = config.links
     let slide = config.slide
+    let posts = (await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php")).posts
     res.render('index', {
         title: 'ㄉㄌㄐㄕ',
         links: links,
-        slide: slide
+        slide: slide,
+        posts: posts
     })
 })
 app.get('/about/', (req, res) => {
