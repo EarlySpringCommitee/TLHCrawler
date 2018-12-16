@@ -42,18 +42,19 @@ $(document).ready(function () {
     })
     // 匯出資料
     if ($("table")) {
-        let downloadDiv = `<div class="mdui-row-xs-2">`
+        let downloadDiv = `<div class="mdui-list">`
         let date = new Date().toLocaleString('zh-TW').replace(/ /, "_")
         $("table").each(function (i) {
             downloadDiv += `
-             <div class="mdui-col">
-                <a href="${exportReportTableToCSV($(this), '匯出.csv')}"
-                    download="${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv"
-                    class="mdui-btn mdui-color-theme mdui-btn-block mdui-ripple"
-                    style="margin:0 4px 4px 0">
-                    ${$(this).attr('data-name')}
-                </a>
-             </div>
+            <a class="mdui-list-item mdui-ripple"
+               href="${exportReportTableToCSV($(this), '匯出.csv')}"
+               download="${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv">
+                <i class="mdui-list-item-icon mdui-icon material-icons">insert_drive_file</i>
+                <div class="mdui-list-item-content">
+                    <div class="mdui-list-item-title">${$(this).attr('data-name')}</div>
+                    <div class="mdui-list-item-text">${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv</div>
+                </div>
+            </a>
              `
         })
         downloadDiv += `</div>`
