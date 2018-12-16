@@ -217,7 +217,6 @@ async function getPost(url) { //請求
                 content = $("#Dyn_2_2 .ptcontent tr td.imagetd+td[valign=\"top\"]").html().trim();
             else
                 content = $("#Dyn_2_2 .ptcontent").html().trim();
-            if (!content) return 404
         } catch (e) {
             return 404
         }
