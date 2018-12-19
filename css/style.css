@@ -1,3 +1,7 @@
+:root {
+    --monofonts: 'Share Tech Mono', monospace;
+}
+
 #navigator {
     margin: 0 auto;
     text-align: center;
@@ -8,7 +12,7 @@
 }
 
 kbd {
-    font-family: 'Roboto Mono', monospace !important;
+    font-family: var(--monofonts)
 }
 
 
@@ -266,7 +270,7 @@ footer {
 }
 
 td.score {
-    font-family: 'Roboto Mono', monospace !important;
+    font-family: var(--monofonts)
 }
 
 .gs.scroll {
