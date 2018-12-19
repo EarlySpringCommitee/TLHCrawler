@@ -80,7 +80,7 @@ exports.slide = [{
     "header": "大改版！",
     "description": "新版成績系統上線啦",
     "img": "https://i.imgur.com/dcZ1yN8.png",
-    "link": "/tlhc/login/"
+    "link": "/system/score/"
 }, {
     "header": "API",
     "description": "歡迎使用",
