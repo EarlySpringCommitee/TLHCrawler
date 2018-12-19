@@ -255,6 +255,7 @@ footer {
 
 .ts.table {
     border-radius: 0;
+    transition: all .2s;
 }
 
 .color.first.line.table tr:nth-child(1)>td {

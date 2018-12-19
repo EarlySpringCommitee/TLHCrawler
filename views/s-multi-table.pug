@@ -5,7 +5,7 @@ block content
     each item in tables
         h3.ts.header=item.title
         .gs.scroll
-            table.ts.definition.compact.striped.celled.table.color.first.line(style='display:none',data-table=item.tableID,data-name=item.title)
+            table.ts.definition.compact.striped.celled.table.color.first.line(style='border-color: transparent;filter: blur(1px);opacity: 0;',data-table=item.tableID,data-name=item.title)
                 !=item.table
     else
         .ts.header 未找到符合條件的資料
