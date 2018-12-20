@@ -104,7 +104,22 @@ $(document).ready(function () {
 });
 
 function generateChart() {
-    let subjectName = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(1)`).map((i, obj) => $(obj).text())
+    let subjectName = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(1)`).map((i, obj) => {
+        let name = $(obj).text().replace(/Ⅰ|Ⅱ|Ⅲ|Ⅳ|Ⅴ|Ⅵ|Ⅶ|Ⅷ|Ⅸ|Ⅹ/, '')
+        if (name == "計算機概論")
+            return "計概"
+        if (name == "程式語言")
+            return "程式"
+        if (name == "行動裝置應用程式設計")
+            return "APP"
+        if (name == "健康與護理")
+            return "健護"
+        if (name == "會計學")
+            return "會計"
+        if (name == "經濟學")
+            return "經濟"
+        return name
+    })
     let midtermExam1Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(2)`).map((i, obj) => $(obj).text())
     let midtermExam2Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(3)`).map((i, obj) => $(obj).text())
     let finalExamScore = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(5)`).map((i, obj) => $(obj).text())
