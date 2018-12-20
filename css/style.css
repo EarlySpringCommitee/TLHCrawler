@@ -1,3 +1,9 @@
+:root {
+    --monofonts: 'Share Tech Mono', "SF Pro TC", "SF Pro Text", "SF Pro Icons", "PingFang TC", "Helvetica Neue", "Helvetica", "Arial", "Microsoft JhengHei", wf_SegoeUI, "Segoe UI", Segoe, "Segoe WP", Tahoma, Verdana, Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, 微軟正黑體, "LiHei Pro", "WenQuanYi Micro Hei", "Droid Sans Fallback", "AR PL UMing TW", Roboto, "Helvetica Neue", "Hiragino Maru Gothic ProN", メイリオ, "ヒラギノ丸ゴ ProN W4", Meiryo, "Droid Sans", monospace;
+
+    --normalfonts: "SF Pro TC", "SF Pro Text", "SF Pro Icons", "PingFang TC", "Helvetica Neue", "Helvetica", "Arial", "Microsoft JhengHei", wf_SegoeUI, "Segoe UI", Segoe, "Segoe WP", Tahoma, Verdana, Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, 微軟正黑體, "LiHei Pro", "WenQuanYi Micro Hei", "Droid Sans Fallback", "AR PL UMing TW", Roboto, "Helvetica Neue", "Hiragino Maru Gothic ProN", メイリオ, "ヒラギノ丸ゴ ProN W4", Meiryo, "Droid Sans", sans-serif;
+}
+
 #navigator {
     margin: 0 auto;
     text-align: center;
@@ -8,7 +14,7 @@
 }
 
 kbd {
-    font-family: 'Roboto Mono', monospace !important;
+    font-family: var(--monofonts)
 }
 
 
@@ -255,6 +261,7 @@ footer {
 
 .ts.table {
     border-radius: 0;
+    transition: all .2s;
 }
 
 .color.first.line.table tr:nth-child(1)>td {
@@ -265,7 +272,7 @@ footer {
 }
 
 td.score {
-    font-family: 'Roboto Mono', monospace !important;
+    font-family: var(--monofonts)
 }
 
 .gs.scroll {
@@ -339,7 +346,7 @@ td.score {
 
 #content,
 #content * {
-    font-family: "SF Pro TC", "SF Pro Text", "SF Pro Icons", "PingFang TC", "Helvetica Neue", "Helvetica", "Arial", "Microsoft JhengHei", wf_SegoeUI, "Segoe UI", Segoe, "Segoe WP", Tahoma, Verdana, Ubuntu, "Bitstream Vera Sans", "DejaVu Sans", Tahoma, 微軟正黑體, "LiHei Pro", "WenQuanYi Micro Hei", "Droid Sans Fallback", "AR PL UMing TW", Roboto, "Helvetica Neue", "Hiragino Maru Gothic ProN", メイリオ, "ヒラギノ丸ゴ ProN W4", Meiryo, "Droid Sans", sans-serif !important;
+    font-family: var(--normalfonts) !important;
     font-size: 16px !important;
     background-color: rgba(0, 0, 0, 0) !important;
     color: rgb(80, 80, 80) !important;

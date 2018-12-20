@@ -209,7 +209,7 @@ function getLatestScore(data) {
     $(`input[type="hidden"]`).remove()
 
     var score = $("body>center>table:nth-child(3) td>table>tbody")
-    var total = $("body>center>table:nth-child(4) td>table>tbody")
+    var rank = $("body>center>table:nth-child(4) td>table>tbody")
     var tables = [{
             'title': '本學期段考成績',
             'table': score.html().replace(/\n/g, ''),
@@ -217,8 +217,8 @@ function getLatestScore(data) {
         },
         {
             'title': '本學期段考排名',
-            'table': total.html().replace(/\n/g, ''),
-            'tableID': 'total'
+            'table': rank.html().replace(/\n/g, ''),
+            'tableID': 'rank'
         }
     ]
     return tables
@@ -245,12 +245,12 @@ function getSemesterScore(data) {
     tables = [{
             'title': title + '總成績',
             'table': scoreTable.html().replace(/\n/g, ''),
-            'tableID': 'score'
+            'tableID': 'semesterScore'
         },
         {
             'title': title + '排名',
             'table': rankTable.html().replace(/\n/g, ''),
-            'tableID': 'rank'
+            'tableID': 'semesterRank'
         }
     ]
     return tables
@@ -417,7 +417,7 @@ exports.getTestPage = async function (cookie, res, req) {
             {
                 "title": "本學期段考排名",
                 "table": "<tr><td>項目</td><td class=\"score\">期中考一</td><td class=\"score\">期中考二</td><td class=\"score\">平時成績</td><td class=\"score\">期末考</td><td class=\"score\">學期</td></tr><tr><td>學業平均</td><td class=\"score\">78.17</td><td class=\"score\">75.33</td><td class=\"score\">74.58</td><td class=\"score\">71.92</td><td class=\"score\">74.43</td></tr><tr><td>班排</td><td class=\"score\">12/69</td><td class=\"score\">68/69</td><td class=\"score\">42/69</td><td class=\"score\">25/69</td><td class=\"score\">10/69</td></tr>",
-                "tableID": "total"
+                "tableID": "rank"
             }
         ],
         "page": "score"
