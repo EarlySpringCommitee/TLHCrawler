@@ -72,23 +72,25 @@ exports.links = [{
     }]
 }]
 exports.slide = [{
-    "header": "哈囉！",
-    "description": "ㄉㄌㄐㄕ歡迎尼",
-    "img": "https://i.imgur.com/8NPV00a.png",
-    "link": "#"
-}, {
-    "header": "大改版！",
-    "description": "新版成績系統上線啦",
-    "img": "https://i.imgur.com/dcZ1yN8.png",
-    "link": "/system/score/"
-}, {
-    "header": "API",
-    "description": "歡迎使用",
-    "img": "https://i.imgur.com/pJnIOpJ.jpg",
-    "link": "/api"
-}, {
-    "header": "加入橫幅",
-    "description": "免費在此加入您的橫幅",
-    "img": "https://i.imgur.com/PpiLxni.png",
-    "link": "http://telegra.ph/addtlhc-05-26"
-}]
+        "header": "哈囉！",
+        "description": "ㄉㄌㄐㄕ歡迎尼",
+        "img": "https://i.imgur.com/8NPV00a.png",
+        "link": "#"
+    }, {
+        "header": "大改版！",
+        "description": "新版成績系統上線啦",
+        "img": "https://i.imgur.com/dcZ1yN8.png",
+        "link": "/system/score/"
+    }, {
+        "header": "API",
+        "description": "歡迎使用",
+        "img": "https://i.imgur.com/pJnIOpJ.jpg",
+        "link": "/api"
+    },
+    /* {
+        "header": "加入橫幅",
+        "description": "免費在此加入您的橫幅",
+        "img": "https://i.imgur.com/PpiLxni.png",
+        "link": "http://telegra.ph/addtlhc-05-26"
+    }*/
+]
