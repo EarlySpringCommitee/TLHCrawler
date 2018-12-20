@@ -117,30 +117,31 @@ function generateChart() {
         finalExam: "期末考",
         semester: "學期成績",
     }
+    let removeSubjects = /會計學實習|英語會話/
     //期中考一
     midtermExam1Score.map((i, obj) => {
-        if (obj != "") {
+        if (obj != "" && !subjectName[i].match(removeSubjects)) {
             if (!data.midtermExam1) data.midtermExam1 = {}
             data.midtermExam1[subjectName[i]] = Number(obj)
         }
     })
     //期中考二
     midtermExam2Score.map((i, obj) => {
-        if (obj != "") {
+        if (obj != "" && !subjectName[i].match(removeSubjects)) {
             if (!data.midtermExam2) data.midtermExam2 = {}
             data.midtermExam2[subjectName[i]] = Number(obj)
         }
     })
     //期末考
     finalExamScore.map((i, obj) => {
-        if (obj != "") {
+        if (obj != "" && !subjectName[i].match(removeSubjects)) {
             if (!data.finalExam) data.finalExam = {}
             data.finalExam[subjectName[i]] = Number(obj)
         }
     })
     //學期成績
     semesterScore.map((i, obj) => {
-        if (obj != "") {
+        if (obj != "" && !subjectName[i].match(removeSubjects)) {
             if (!data.semester) data.semester = {}
             data.semester[subjectName[i]] = Number(obj)
         }
