@@ -147,6 +147,19 @@ function generateChart() {
         }
     })
     for (name in data) {
+        let score = Object.values(data[name])
+        let score2Color = (score, alpha = 0.2) => {
+            let colors = []
+            for (n of score) {
+                if (n > 80)
+                    colors.push(`rgba(255, 159, 64, ${alpha})`)
+                else if (n < 60)
+                    colors.push(`rgba(255, 99, 132, ${alpha})`)
+                else
+                    colors.push(`rgba(54, 162, 235, ${alpha})`)
+            }
+            return colors
+        }
         $(`[data-chart="score"]`).append(`<div class="column"><canvas id="chart-${name}"></canvas></div>`)
         var ctx = document.getElementById(`chart-${name}`).getContext('2d')
         new Chart(ctx, {
@@ -154,9 +167,9 @@ function generateChart() {
             data: {
                 labels: Object.keys(data[name]),
                 datasets: [{
-                    data: Object.values(data[name]),
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    data: score,
+                    backgroundColor: score2Color(score),
+                    borderColor: score2Color(score, 1),
                     borderWidth: 1
                 }]
             },
