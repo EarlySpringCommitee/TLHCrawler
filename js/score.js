@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    console.time("整理表格");
+    console.time("整理表格")
 
     function removeScoreProcessing(el) {
         $(el).html(function () {
@@ -74,7 +74,7 @@ $(document).ready(function () {
 
     /*/ === 表格整理完畢，耶！ === /*/
     $("table").removeAttr('style')
-    console.timeEnd("整理表格");
+    console.timeEnd("整理表格")
 
     /*/ === 產出圖表 === /*/
     generateChart()
@@ -170,7 +170,7 @@ function generateChart() {
             return colors
         }
         $(`[data-chart="score"]`).append(`<div class="column"><canvas id="chart-${name}"></canvas></div>`)
-        var ctx = document.getElementById(`chart-${name}`).getContext('2d')
+        let ctx = document.getElementById(`chart-${name}`).getContext('2d')
         new Chart(ctx, {
             type: 'bar',
             data: {
