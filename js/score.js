@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    console.time("整理表格");
+
     function removeScoreProcessing(el) {
         $(el).html(function () {
             let text = $(this).text().trim();
@@ -72,15 +74,21 @@ $(document).ready(function () {
 
     /*/ === 表格整理完畢，耶！ === /*/
     $("table").removeAttr('style')
+    console.timeEnd("整理表格");
 
-    // 匯出資料
+    /*/ === 產出圖表 === /*/
+    generateChart()
+
+    /*/ === 匯出資料 === /*/
     if ($("table")) {
         let downloadDiv = `<div class="mdui-list">`
-        let date = new Date().toLocaleString('zh-TW').replace(/ /, "_")
+        let date = new Date().toLocaleString('zh-TW', {
+            hour12: false
+        }).replace(/ /, "-")
         $("table").each(function (i) {
             downloadDiv += `
             <a class="mdui-list-item mdui-ripple"
-               href="${exportReportTableToCSV($(this), '匯出.csv')}"
+               href="${exportReportTableToCSV($(this))}"
                download="${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv">
                 <i class="mdui-list-item-icon mdui-icon material-icons">insert_drive_file</i>
                 <div class="mdui-list-item-content">
@@ -95,8 +103,89 @@ $(document).ready(function () {
     }
 });
 
+function generateChart() {
+    let subjectName = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(1)`).map((i, obj) => $(obj).text())
+    let midtermExam1Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(2)`).map((i, obj) => $(obj).text())
+    let midtermExam2Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(3)`).map((i, obj) => $(obj).text())
+    let finalExamScore = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(5)`).map((i, obj) => $(obj).text())
+    let semesterScore = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(8)`).map((i, obj) => $(obj).text())
+
+    let data = {}
+    let title = {
+        midtermExam1: "第一次期中考",
+        midtermExam2: "第二次期中考",
+        finalExam: "期末考",
+        semester: "學期成績",
+    }
+    //期中考一
+    midtermExam1Score.map((i, obj) => {
+        if (obj != "") {
+            if (!data.midtermExam1) data.midtermExam1 = {}
+            data.midtermExam1[subjectName[i]] = Number(obj)
+        }
+    })
+    //期中考二
+    midtermExam2Score.map((i, obj) => {
+        if (obj != "") {
+            if (!data.midtermExam2) data.midtermExam2 = {}
+            data.midtermExam2[subjectName[i]] = Number(obj)
+        }
+    })
+    //期末考
+    finalExamScore.map((i, obj) => {
+        if (obj != "") {
+            if (!data.finalExam) data.finalExam = {}
+            data.finalExam[subjectName[i]] = Number(obj)
+        }
+    })
+    //學期成績
+    semesterScore.map((i, obj) => {
+        if (obj != "") {
+            if (!data.semester) data.semester = {}
+            data.semester[subjectName[i]] = Number(obj)
+        }
+    })
+    console.log(data)
+    for (name in data) {
+        $(`[data-chart="score"]`).append(`<div class="column"><canvas id="chart-${name}"></canvas></div>`)
+        var ctx = document.getElementById(`chart-${name}`).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: Object.keys(data[name]),
+                datasets: [{
+                    data: Object.values(data[name]),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: title[name]
+                },
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }]
+                },
+                layout: {
+                    padding: 5
+                },
+                legend: {
+                    display: false
+                }
+            }
+        });
+    }
+
+}
 // https://stackoverflow.com/questions/24610694/export-html-table-to-csv-in-google-chrome-browser/24611096
-function exportReportTableToCSV($table, filename) {
+function exportReportTableToCSV($table) {
     var dumpd = '';
     var csvData = '';
     $table.each(function () {
