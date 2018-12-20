@@ -145,10 +145,9 @@ function generateChart() {
             data.semester[subjectName[i]] = Number(obj)
         }
     })
-    console.log(data)
     for (name in data) {
         $(`[data-chart="score"]`).append(`<div class="column"><canvas id="chart-${name}"></canvas></div>`)
-        var ctx = document.getElementById(`chart-${name}`).getContext('2d');
+        var ctx = document.getElementById(`chart-${name}`).getContext('2d')
         new Chart(ctx, {
             type: 'bar',
             data: {
@@ -180,7 +179,7 @@ function generateChart() {
                     display: false
                 }
             }
-        });
+        })
     }
 
 }
