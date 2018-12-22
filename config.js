@@ -77,9 +77,9 @@ exports.slide = [{
         "img": "https://i.imgur.com/8NPV00a.png",
         "link": "#"
     }, {
-        "header": "大改版！",
-        "description": "新版成績系統上線啦",
-        "img": "https://i.imgur.com/dcZ1yN8.png",
+        "header": "蹦蹦蹦",
+        "description": "新增可愛圖表",
+        "img": "https://i.imgur.com/pXQOkX3.png",
         "link": "/system/score/"
     }, {
         "header": "API",
