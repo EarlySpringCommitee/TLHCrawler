@@ -106,19 +106,21 @@ $(document).ready(function () {
 
 function parseSubjectName(text) {
     let name = $(text).text().replace(/Ⅰ|Ⅱ|Ⅲ|Ⅳ|Ⅴ|Ⅵ|Ⅶ|Ⅷ|Ⅸ|Ⅹ/, '')
-    if (name == "計算機概論") return "計概"
-    if (name == "程式語言") return "程式"
-    if (name == "行動裝置應用程式設計") return "APP"
-    if (name == "健康與護理") return "健護"
-    if (name == "會計學") return "會計"
-    if (name == "經濟學") return "經濟"
-    if (name == "文書處理") return "文書"
-    if (name == "商業概論") return "商概"
-    if (name == "全民國防教育") return "國防"
-    if (name == "基礎化學") return "化學"
-    if (name == "基礎物理") return "物理"
-    if (name == "基礎生物") return "生物"
-    return name
+    let shortname = {
+        "計算機概論": "計概",
+        "程式語言": "程式",
+        "行動裝置應用程式設計": "APP",
+        "健康與護理": "健護",
+        "會計學": "會計",
+        "經濟學": "經濟",
+        "文書處理": "文書",
+        "商業概論": "商概",
+        "全民國防教育": "國防",
+        "基礎化學": "化學",
+        "基礎物理": "物理",
+        "基礎生物": "生物",
+    }
+    return shortname[name] || name
 }
 let removeSubjects = /會計學實習|英語會話/
 
