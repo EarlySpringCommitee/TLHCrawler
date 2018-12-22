@@ -211,17 +211,13 @@ app.get('/api/search/', cors(), async (req, res) => {
 // 登入
 app
     .get('/system/login/', (req, res) => {
-        req.session.tlhc ?
-            res.redirect("/system/score/") :
-            res.render('s-login', {
-                title: 'ㄉㄌㄐㄕ - 登入',
-                post: '/tlhc/login/',
-                system: true
-            })
+        res.render('s-login', {
+            title: 'ㄉㄌㄐㄕ - 登入',
+            post: '/tlhc/login/',
+            system: true
+        })
     })
-    .post('/system/login/', (req, res) => {
-        tlhcScore.getCookie(req, res)
-    });
+    .post('/system/login/', (req, res) => tlhcScore.getCookie(req, res));
 // 登出
 app.get('/system/logout', (req, res) => {
     req.session.destroy()
