@@ -121,25 +121,26 @@ function parseSubjectName(text) {
     return name
 }
 let removeSubjects = /會計學實習|英語會話/
-let score2Color = (score, alpha = 0.2) => {
-    let colors = []
-    for (n of score) {
-        if (n > 80)
-            colors.push(`rgba(255, 159, 64, ${alpha})`)
-        else if (n < 60)
-            colors.push(`rgba(255, 99, 132, ${alpha})`)
-        else
-            colors.push(`rgba(54, 162, 235, ${alpha})`)
-    }
-    return colors
-}
 
+// 建立圖表
 function createChart({
     ctx,
     labels,
     data,
     title = false
 }) {
+    let score2Color = (score, alpha = 0.35) => {
+        let colors = []
+        for (n of score) {
+            if (n > 80)
+                colors.push(`rgba(255, 159, 64, ${alpha})`) //棒
+            else if (n < 60)
+                colors.push(`rgba(255, 99, 132, ${alpha})`) //不及格
+            else
+                colors.push(`rgba(54, 162, 235, ${alpha})`) //普通
+        }
+        return colors
+    }
     new Chart(ctx, {
         type: 'bar',
         data: {
