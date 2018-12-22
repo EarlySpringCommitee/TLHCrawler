@@ -188,8 +188,8 @@ function generateSemesterScoreChart() {
             })
             let randomID = Math.random().toString(36).substr(2)
             if (Object.keys(data).length > 0) {
-                $(obj).parent().prev().append(`<div class="sixteen wide column"><canvas id="chart-${name}-${randomID}"></canvas></div>`)
-                let ctx = document.getElementById(`chart-${name}-${randomID}`).getContext('2d')
+                $(obj).parent().prev().append(`<div class="sixteen wide column"><canvas id="chart-${randomID}"></canvas></div>`)
+                let ctx = document.getElementById(`chart-${randomID}`).getContext('2d')
                 createChart({
                     ctx: ctx,
                     labels: Object.keys(data),
