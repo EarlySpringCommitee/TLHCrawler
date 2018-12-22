@@ -211,11 +211,13 @@ app.get('/api/search/', cors(), async (req, res) => {
 // 登入
 app
     .get('/system/login/', (req, res) => {
-        res.render('s-login', {
-            title: 'ㄉㄌㄐㄕ - 登入',
-            post: '/tlhc/login/',
-            system: true
-        })
+        req.session.tlhc ?
+            res.redirect("/system/score/") :
+            res.render('s-login', {
+                title: 'ㄉㄌㄐㄕ - 登入',
+                post: '/tlhc/login/',
+                system: true
+            })
     })
     .post('/system/login/', (req, res) => tlhcScore.getCookie(req, res));
 // 登出
@@ -249,6 +251,7 @@ app.use((req, res, next) => {
     })
 });
 app.use((err, req, res, next) => {
+    console.error(err)
     res.status(500).render('error', {
         title: 'ㄉㄌㄐㄕ - 錯誤',
         error: 500
