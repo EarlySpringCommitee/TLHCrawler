@@ -9,8 +9,8 @@ $(document).ready(function () {
     }
 
     function scoreRating(el) {
-        $(el).html(function () {
-            let text = $(this).text().trim();
+        $(el).each(function () {
+            let text = $(this).text().trim()
             if (text < 60 && text > 0 || text == '0') {
                 // 不及格
                 $(this).addClass('negative')
@@ -62,7 +62,7 @@ $(document).ready(function () {
     scoreRating(`[data-table="rank"] tr:nth-child(2) td:nth-child(n+2)`)
     $(`[data-table="rank"] tr:nth-child(n+1) td:nth-child(n+2)`).addClass("score")
     // 學期排名
-    scoreRating(`[data-table="semesterRank"] tr:nth-child(1) > td.score`)
+    scoreRating(`[data-table="semesterRank"] tr:nth-child(1) > td`)
     $(`[data-table="semesterRank"] tr td:nth-child(1n+2)`).addClass("score")
     // 學期總成績
     scoreRating(`[data-table="semesterScore"] td:nth-child(n+3):not(:nth-child(n+7))`) // 略過學分
