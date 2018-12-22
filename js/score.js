@@ -77,7 +77,8 @@ $(document).ready(function () {
     console.timeEnd("整理表格")
 
     /*/ === 產出圖表 === /*/
-    generateChart()
+    generateScoreChart()
+    generateSemesterScoreChart()
 
     /*/ === 匯出資料 === /*/
     if ($("table")) {
@@ -103,17 +104,104 @@ $(document).ready(function () {
     }
 });
 
-function generateChart() {
-    let subjectName = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(1)`).map((i, obj) => {
-        let name = $(obj).text().replace(/Ⅰ|Ⅱ|Ⅲ|Ⅳ|Ⅴ|Ⅵ|Ⅶ|Ⅷ|Ⅸ|Ⅹ/, '')
-        if (name == "計算機概論") return "計概"
-        if (name == "程式語言") return "程式"
-        if (name == "行動裝置應用程式設計") return "APP"
-        if (name == "健康與護理") return "健護"
-        if (name == "會計學") return "會計"
-        if (name == "經濟學") return "經濟"
-        return name
+function parseSubjectName(text) {
+    let name = $(text).text().replace(/Ⅰ|Ⅱ|Ⅲ|Ⅳ|Ⅴ|Ⅵ|Ⅶ|Ⅷ|Ⅸ|Ⅹ/, '')
+    if (name == "計算機概論") return "計概"
+    if (name == "程式語言") return "程式"
+    if (name == "行動裝置應用程式設計") return "APP"
+    if (name == "健康與護理") return "健護"
+    if (name == "會計學") return "會計"
+    if (name == "經濟學") return "經濟"
+    if (name == "文書處理") return "文書"
+    if (name == "商業概論") return "商概"
+    if (name == "全民國防教育") return "國防"
+    if (name == "基礎化學") return "化學"
+    if (name == "基礎物理") return "物理"
+    if (name == "基礎生物") return "生物"
+    return name
+}
+let removeSubjects = /會計學實習|英語會話/
+let score2Color = (score, alpha = 0.2) => {
+    let colors = []
+    for (n of score) {
+        if (n > 80)
+            colors.push(`rgba(255, 159, 64, ${alpha})`)
+        else if (n < 60)
+            colors.push(`rgba(255, 99, 132, ${alpha})`)
+        else
+            colors.push(`rgba(54, 162, 235, ${alpha})`)
+    }
+    return colors
+}
+
+function createChart({
+    ctx,
+    labels,
+    data,
+    title = false
+}) {
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: data,
+                backgroundColor: score2Color(data),
+                borderColor: score2Color(data, 1),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title: {
+                display: Boolean(title),
+                text: title
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        max: 100
+                    }
+                }]
+            },
+            layout: {
+                padding: 5
+            },
+            legend: {
+                display: false
+            }
+        }
     })
+}
+
+function generateSemesterScoreChart() {
+    $(`[data-table="semesterScore"]`).map((i, obj) => {
+        if ($(obj).find("tr:nth-child(2) td").text() != "無任何資料") {
+            let data = {}
+            let subjectName = $(obj).find("tr:nth-child(n+2) td:nth-child(1)").map((i, obj) => parseSubjectName(obj))
+            let score = $(obj).find(`tr:nth-child(n+2) td:nth-child(3)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
+            score.map((i, obj) => {
+                if (obj && obj != "" && !subjectName[i].match(removeSubjects)) {
+                    data[subjectName[i]] = obj
+                }
+            })
+            let randomID = Math.random().toString(36).substr(2)
+            if (Object.keys(data).length > 0) {
+                $(obj).parent().prev().append(`<div class="sixteen wide column"><canvas id="chart-${name}-${randomID}"></canvas></div>`)
+                let ctx = document.getElementById(`chart-${name}-${randomID}`).getContext('2d')
+                createChart({
+                    ctx: ctx,
+                    labels: Object.keys(data),
+                    data: Object.values(data)
+                })
+
+            }
+        }
+    })
+}
+
+function generateScoreChart() {
+    let subjectName = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(1)`).map((i, obj) => parseSubjectName(obj))
     let midtermExam1Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(2)`).map((i, obj) => $(obj).text())
     let midtermExam2Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(3)`).map((i, obj) => $(obj).text())
     let finalExamScore = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(5)`).map((i, obj) => $(obj).text())
@@ -126,7 +214,6 @@ function generateChart() {
         finalExam: "期末考",
         semester: "學期成績",
     }
-    let removeSubjects = /會計學實習|英語會話/
     //期中考一
     midtermExam1Score.map((i, obj) => {
         if (obj != "" && !subjectName[i].match(removeSubjects)) {
@@ -157,54 +244,15 @@ function generateChart() {
     })
     for (name in data) {
         let score = Object.values(data[name])
-        let score2Color = (score, alpha = 0.2) => {
-            let colors = []
-            for (n of score) {
-                if (n > 80)
-                    colors.push(`rgba(255, 159, 64, ${alpha})`)
-                else if (n < 60)
-                    colors.push(`rgba(255, 99, 132, ${alpha})`)
-                else
-                    colors.push(`rgba(54, 162, 235, ${alpha})`)
-            }
-            return colors
-        }
-        $(`[data-chart="score"]`).append(`<div class="column"><canvas id="chart-${name}"></canvas></div>`)
+        $(`[data-chart="score"]`).append(`<div class="eight wide column"><canvas id="chart-${name}"></canvas></div>`)
         let ctx = document.getElementById(`chart-${name}`).getContext('2d')
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: Object.keys(data[name]),
-                datasets: [{
-                    data: score,
-                    backgroundColor: score2Color(score),
-                    borderColor: score2Color(score, 1),
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: title[name]
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            max: 100
-                        }
-                    }]
-                },
-                layout: {
-                    padding: 5
-                },
-                legend: {
-                    display: false
-                }
-            }
+        createChart({
+            ctx: ctx,
+            labels: Object.keys(data[name]),
+            data: score,
+            title: title[name]
         })
     }
-
 }
 // https://stackoverflow.com/questions/24610694/export-html-table-to-csv-in-google-chrome-browser/24611096
 function exportReportTableToCSV($table) {

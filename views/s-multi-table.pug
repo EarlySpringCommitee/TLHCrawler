@@ -4,7 +4,7 @@ append head
 block content
     each item in tables
         h3.ts.header=item.title
-        .ts.two.column.stackable.grid(data-chart=item.tableID)
+        .ts.centered.stackable.grid(data-chart=item.tableID)
         .gs.scroll
             table.ts.definition.compact.striped.celled.table.color.first.line(style='border-color: transparent;filter: blur(1px);opacity: 0;',data-table=item.tableID,data-name=item.title)
                 !=item.table
