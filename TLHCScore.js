@@ -317,7 +317,7 @@ exports.getRewardsPage = async function (cookie, res, req) {
     var $ = cheerio.load(RewardsSelect)
 
     // 拿資料囉
-    let tables = [];
+    let r = [];
     var link = $('body table table table tbody tr td.DataTD font.FieldCaptionFONT a')
     for (var i = 0; i < link.length; i++) {
         let getURL = "http://register.tlhc.ylc.edu.tw/hcode/" + $(link[i]).attr('href')
@@ -331,14 +331,14 @@ exports.getRewardsPage = async function (cookie, res, req) {
             }
         });
         let data = decodeBig5(RewardsRequest)
-        let table = parseRewards(data)
-        tables.push(table);
+        let parsedData = parseRewards(data)
+        r.push(parsedData);
     }
 
-    res.render('s-multi-table', {
+    res.render('s-list', {
         title: 'ㄉㄌㄐㄕ - 獎懲紀錄',
         user: JSON.parse(req.session.user),
-        tables: tables.reduce((a, b) => a.concat(b), []),
+        list: r.reduce((a, b) => a.concat(b), []),
         page: "rewards"
     })
 }
@@ -347,13 +347,41 @@ function parseRewards(data) {
     let $ = cheerio.load(data)
     let rewardsTitle = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody a font").text()
     $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody tr:first-child").remove()
-    let rewardsTable = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
-    let tables = [{
-        'title': rewardsTitle + '獎懲紀錄',
-        'table': rewardsTable.html().replace(/\n/g, '').trim(),
-        'tableID': 'rewards'
-    }]
-    return tables
+    $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody tr td:last-child").remove()
+    $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody td").text(function () {
+        return $(this).children('font').text().trim()
+    })
+
+    let s = "body>center>table:nth-child(3)>tbody>tr>td>table>tbody tr:nth-child(n+2)"
+    let d = []
+    for (i = 0; i < $(s).length; i++) {
+        let date = $(s).eq(i).find('td:nth-child(1)').text() //獎懲日期
+        let type = $(s).eq(i).find('td:nth-child(2)').text() //獎懲類別
+        let item = $(s).eq(i).find('td:nth-child(3)').text().replace(/。/g, '') //獎懲事項
+        let clause = $(s).eq(i).find('td:nth-child(4)').text() //獎懲條款
+        let offsetDate = $(s).eq(i).find('td:nth-child(5)').text() //抵銷日期
+        let offsetType = $(s).eq(i).find('td:nth-child(6)').text() //抵銷類別
+        if (date == "無任何資料" || type == "") break
+        title = type
+        subTitle = date
+
+        description = `您於${rewardsTitle} (${date}) `
+
+        if (clause) description += `以「${item}」及條款「${clause}」`
+        else description += `以「${item}」`
+
+        description += `取得「${type}」`
+
+        if (offsetDate != "")
+            description += `並於 ${offsetDate} 以「${offsetType}」抵銷`
+
+        d.push({
+            "title": title,
+            "subTitle": subTitle,
+            "description": description
+        })
+    }
+    return d
 }
 
 // ------------------- 取得社團
@@ -385,7 +413,7 @@ exports.getGroupPage = async function (cookie, res, req) {
     for (i = 0; i < $(s).length; i++) {
         let semester1 = $(s).eq(i).find('td:nth-child(1)').text()
         let semester2 = $(s).eq(i).find('td:nth-child(2)').text() == "1" ? "上" : $(s).eq(i).find('td:nth-child(2)').text() == "2" ? "下" : false
-        if (!semester2) continue
+        if (!semester2) continue //跳過詭異空欄位
         let className = $(s).eq(i).find('td:nth-child(3)').text()
         let classOfficer = $(s).eq(i).find('td:nth-child(4)').text()
         let autonomousOfficer = $(s).eq(i).find('td:nth-child(5)').text()
