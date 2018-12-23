@@ -383,11 +383,9 @@ exports.getGroupPage = async function (cookie, res, req) {
     let data = []
     let s = "body>center>table:nth-child(3)>tbody>tr>td>table>tbody tr:nth-child(n+2)"
     for (i = 0; i < $(s).length; i++) {
-        console.log($(s).eq(i).find('td:nth-child(1)').text())
         let semester1 = $(s).eq(i).find('td:nth-child(1)').text()
         let semester2 = $(s).eq(i).find('td:nth-child(2)').text() == "1" ? "上" : $(s).eq(i).find('td:nth-child(2)').text() == "2" ? "下" : false
         if (!semester2) continue
-        let semester = `${semester1} ${semester2}`
         let className = $(s).eq(i).find('td:nth-child(3)').text()
         let classOfficer = $(s).eq(i).find('td:nth-child(4)').text()
         let autonomousOfficer = $(s).eq(i).find('td:nth-child(5)').text()
@@ -408,7 +406,7 @@ exports.getGroupPage = async function (cookie, res, req) {
         if (groupName != "") {
             title = groupName
             subTitle = "社團"
-            description = `您於 ${semester1} 年${semester2}學期參加「${groupName}」社團`
+            description = `您於 ${semester1} 年${semester2}學期參加社團「${groupName}」`
             if (groupOfficer) {
                 title += ` (${groupOfficer})`
                 description += `，並擔任「${groupOfficer}」`
@@ -421,16 +419,9 @@ exports.getGroupPage = async function (cookie, res, req) {
         }
 
         data.push({
-            //"semester": semester,
-            //"class": className,
             "title": title,
             "subTitle": subTitle,
-            "description": description,
-            //"classOfficer": classOfficer,
-            //"autonomousOfficer": autonomousOfficer,
-            //"group": groupName,
-            //"groupOfficer": groupOfficer,
-            //"classAssociation": classAssociation
+            "description": description
         })
     }
     res.render('s-list', {
