@@ -99,9 +99,7 @@ app.use(session({
 //發餅乾
 
 //設定 /js /icon /css 目錄
-app.use('/js', express.static('js'))
-app.use('/css', express.static('css'))
-app.use('/icon', express.static('icon'))
+app.use('/', express.static('public'))
 
 
 app.listen(3000, () => {
