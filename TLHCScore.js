@@ -194,22 +194,56 @@ exports.getScorePage = async function (cookie, res, req) {
         page: "score"
     })
 }
-
+// 分數
+function scoreRating($, el) {
+    $(el).each(function () {
+        let text = $(this).text().trim()
+        if (text < 60 && text > 0 || text == '0') {
+            // 不及格
+            $(this).addClass('negative')
+        }
+        if (text <= 100 && text >= 80) {
+            // 八十分
+            $(this).addClass('positive')
+        }
+        if (text <= 100 && text >= 0) {
+            // 如果是分數，加上等寬字元
+            $(this).addClass('score')
+        }
+        return text
+    })
+}
 // 整理本學期成績網頁並取出表格
 function getLatestScore(data) {
     var $ = cheerio.load(data)
+    let scoreTable = `body>center>table:nth-child(3) td>table`
+    let rankTable = `body>center>table:nth-child(4) td>table`
     // clean score trash
-    $(`body>center>table:nth-child(3) td>table>tbody tr:first-child,
-       body>center>table:nth-child(3) td>table>tbody td:nth-child(4),
-       body>center>table:nth-child(3) td>table>tbody td:nth-child(7)`).remove()
+    $(`${scoreTable}>tbody tr:first-child,
+       ${scoreTable}>tbody td:nth-child(4),
+       ${scoreTable}>tbody td:nth-child(7),
+       ${scoreTable}>tbody tr:last-child`).remove()
     // clean total trash
-    $(`body>center>table:nth-child(4) td>table>tbody td:nth-child(4),
-       body>center>table:nth-child(4) td>table>tbody td:nth-child(7)`).remove()
+    $(`${rankTable}>tbody td:nth-child(4),
+       ${rankTable}>tbody td:nth-child(7),
+       ${rankTable}>tbody tr:last-child`).remove()
     // clean hidden inputs
     $(`input[type="hidden"]`).remove()
 
+    $(`${scoreTable} td,${rankTable} td`).text(function () {
+        $(this).removeAttr('class')
+        let text = $(this).children('font').text().trim()
+        return !text.match(/成績輸入期間|成績處理期間/) ? text : ""
+    })
+    $(`${rankTable} tr:nth-child(n+1) td:nth-child(n+2)`).addClass("score")
+
+    /*/ === 分數閃亮亮 === /*/
+    scoreRating($, `${scoreTable} td`)
+    scoreRating($, `${rankTable} tr:nth-child(1) > td`)
+
     var score = $("body>center>table:nth-child(3) td>table>tbody")
     var rank = $("body>center>table:nth-child(4) td>table>tbody")
+
     var tables = [{
             'title': '本學期段考成績',
             'table': score.html().replace(/\n/g, ''),
@@ -229,27 +263,48 @@ function getSemesterScore(data) {
     var $ = cheerio.load(data)
     let title,
         tables,
-        scoreTable = `body > center:nth-child(1) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)`,
-        rankTable = `body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)`
+        scoreSemesterTable = `body > center:nth-child(1) > table:nth-child(3) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)`,
+        rankSemesterTable = `body > center:nth-child(1) > table:nth-child(4) > tbody:nth-child(1) > tr:nth-child(1) > td:nth-child(1) > form:nth-child(1) > table:nth-child(1) > tbody:nth-child(1)`
 
     title = $(".FormHeaderFONT").text()
 
-    // clean score trash
-    $(`${scoreTable} tr:first-child`).remove()
+    // clean scoreTable trash
+    $(`${scoreSemesterTable} tr:first-child,${scoreSemesterTable} tr:last-child`).remove()
+    // clean rankTable trash
+    $(`${rankSemesterTable} tr:last-child`).remove()
     // clean hidden inputs
     $(`input[type="hidden"]`).remove()
+    // parse td
+    $(`${scoreSemesterTable} td,${rankSemesterTable} td`).text(function () {
+        $(this).removeAttr('class')
+        /*導師評語*/
+        let textarea = $(this).children('textarea').text().trim()
+        if (textarea != "" && !textarea.match(/成績輸入期間|成績處理期間/)) return textarea
+        /*其他欄位*/
+        let text = $(this).children('font').text().trim()
+        return !text.match(/成績輸入期間|成績處理期間/) ? text : ""
+    })
+    //add score class
+    $(`${rankSemesterTable} tr td:nth-child(1n+2)`).addClass("score")
+    $(`${scoreSemesterTable} td:nth-child(n+7)`).addClass("score") // 學分加上等寬
 
-    scoreTable = $(scoreTable)
-    rankTable = $(rankTable)
+    /*/ === 分數閃亮亮 === /*/
+    // 學期排名
+    scoreRating($, `${rankSemesterTable}  tr:nth-child(1) > td`)
+    // 學期總成績
+    scoreRating($, `${scoreSemesterTable} td:nth-child(n+3):not(:nth-child(n+7))`) // 略過學分
+
+    scoreSemesterTable = $(scoreSemesterTable)
+    rankSemesterTable = $(rankSemesterTable)
 
     tables = [{
             'title': title + '總成績',
-            'table': scoreTable.html().replace(/\n/g, ''),
+            'table': scoreSemesterTable.html().replace(/\n/g, ''),
             'tableID': 'semesterScore'
         },
         {
             'title': title + '排名',
-            'table': rankTable.html().replace(/\n/g, ''),
+            'table': rankSemesterTable.html().replace(/\n/g, ''),
             'tableID': 'semesterRank'
         }
     ]
@@ -280,7 +335,19 @@ exports.getAttendance = (cookie, res, req) => {
             return
         }
         var $ = cheerio.load(b)
-        var day = $("body>center>table:nth-child(3)>tbody>tr>td>table>tbody")
+        let table = `body>center>table:nth-child(3)>tbody>tr>td>table>tbody`
+
+        // clean empty tr
+        $(`${table} tr:last-child`).remove()
+
+        $(`${table} td`).text(function () {
+            $(this).removeAttr('class')
+            let text = $(this).children('font').text().trim()
+            if (text.match(/曠課|遲到|升降旗缺席/)) $(this).addClass('negative')
+            return text
+        })
+
+        var day = $(table)
         var tables = [{
             'title': '出勤紀錄',
             'table': day.html().replace(/\n/g, ''),
