@@ -38,7 +38,6 @@ const delay = (interval) => {
 
 async function updateTgCh() {
     if (bot) {
-        console.log('🤖 已啟用 Telegram bot')
         let pageData = (await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php"))
         pageData.posts = pageData.posts.sort(function (a, b) {
             return b - a
@@ -106,9 +105,7 @@ app.use('/icon', express.static('icon'))
 
 
 app.listen(3000, () => {
-    console.log(TLHCrawlerLogo)
-    console.log("🌏 http://localhost:3000")
-    console.log(moment().format("🕒 YYYY/MM/DD HH:mm"))
+    console.log(`[TLHCRAWLER] ${moment().format("YYYY/MM/DD HH:mm")} http://localhost:3000 ${bot?'w/bot':''}`)
 })
 
 app.get('/og/og.png', (req, res) => {
