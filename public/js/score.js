@@ -5,12 +5,12 @@ $(document).ready(function () {
 
     /*/ === 匯出資料 === /*/
     if ($("table")) {
-        let downloadDiv = `<div class="mdui-list">`
+        let downloadDiv = $(`<div class="mdui-list"></div>`)
         let date = new Date().toLocaleString('zh-TW', {
             hour12: false
         }).replace(/ /, "-")
         $("table").each(function (i) {
-            downloadDiv += `
+            let item = $(`
             <a class="mdui-list-item mdui-ripple"
                href="${exportReportTableToCSV($(this))}"
                download="${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv">
@@ -20,9 +20,9 @@ $(document).ready(function () {
                     <div class="mdui-list-item-text">${$(this).attr('data-name')}_${date}_ㄉㄌㄐㄕ匯出.csv</div>
                 </div>
             </a>
-             `
+             `)
+            $(downloadDiv).append(item)
         })
-        downloadDiv += `</div>`
         $('#export').html(downloadDiv)
     }
 });
@@ -88,13 +88,24 @@ function createChart({
                     }
                 }]
             },
+            tooltips: {
+                enabled: false
+            },
             layout: {
                 padding: 5
             },
             legend: {
                 display: false
+            },
+            plugins: {
+                datalabels: {
+                    align: 'start',
+                    anchor: 'end',
+                    color: 'white'
+                }
             }
-        }
+        },
+        plugins: [ChartDataLabels],
     })
 }
 

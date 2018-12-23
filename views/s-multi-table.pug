@@ -1,5 +1,7 @@
 extends _s-layout.pug
 append head
+    script(src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js")
+    script(src="//cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@0.5.0")
     script(src='/js/score.js')
 block content
     each item in tables
