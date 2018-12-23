@@ -25,14 +25,6 @@ function check() {
                         icon: "error",
                     });
             })
-            .fail(function () {
-                swal({
-                    title: "喔不",
-                    text: "發生了未知的錯誤",
-                    icon: "error",
-                });
-            })
-
         return false;
     }
     //非法輸入提示
