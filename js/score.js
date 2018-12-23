@@ -127,15 +127,15 @@ function createChart({
     data,
     title = false
 }) {
-    let score2Color = (score, alpha = 0.35) => {
+    let score2Color = (score) => {
         let colors = []
         for (n of score) {
             if (n > 80)
-                colors.push(`rgba(255, 159, 64, ${alpha})`) //棒
+                colors.push(`#8BC34A`) //棒    mdui-color-light-green-500
             else if (n < 60)
-                colors.push(`rgba(255, 99, 132, ${alpha})`) //不及格
+                colors.push(`#E57373`) //不及格 mdui-color-red-300
             else
-                colors.push(`rgba(54, 162, 235, ${alpha})`) //普通
+                colors.push(`#03A9F4`) //普通   mdui-color-light-blue-500
         }
         return colors
     }
@@ -145,9 +145,7 @@ function createChart({
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: score2Color(data),
-                borderColor: score2Color(data, 1),
-                borderWidth: 1
+                backgroundColor: score2Color(data)
             }]
         },
         options: {
