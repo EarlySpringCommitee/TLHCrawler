@@ -433,7 +433,7 @@ function parseRewards(data) {
             // 棒棒
             rating = 'positive'
         }
-        if (type.match(/曠課|遲到|升降旗缺席|小過|警告|缺點/)) {
+        if (type.match(/小過|警告|缺點/)) {
             // 壞壞
             rating = 'negative'
         }
