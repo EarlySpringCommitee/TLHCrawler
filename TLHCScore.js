@@ -361,6 +361,15 @@ function parseRewards(data) {
         let clause = $(s).eq(i).find('td:nth-child(4)').text() //獎懲條款
         let offsetDate = $(s).eq(i).find('td:nth-child(5)').text() //抵銷日期
         let offsetType = $(s).eq(i).find('td:nth-child(6)').text() //抵銷類別
+        let rating;
+        if (type.match(/大功|小功|嘉獎/)) {
+            // 棒棒
+            rating = 'positive'
+        }
+        if (type.match(/曠課|遲到|升降旗缺席|小過|警告|缺點/)) {
+            // 壞壞
+            rating = 'negative'
+        }
         if (date == "無任何資料" || type == "") break
         title = type
         subTitle = date
@@ -378,7 +387,8 @@ function parseRewards(data) {
         d.push({
             "title": title,
             "subTitle": subTitle,
-            "description": description
+            "description": description,
+            "rating": rating
         })
     }
     return d

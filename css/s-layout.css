@@ -45,3 +45,16 @@
         border-radius: 0
     }
 }
+
+/* 獎懲 */
+#app .items .item {
+    border-left: 10px solid #00ADEA;
+}
+
+#app .items .item.positive {
+    border-left: 10px solid #8BB96E;
+}
+
+#app .items .item.negative {
+    border-left: 10px solid #CE5F58;
+}

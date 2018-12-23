@@ -10,9 +10,9 @@ block content
 			else
 				li.mdui-list-item 未找到符合條件的資料
 	-if(page=="group"||page=="rewards")
-		.ts.divided.items
+		.ts.items
 			each item in list
-				.item
+				.item(class=item.rating)
 					.content
 						.header=item.title
 						.inline.meta

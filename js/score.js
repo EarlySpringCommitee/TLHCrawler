@@ -68,10 +68,6 @@ $(document).ready(function () {
     scoreRating(`[data-table="semesterScore"] td:nth-child(n+3):not(:nth-child(n+7))`) // 略過學分
     $(`[data-table="semesterScore"] td:nth-child(n+7)`).addClass("score") // 學分加上等寬
 
-    /*/ === 獎懲、出勤閃亮亮 === /*/
-    othersRating(`[data-table="rewards"] td`) // 獎懲
-    othersRating(`[data-table="day"] td`) // 出勤
-
     /*/ === 表格整理完畢，耶！ === /*/
     $("table").removeAttr('style')
     console.timeEnd("整理表格")
