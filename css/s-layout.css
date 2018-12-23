@@ -48,13 +48,17 @@
 
 /* 獎懲 */
 #app .items .item {
-    border-left: 10px solid #00ADEA;
+    border: 1px solid rgb(0, 173, 234);
+    border-radius: 5px;
+    border-left: 10px solid rgb(0, 173, 234);
 }
 
 #app .items .item.positive {
-    border-left: 10px solid #8BB96E;
+    border: 1px solid rgb(139, 185, 110);
+    border-left: 10px solid rgb(139, 185, 110);
 }
 
 #app .items .item.negative {
-    border-left: 10px solid #CE5F58;
+    border: 1px solid rgb(206, 95, 88);
+    border-left: 10px solid rgb(206, 95, 88);
 }
