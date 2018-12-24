@@ -88,11 +88,10 @@ function createChart({
                     }
                 }]
             },
-            tooltips: {
-                enabled: false
-            },
             layout: {
-                padding: 5
+                padding: {
+                    bottom: 5
+                }
             },
             legend: {
                 display: false
