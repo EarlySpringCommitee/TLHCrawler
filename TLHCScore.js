@@ -343,7 +343,7 @@ exports.getAttendance = (cookie, res, req) => {
         $(`${table} td`).text(function () {
             $(this).removeAttr('class')
             let text = $(this).children('font').text().trim()
-            if (text.match(/曠課|遲到|升降旗缺席/)) $(this).addClass('negative')
+            if (text.match(/曠課|遲到|缺席/)) $(this).addClass('negative')
             return text
         })
 
