@@ -19,10 +19,12 @@ body {
 }
 
 header {
+    border-radius: 8px 0 0;
     background-color: #9c27b0;
     background-image: url('https://i.imgur.com/uhl0bwq.jpg');
     background-size: cover;
-    padding: 85px 40px 28px;
+    padding: 140px 40px 28px;
+    text-shadow: 0px 1px 8px rgba(0, 0, 0, 0.48);
     color: #FFF;
 }
 
