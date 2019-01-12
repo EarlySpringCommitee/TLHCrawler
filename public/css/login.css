@@ -1,0 +1,40 @@
+/* MDUI Button */
+.mdui-btn:not(.mdui-btn-icon) {
+    border-radius: 8px;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#box {
+    width: 350px;
+    max-width: 90vw;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 6px 20px #0000001f;
+}
+
+header {
+    background-color: #9c27b0;
+    background-image: url('https://i.imgur.com/uhl0bwq.jpg');
+    background-size: cover;
+    padding: 85px 40px 28px;
+    color: #FFF;
+}
+
+form {
+    padding: 10px 40px 62px;
+}
+
+.mdui-textfield {
+    padding: 5px;
+    margin: 10px 0;
+}
+
+#back {
+    margin-top: 8px
+}
