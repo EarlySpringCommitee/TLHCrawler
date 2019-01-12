@@ -49,7 +49,7 @@ html
                 .info=`${user.id} (${user.class})`
             .mdui-list
                 mixin link(name,link,icon,active)
-                    a.mdui-list-item(class=active?"mdui-color-theme-50 mdui-list-item-active":"",href=active?'#':link,data-navigo)&attributes(attributes)
+                    a.mdui-list-item(class=active?"mdui-color-theme-50 mdui-text-color-theme":"",href=active?'#':link,data-navigo)&attributes(attributes)
                         i.mdui-list-item-icon.mdui-icon.material-icons=icon
                         .mdui-list-item-content=name
                 +link("成績","/system/score/","format_list_numbered",page=="score")
