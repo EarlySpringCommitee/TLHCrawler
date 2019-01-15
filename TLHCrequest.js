@@ -266,9 +266,11 @@ async function sendSearch(keyword, res, page) {
     })
 };
 async function searchPosts(keyword, page) {
+    let url = `https://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=${page}&wc=` + encodeURIComponent(`a:3:{s:3:"Key";${keyword.match(/ /)?`s:7:"${keyword}";`:`s:6:"${keyword}";`}s:8:"pagesize";s:2:"10";s:3:"Rcg";i:0;}`).replace(/%20/g, '+')
+    console.log(url)
     let SearchData;
     SearchData = await doRequest({
-        url: 'http://www.tlhc.ylc.edu.tw/bin/ptsearch.php?P=' + page + '&T=66&wc=a%3A3%3A{s%3A3%3A%22Key%22%3Bs%3A6%3A%22' + encodeURIComponent(keyword) + '%22%3Bs%3A8%3A%22pagesize%22%3Bs%3A2%3A%2210%22%3Bs%3A3%3A%22Rcg%22%3Bi%3A0%3B}',
+        url: url,
         method: "GET",
         headers: {
             'User-Agent': userAgent
