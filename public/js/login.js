@@ -1,6 +1,6 @@
 function check() {
     //讀取中喔
-    $("[type=\"submit\"]").addClass("loading");
+    $("[type=\"submit\"]").attr("disabled", '');
     //獲取 form 表單輸入:使用者名稱,密碼,是否保存密碼
     var username = document.getElementById("userID").value.trim();
     var password = document.getElementById("userPASS").value.trim();
@@ -35,7 +35,7 @@ function check() {
             icon: "error",
         });
 
-        $("[type=\"submit\"]").removeClass("loading");
+        $("[type=\"submit\"]").removeAttr("disabled");
         return false;
     }
 }

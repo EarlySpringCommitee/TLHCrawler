@@ -56,6 +56,10 @@ function parseSubjectName(text) {
             return "國防"
         case /物聯網互動科/.test(name):
             return "IoT"
+        case /電子商務/.test(name):
+            return "電商"
+        case /專題/.test(name):
+            return "專題"
         default:
             return name
     }
