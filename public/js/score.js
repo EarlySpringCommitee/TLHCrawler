@@ -29,21 +29,37 @@ $(document).ready(function () {
 
 function parseSubjectName(text) {
     let name = $(text).text().replace(/Ⅰ|Ⅱ|Ⅲ|Ⅳ|Ⅴ|Ⅵ|Ⅶ|Ⅷ|Ⅸ|Ⅹ/, '')
-    let shortname = {
-        "計算機概論": "計概",
-        "程式語言": "程式",
-        "行動裝置應用程式設計": "APP",
-        "健康與護理": "健護",
-        "會計學": "會計",
-        "經濟學": "經濟",
-        "文書處理": "文書",
-        "商業概論": "商概",
-        "全民國防教育": "國防",
-        "基礎化學": "化學",
-        "基礎物理": "物理",
-        "基礎生物": "生物",
+    switch (true) {
+        case /計算機概論/.test(name):
+            return "計概"
+        case /行動裝置應用/.test(name):
+            return "APP"
+        case /程式/.test(name):
+            return "程式"
+        case /健康與護理/.test(name):
+            return "健護"
+        case /會計/.test(name):
+            return "會計"
+        case /經濟/.test(name):
+            return "經濟"
+        case /商業概論/.test(name):
+            return "商概"
+        case /化學/.test(name):
+            return "化學"
+        case /物理/.test(name):
+            return "物理"
+        case /生物/.test(name):
+            return "生物"
+        case /文書/.test(name):
+            return "文書"
+        case /國防/.test(name):
+            return "國防"
+        case /物聯網互動科/.test(name):
+            return "IoT"
+        default:
+            return name
     }
-    return shortname[name] || name
+
 }
 let removeSubjects = /會計學實習|英語會話/
 
@@ -94,7 +110,10 @@ function createChart({
                 }
             },
             legend: {
-                display: false
+                display: false,
+                labes: {
+                    usePotintStyle: true
+                }
             },
             plugins: {
                 datalabels: {
@@ -114,9 +133,12 @@ function generateSemesterScoreChart() {
             let data = {}
             let subjectName = $(obj).find("tr:nth-child(n+2) td:nth-child(1)").map((i, obj) => parseSubjectName(obj))
             let score = $(obj).find(`tr:nth-child(n+2) td:nth-child(3)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
+            let scoreMakeUp = $(obj).find(`tr:nth-child(n+2) td:nth-child(4)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
+            let scoreRetake = $(obj).find(`tr:nth-child(n+2) td:nth-child(5)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
+            let scoreAdjustment = $(obj).find(`tr:nth-child(n+2) td:nth-child(6)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
             score.map((i, obj) => {
                 if (obj && obj != "" && !subjectName[i].match(removeSubjects)) {
-                    data[subjectName[i]] = obj
+                    data[subjectName[i]] = Math.max(obj, scoreMakeUp[i], scoreRetake[i], scoreAdjustment[i])
                 }
             })
             let randomID = Math.random().toString(36).substr(2)
@@ -139,7 +161,10 @@ function generateScoreChart() {
     let midtermExam1Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(2)`).map((i, obj) => $(obj).text())
     let midtermExam2Score = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(3)`).map((i, obj) => $(obj).text())
     let finalExamScore = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(5)`).map((i, obj) => $(obj).text())
+    let scoreMakeUp = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(6)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
+    let scoreRetake = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(7)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
     let semesterScore = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(8)`).map((i, obj) => $(obj).text())
+    let scoreAdjustment = $(`[data-table="score"] tr:nth-child(n+2) td:nth-child(9)`).map((i, obj) => $(obj).text() != "" ? Number($(obj).text()) : false)
 
     let data = {}
     let title = {
@@ -173,7 +198,7 @@ function generateScoreChart() {
     semesterScore.map((i, obj) => {
         if (obj != "" && !subjectName[i].match(removeSubjects)) {
             if (!data.semester) data.semester = {}
-            data.semester[subjectName[i]] = Number(obj)
+            data.semester[subjectName[i]] = Math.max(obj, scoreMakeUp[i], scoreRetake[i], scoreAdjustment[i])
         }
     })
     for (name in data) {
