@@ -9,7 +9,6 @@ const tlhcRequest = require('./TLHCrequest.js'); //請求模組
 const tlhcScore = require('./TLHCScore.js'); //成績系統模組
 const config = require('./config.js'); //設定檔
 const express = require('express'); // Node.js Web 架構
-const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser'); // 讀入 post 請求
 const session = require('express-session');
@@ -135,109 +134,13 @@ app.get('/about/', (req, res) => {
         title: 'ㄉㄌㄐㄕ - 關於'
     });
 });
-//------------公佈欄------------
-// ㄉㄌㄐㄕ
-app.get('/tlhc/pages/:id', (req, res) => {
-    let url = Base64.decode(req.params.id)
-    if (url.match(/[0-9]*-[0-9]*-[0-9]*-[0-9]*\.php/)) {
-        var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
-        tlhcRequest.sendPage(originalURL, Base64.decode(req.params.id), res)
-    } else {
-        res.status(404).render('error', {
-            title: '錯誤 - 404',
-            message: '看來我們找不到您要的東西'
-        })
-    }
-});
 
-app.get('/tlhc/post/:id', (req, res) => {
-    let url = Base64.decode(req.params.id)
-    if (url.match(/[0-9]*-[0-9]*-[0-9]*.+\.php/)) {
-        var originalURL = "http://web.tlhc.ylc.edu.tw/files/" + url
-        tlhcRequest.sendPost(originalURL, Base64.decode(req.params.id), res)
-    } else {
-        res.status(404).render('error', {
-            title: '錯誤 - 404',
-            message: '看來我們找不到您要的東西'
-        })
-    }
-});
-
-app.get('/tlhc/search/', (req, res) => {
-    res.render('tlhc-search', {
-        title: 'ㄉㄌㄐㄕ - 搜尋'
-    })
-});
-app.get('/tlhc/search/:id/:page', (req, res) => {
-    tlhcRequest.sendSearch(req.params.id, res, req.params.page)
-});
 //------------API-------------
 
-app.get('/api', (req, res) => {
-    res.render('api', {
-        title: 'ㄉㄌㄐㄕ - API'
-    })
-});
-app.get('/api/page', cors(), async (req, res) => {
-    res.json(await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/40-1001-15-1.php"))
-});
-app.get('/api/page/:id', cors(), async (req, res) => {
-    let url = Base64.decode(req.params.id)
-    if (url.match(/[0-9]*-[0-9]*-[0-9]*-[0-9]*\.php/)) {
-        res.json(await tlhcRequest.getPage("http://web.tlhc.ylc.edu.tw/files/" + url))
-    } else {
-        res.status(404).send('error')
-    }
-});
+app.use('/api', require('./router/api'));
+app.use('/system', require('./router/system'));
+app.use('/tlhc', require('./router/tlhc'));
 
-app.get('/api/post/:id', cors(), async (req, res) => {
-    let url = Base64.decode(req.params.id)
-    if (url.match(/[0-9]*-[0-9]*-[0-9]*.+\.php/)) {
-        res.json(await tlhcRequest.getPost("http://web.tlhc.ylc.edu.tw/files/" + url))
-    } else {
-        res.status(404).send('error')
-    }
-});
-app.get('/api/search/', cors(), async (req, res) => {
-    let page = req.query.page ? req.query.page : 1
-    res.json(await tlhcRequest.searchPosts(req.query.keyword, page))
-});
-//------------成績系統------------
-// 登入
-app
-    .get('/system/login/', (req, res) => {
-        req.session.tlhc ?
-            res.redirect("/system/score/") :
-            res.render('s-login', {
-                title: 'ㄉㄌㄐㄕ - 登入',
-                post: '/tlhc/login/',
-                system: true
-            })
-    })
-    .post('/system/login/', (req, res) => tlhcScore.getCookie(req, res));
-// 登出
-app.get('/system/logout', (req, res) => {
-    req.session.destroy()
-    res.redirect("/system/login/")
-});
-//------- 測試頁面
-app.get('/system/test/', (req, res) => tlhcScore.getTestPage(req.session.tlhc, res, req));
-// 有登入嗎
-app.use((req, res, next) => {
-    req.session.tlhc || req.path.split("/")[1] != "system" ? next() : res.redirect("/system/login/")
-});
-//------- 基本資料
-app.get('/system/info/', (req, res) => tlhcScore.getInfoPage(req.session.tlhc, res, req));
-//------- 成績
-app.get('/system/score/', (req, res) => tlhcScore.getScorePage(req.session.tlhc, res, req));
-//------- 出勤
-app.get('/system/attendance/', (req, res) => tlhcScore.getAttendance(req.session.tlhc, res, req));
-//------- 獎懲
-app.get('/system/rewards/', (req, res) => tlhcScore.getRewardsPage(req.session.tlhc, res, req));
-//------- 社團及幹部
-app.get('/system/group/', (req, res) => tlhcScore.getGroupPage(req.session.tlhc, res, req));
-//------- 瀏覽匯出資料
-app.get('/system/csv/', (req, res) => tlhcScore.getCSV(req.session.tlhc, res, req));
 //------------錯誤頁------------
 app.use((req, res, next) => {
     res.status(404).render('error', {
