@@ -216,6 +216,7 @@ footer {
     z-index: 1000;
     padding: 1.2em 1em;
     border-bottom: 2px solid #F0F0F0;
+    box-shadow: 0 0 20px white;
 }
 
 .ts.items .item {
