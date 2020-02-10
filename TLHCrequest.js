@@ -247,10 +247,15 @@ function parseHTML(content) {
         .removeAttr('dir')
         .removeAttr('style')
         .removeAttr('id')
+        .removeAttr('color')
+        .removeAttr('size')
         .html()
         .replace("<head></head><body>", '')
         .replace("</body>", '')
-    return htmlDecode(content)
+        .replace(/\<span (.+)\>|<span>|<\/span>/g, '')
+    content = htmlDecode(content)
+    //console.log(content)
+    return content
 }
 // 搜尋
 async function sendSearch(keyword, res, page) {
