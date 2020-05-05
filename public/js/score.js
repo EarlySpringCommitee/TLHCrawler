@@ -30,7 +30,7 @@ $(document).ready(function () {
 function parseSubjectName(text) {
     let name = $(text).text().replace(/Ⅰ|Ⅱ|Ⅲ|Ⅳ|Ⅴ|Ⅵ|Ⅶ|Ⅷ|Ⅸ|Ⅹ/, '')
     switch (true) {
-        case /計算機概論/.test(name):
+        case /計算機概論|計算機應用/.test(name):
             return "計概"
         case /行動裝置應用/.test(name):
             return "APP"
@@ -60,6 +60,14 @@ function parseSubjectName(text) {
             return "電商"
         case /專題/.test(name):
             return "專題"
+        case /公民與社會/.test(name):
+            return "公民"
+        case /網際網路應用實務/.test(name):
+            return "網路"
+        case /法律與生活/.test(name):
+            return "法律"
+        case /資料庫應用/.test(name):
+            return "資料庫"
         default:
             return name
     }
