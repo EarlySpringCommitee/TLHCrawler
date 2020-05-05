@@ -77,7 +77,7 @@ function createChart({
     let score2Color = (score) => {
         let colors = []
         for (n of score) {
-            if (n > 80)
+            if (n >= 80)
                 colors.push(`#8BC34A`) //棒    mdui-color-light-green-500
             else if (n < 60)
                 colors.push(`#E57373`) //不及格 mdui-color-red-300
