@@ -96,7 +96,6 @@ exports.getInfoPage = async function (cookie, res, req) {
         }
     });
     info = decodeBig5(info)
-    console.log(info)
     if (info.match(authorizedDetect)) {
         req.session.destroy()
         res.redirect("/system/login/")
@@ -331,7 +330,7 @@ exports.getAttendance = (cookie, res, req) => {
         if (e || !b) {
             return
         }
-        if (b = .match(authorizedDetect)) {
+        if (b.match(authorizedDetect)) {
             req.session.destroy()
             res.redirect("/system/login/")
             return
