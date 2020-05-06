@@ -17,6 +17,7 @@ function doRequest(url) {
 }
 const cheerio = require("cheerio"); // Server 端的 jQuery 實作
 const userAgent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36';
+const authorizedDetect = /無權限使用本程式|無權使用 請登入/
 
 function decodeBig5(code) {
     return require('iconv-lite').decode(code, 'Big5')
@@ -96,7 +97,7 @@ exports.getInfoPage = async function (cookie, res, req) {
     });
     info = decodeBig5(info)
     console.log(info)
-    if (info.match(/無權限使用本程式|無權使用 請登入/)) {
+    if (info.match(authorizedDetect)) {
         req.session.destroy()
         res.redirect("/system/login/")
         return
@@ -141,7 +142,7 @@ exports.getScorePage = async function (cookie, res, req) {
         }
     });
     ScoreSelect = decodeBig5(ScoreSelect)
-    if (ScoreSelect == '無權使用 請登入') {
+    if (ScoreSelect.match(authorizedDetect)) {
         req.session.destroy()
         res.redirect("/system/login/")
         return
@@ -330,7 +331,7 @@ exports.getAttendance = (cookie, res, req) => {
         if (e || !b) {
             return
         }
-        if (b == '無權使用 請登入') {
+        if (b = .match(authorizedDetect)) {
             req.session.destroy()
             res.redirect("/system/login/")
             return
@@ -377,7 +378,7 @@ exports.getRewardsPage = async function (cookie, res, req) {
     });
 
     RewardsSelect = decodeBig5(RewardsSelect)
-    if (RewardsSelect == '無權使用 請登入') {
+    if (RewardsSelect.match(authorizedDetect)) {
         req.session.destroy()
         res.redirect("/system/login/")
         return
@@ -474,7 +475,7 @@ exports.getGroupPage = async function (cookie, res, req) {
         }
     });
     GroupPage = decodeBig5(GroupPage)
-    if (GroupPage == '無權使用 請登入') {
+    if (GroupPage.match(authorizedDetect)) {
         req.session.destroy()
         res.redirect("/system/login/")
         return
