@@ -95,7 +95,8 @@ exports.getInfoPage = async function (cookie, res, req) {
         }
     });
     info = decodeBig5(info)
-    if (info == '無權使用 請登入') {
+    console.log(info)
+    if (info.match(/無權限使用本程式|無權使用 請登入/)) {
         req.session.destroy()
         res.redirect("/system/login/")
         return
