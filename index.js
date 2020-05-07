@@ -57,7 +57,7 @@ async function updateTgCh() {
                                 disable_web_page_preview: true
                             })
                         } catch (e) {
-                            msg = await bot.sendMessage(process.env.botChannelId || process.argv[3], `${title}\n本公告含有無法解析內容，請點擊上方連結預覽`, {
+                            msg = await bot.sendMessage(process.env.botChannelId || process.argv[3], `${title}\n❌本公告含有無法解析內容，請點擊上方連結預覽`, {
                                 parse_mode: "HTML",
                                 disable_web_page_preview: true
                             })
